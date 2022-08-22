@@ -1,0 +1,52 @@
+name: Example
+variables:
+    submitBtnId: submit-btn
+    submitBtn:
+        type: id
+        value: $(submitBtnId)
+    signInLink:
+        type: css
+        value: .signin-link
+    elementWaitTimeout: 3
+steps:
+    - name: Open Browser
+      type: open-browser
+      values:
+          browser: chrome
+          headless: true
+    - name: Open Url
+      type: open-url
+      values:
+          url: https://developer.mozilla.org/en-US/
+    - name: Click on Element
+      type: click
+      values:
+          selector: $(signInLink)
+    - name: Wait for sign in button
+      type: wait
+      values:
+          selector: $(submitBtn)
+          timeout: $(elementWaitTimeout)0
+    - name: Type email
+      type: type
+      values:
+          text: dmitriy.bondarchuk@outlook.com
+          selector:
+              type: name
+              value: email
+    - name: Click on sign in button
+      type: click
+      values:
+          selector: $(submitBtn)
+    - name: Wait for sign up button
+      type: wait
+      values:
+          selector:
+              type: text
+              value: Create account
+          timeout: $(elementWaitTimeout)
+    - name: Make screenshot
+      type: screenshot
+      runOnFailure: true
+      values:
+          type: page

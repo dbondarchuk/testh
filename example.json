@@ -1,0 +1,50 @@
+{
+    "name": "Example",
+    "steps": [
+        {
+            "name": "Open Browser",
+            "type": "open-browser",
+            "values": {
+                "browser": "chrome"
+            }
+        },
+        {
+            "name": "Open Url",
+            "type": "open-url",
+            "values": {
+                "url": "https://developer.mozilla.org/en-US/"
+            }
+        },
+        {
+            "name": "Click on Element",
+            "type": "click",
+            "values": {
+                "selector": {
+                    "type": "css",
+                    "value": ".signin-link"
+                }
+            }
+        },
+        {
+            "name": "Wait for sign in button",
+            "type": "wait",
+            "values": {
+                "selector": {
+                    "type": "id",
+                    "value": "submit-btn"
+                },
+                "timeout": 2
+            }
+        },
+        {
+            "name": "Click on sign in button",
+            "type": "click",
+            "values": {
+                "selector": {
+                    "type": "id",
+                    "value": "submit-btn"
+                }
+            }
+        }
+    ]
+}
