@@ -5,8 +5,8 @@ export type Constructor<T> = new (...args: any[]) => T;
 const implementations: Record<string, TestStepRunnerImplementationType> = {};
 
 export type TestStepRunnerImplementationType = {
-    ctor: Constructor<ITestStepRunner<ITestStepRunnerProperties>>;
-    propertiesType: Constructor<ITestStepRunnerProperties>;
+  ctor: Constructor<ITestStepRunner<ITestStepRunnerProperties>>;
+  propertiesType: Constructor<ITestStepRunnerProperties>;
 };
 
 /**
@@ -14,10 +14,10 @@ export type TestStepRunnerImplementationType = {
  * @returns All implementations of {ITestStepRunner}
  */
 export function getImplementations(): Record<
-    string,
-    TestStepRunnerImplementationType
+  string,
+  TestStepRunnerImplementationType
 > {
-    return implementations;
+  return implementations;
 }
 
 /**
@@ -25,17 +25,17 @@ export function getImplementations(): Record<
  * @param aliases Names to register test step runner
  */
 export function Register<
-    T extends Constructor<ITestStepRunner<Props>>,
-    Props extends ITestStepRunnerProperties,
+  T extends Constructor<ITestStepRunner<Props>>,
+  Props extends ITestStepRunnerProperties,
 >(propertiesType: Constructor<Props>, ...aliases: string[]): (ctor: T) => any {
-    return (ctor: T) => {
-        if (!aliases) {
-            throw new TypeError('Test step names are required');
-        }
+  return (ctor: T) => {
+    if (!aliases) {
+      throw new TypeError('Test step names are required');
+    }
 
-        aliases.forEach(
-            (alias) => (implementations[alias] = { propertiesType, ctor }),
-        );
-        return ctor as T;
-    };
+    aliases.forEach(
+      (alias) => (implementations[alias] = { propertiesType, ctor }),
+    );
+    return ctor as T;
+  };
 }

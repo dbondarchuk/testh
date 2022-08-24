@@ -11,7 +11,7 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
-export class WaitForElementToBePresentTestStepRunnerProperties
+export class WaitForElementToBeVisibleTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
   @Type(() => Selector)
@@ -23,19 +23,18 @@ export class WaitForElementToBePresentTestStepRunnerProperties
  * Waits for a web element to be present
  */
 @Register(
-  WaitForElementToBePresentTestStepRunnerProperties,
-  'wait',
-  'wait-to-be-present',
+  WaitForElementToBeVisibleTestStepRunnerProperties,
+  'wait-to-be-visible',
 )
-export class WaitForElementToBePresentTestStepRunner extends ITestStepRunner<WaitForElementToBePresentTestStepRunnerProperties> {
+export class WaitForElementToBeVisibleTestStepRunner extends ITestStepRunner<WaitForElementToBeVisibleTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
-    props: WaitForElementToBePresentTestStepRunnerProperties,
+    props: WaitForElementToBeVisibleTestStepRunnerProperties,
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<WaitForElementToBePresentTestStepRunner>(
-      WaitForElementToBePresentTestStepRunner,
+    this.logger = loggerFactory.get<WaitForElementToBeVisibleTestStepRunner>(
+      WaitForElementToBeVisibleTestStepRunner,
     );
   }
 
@@ -47,13 +46,15 @@ export class WaitForElementToBePresentTestStepRunner extends ITestStepRunner<Wai
     }
 
     this.logger.info(
-      `Waiting for element ${selector} to be present and visible for ${timeout} seconds.`,
+      `Waiting for element ${selector} to be visible for ${timeout} seconds.`,
     );
 
+    const element = state.currentDriver.findElement(selector.by);
+
     await state.currentDriver.wait(
-      until.elementLocated(selector.by),
+      until.elementIsVisible(element),
       timeout * 1000,
-      `Element ${selector} wasn't present for ${timeout} seconds`,
+      `Element ${selector} wasn't visible for ${timeout} seconds`,
     );
 
     this.logger.info(`Element ${selector} was sucessfully located`);

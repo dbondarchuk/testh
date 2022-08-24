@@ -10,29 +10,31 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
-export class InputTextTestStepRunnerProperties
+export class GetElementTextTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
   @Type(() => Selector)
   selector: Selector;
-
-  text?: string;
-  clear?: boolean;
+  variable: string;
 }
 
 /**
- * Clicks on a web element
+ * Gets a web element text and stores it into a variable
  */
-@Register(InputTextTestStepRunnerProperties, 'input', 'type')
-export class InputTextTestStepRunner extends ITestStepRunner<InputTextTestStepRunnerProperties> {
+@Register(
+  GetElementTextTestStepRunnerProperties,
+  'get-text',
+  'get-element-text',
+)
+export class GetElementTextTestStepRunner extends ITestStepRunner<GetElementTextTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
-    props: InputTextTestStepRunnerProperties,
+    props: GetElementTextTestStepRunnerProperties,
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<InputTextTestStepRunner>(
-      InputTextTestStepRunner,
+    this.logger = loggerFactory.get<GetElementTextTestStepRunner>(
+      GetElementTextTestStepRunner,
     );
   }
 
@@ -42,19 +44,18 @@ export class InputTextTestStepRunner extends ITestStepRunner<InputTextTestStepRu
       throw new PropertyIsRequiredException('selector');
     }
 
+    let variable = this.props.variable;
+    if (!variable) {
+      throw new PropertyIsRequiredException('variable');
+    }
+
     const element = await state.currentDriver.findElement(selector.by);
+    const elementText = await element.getText();
 
-    if (this.props.clear) {
-      this.logger.info(`Clearing input ${selector}`);
-      await element.clear();
+    variable = state.variables.put(variable, elementText);
 
-      this.logger.info(`Succesfully cleared element ${selector}`);
-    }
-
-    if (this.props.text) {
-      this.logger.info(`Typing ${this.props.text} into ${selector}`);
-      await element.sendKeys(this.props.text);
-      this.logger.info(`Succesfully typed into element ${selector}`);
-    }
+    this.logger.info(
+      `Succesfully stored text '${elementText}' of the element ${selector} into '${variable}' variable`,
+    );
   }
 }

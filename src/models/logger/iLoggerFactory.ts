@@ -5,9 +5,9 @@ import { ILogger } from './iLogger';
  * Describes a logger factory
  */
 export interface ILoggerFactory {
-    /**
-     * Gets a new logger for specified type
-     * @param type Type for the logger
-     */
-    get<T>(type: Constructor<T>): ILogger;
+  /**
+   * Gets a new logger for specified type
+   * @param type Type for the logger
+   */
+  get<T>(type: Constructor<T>): ILogger;
 }

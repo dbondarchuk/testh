@@ -5,18 +5,14 @@ import * as fs from 'fs';
  * @returns If the test is executed inside a Docker container
  */
 export const isDockerEnvironment = (): boolean => {
-    const procFile = '/proc/self/cgroup';
+  const procFile = '/proc/self/cgroup';
 
-    return (
-        fs.existsSync('./dockerenv') ||
-        (fs.existsSync(procFile) &&
-            fs.lstatSync(procFile).isFile() &&
-            fs
-                .readFileSync(procFile)
-                .toString()
-                .toLowerCase()
-                .indexOf('docker') >= 0)
-    );
+  return (
+    fs.existsSync('./dockerenv') ||
+    (fs.existsSync(procFile) &&
+      fs.lstatSync(procFile).isFile() &&
+      fs.readFileSync(procFile).toString().toLowerCase().indexOf('docker') >= 0)
+  );
 };
 
 /**
@@ -24,5 +20,5 @@ export const isDockerEnvironment = (): boolean => {
  * @returns If the test is executed in headless environment
  */
 export const isHeadlessEnvironment = (): boolean => {
-    return isDockerEnvironment();
+  return isDockerEnvironment();
 };

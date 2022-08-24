@@ -9,30 +9,32 @@ import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
+import { StringComparison } from '../../models/comparison/stringComparison';
+import { Assert } from '../../helpers/assert';
 
-export class InputTextTestStepRunnerProperties
+export class CheckElementTextTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
   @Type(() => Selector)
   selector: Selector;
 
-  text?: string;
-  clear?: boolean;
+  @Type(() => StringComparison)
+  compare: StringComparison;
 }
 
 /**
- * Clicks on a web element
+ * Checks a web element text
  */
-@Register(InputTextTestStepRunnerProperties, 'input', 'type')
-export class InputTextTestStepRunner extends ITestStepRunner<InputTextTestStepRunnerProperties> {
+@Register(CheckElementTextTestStepRunnerProperties, 'compare-element-text')
+export class CheckElementTextTestStepRunner extends ITestStepRunner<CheckElementTextTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
-    props: InputTextTestStepRunnerProperties,
+    props: CheckElementTextTestStepRunnerProperties,
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<InputTextTestStepRunner>(
-      InputTextTestStepRunner,
+    this.logger = loggerFactory.get<CheckElementTextTestStepRunner>(
+      CheckElementTextTestStepRunner,
     );
   }
 
@@ -43,18 +45,16 @@ export class InputTextTestStepRunner extends ITestStepRunner<InputTextTestStepRu
     }
 
     const element = await state.currentDriver.findElement(selector.by);
+    const elementText = await element.getText();
 
-    if (this.props.clear) {
-      this.logger.info(`Clearing input ${selector}`);
-      await element.clear();
+    this.logger.info(
+      `Comparing element ${selector} text '${elementText}' to '${this.props.compare}'`,
+    );
 
-      this.logger.info(`Succesfully cleared element ${selector}`);
-    }
+    Assert.assertComparison(this.props.compare, elementText);
 
-    if (this.props.text) {
-      this.logger.info(`Typing ${this.props.text} into ${selector}`);
-      await element.sendKeys(this.props.text);
-      this.logger.info(`Succesfully typed into element ${selector}`);
-    }
+    this.logger.info(
+      `Element ${selector} text successfully matched ${this.props.compare}`,
+    );
   }
 }

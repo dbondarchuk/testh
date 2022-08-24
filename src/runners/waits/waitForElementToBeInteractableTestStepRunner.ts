@@ -1,4 +1,3 @@
-import { until } from 'selenium-webdriver';
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
 import {
@@ -11,7 +10,7 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
-export class WaitForElementToBePresentTestStepRunnerProperties
+export class WaitForElementToBeInteractableTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
   @Type(() => Selector)
@@ -20,23 +19,23 @@ export class WaitForElementToBePresentTestStepRunnerProperties
 }
 
 /**
- * Waits for a web element to be present
+ * Waits for a web element to be interactable
  */
 @Register(
-  WaitForElementToBePresentTestStepRunnerProperties,
-  'wait',
-  'wait-to-be-present',
+  WaitForElementToBeInteractableTestStepRunnerProperties,
+  'wait-to-be-interactable',
 )
-export class WaitForElementToBePresentTestStepRunner extends ITestStepRunner<WaitForElementToBePresentTestStepRunnerProperties> {
+export class WaitForElementToBeInteractableTestStepRunner extends ITestStepRunner<WaitForElementToBeInteractableTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
-    props: WaitForElementToBePresentTestStepRunnerProperties,
+    props: WaitForElementToBeInteractableTestStepRunnerProperties,
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<WaitForElementToBePresentTestStepRunner>(
-      WaitForElementToBePresentTestStepRunner,
-    );
+    this.logger =
+      loggerFactory.get<WaitForElementToBeInteractableTestStepRunner>(
+        WaitForElementToBeInteractableTestStepRunner,
+      );
   }
 
   public async run(state: TestRunState): Promise<void> {
@@ -47,13 +46,15 @@ export class WaitForElementToBePresentTestStepRunner extends ITestStepRunner<Wai
     }
 
     this.logger.info(
-      `Waiting for element ${selector} to be present and visible for ${timeout} seconds.`,
+      `Waiting for element ${selector} to be interactable for ${timeout} seconds.`,
     );
 
+    const element = state.currentDriver.findElement(selector.by);
+
     await state.currentDriver.wait(
-      until.elementLocated(selector.by),
+      async () => (await element.isDisplayed()) && (await element.isEnabled()),
       timeout * 1000,
-      `Element ${selector} wasn't present for ${timeout} seconds`,
+      `Element ${selector} wasn't interactable for ${timeout} seconds`,
     );
 
     this.logger.info(`Element ${selector} was sucessfully located`);

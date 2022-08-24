@@ -2,8 +2,8 @@ import { ElementNotFoundException } from '../../models/exceptions/elementNotFoun
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
 import {
-    ITestStepRunner,
-    ITestStepRunnerProperties,
+  ITestStepRunner,
+  ITestStepRunnerProperties,
 } from '../../models/runners/iTestStepRunner';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
@@ -12,10 +12,10 @@ import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
 export class ClickOnElementTestStepRunnerProperties
-    implements ITestStepRunnerProperties
+  implements ITestStepRunnerProperties
 {
-    @Type(() => Selector)
-    selector: Selector;
+  @Type(() => Selector)
+  selector: Selector;
 }
 
 /**
@@ -23,31 +23,31 @@ export class ClickOnElementTestStepRunnerProperties
  */
 @Register(ClickOnElementTestStepRunnerProperties, 'click')
 export class ClickOnElementTestStepRunner extends ITestStepRunner<ClickOnElementTestStepRunnerProperties> {
-    private readonly logger: ILogger;
-    constructor(
-        props: ClickOnElementTestStepRunnerProperties,
-        loggerFactory: ILoggerFactory,
-    ) {
-        super(props);
-        this.logger = loggerFactory.get<ClickOnElementTestStepRunner>(
-            ClickOnElementTestStepRunner,
-        );
+  private readonly logger: ILogger;
+  constructor(
+    props: ClickOnElementTestStepRunnerProperties,
+    loggerFactory: ILoggerFactory,
+  ) {
+    super(props);
+    this.logger = loggerFactory.get<ClickOnElementTestStepRunner>(
+      ClickOnElementTestStepRunner,
+    );
+  }
+
+  public async run(state: TestRunState): Promise<void> {
+    const selector = this.props.selector;
+    if (!selector) {
+      throw new PropertyIsRequiredException('selector');
     }
 
-    public async run(state: TestRunState): Promise<void> {
-        const selector = this.props.selector;
-        if (!selector) {
-            throw new PropertyIsRequiredException('selector');
-        }
-
-        this.logger.info(`Clicking on element ${selector}`);
-        const element = await state.currentDriver.findElement(selector.by);
-        if (!element) {
-            throw new ElementNotFoundException(selector);
-        }
-
-        await element.click();
-
-        this.logger.info(`Succesfully clicked on element ${selector}`);
+    this.logger.info(`Clicking on element ${selector}`);
+    const element = await state.currentDriver.findElement(selector.by);
+    if (!element) {
+      throw new ElementNotFoundException(selector);
     }
+
+    await element.click();
+
+    this.logger.info(`Succesfully clicked on element ${selector}`);
+  }
 }

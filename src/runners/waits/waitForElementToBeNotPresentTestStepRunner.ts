@@ -1,4 +1,3 @@
-import { until } from 'selenium-webdriver';
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
 import {
@@ -10,8 +9,9 @@ import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
+import { Waits } from '../../helpers/selenium/waits';
 
-export class WaitForElementToBePresentTestStepRunnerProperties
+export class WaitForElementToBeNotPresentTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
   @Type(() => Selector)
@@ -20,22 +20,21 @@ export class WaitForElementToBePresentTestStepRunnerProperties
 }
 
 /**
- * Waits for a web element to be present
+ * Waits for a web element to be not present
  */
 @Register(
-  WaitForElementToBePresentTestStepRunnerProperties,
-  'wait',
-  'wait-to-be-present',
+  WaitForElementToBeNotPresentTestStepRunnerProperties,
+  'wait-to-be-not-present',
 )
-export class WaitForElementToBePresentTestStepRunner extends ITestStepRunner<WaitForElementToBePresentTestStepRunnerProperties> {
+export class WaitForElementToBeNotPresentTestStepRunner extends ITestStepRunner<WaitForElementToBeNotPresentTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
-    props: WaitForElementToBePresentTestStepRunnerProperties,
+    props: WaitForElementToBeNotPresentTestStepRunnerProperties,
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<WaitForElementToBePresentTestStepRunner>(
-      WaitForElementToBePresentTestStepRunner,
+    this.logger = loggerFactory.get<WaitForElementToBeNotPresentTestStepRunner>(
+      WaitForElementToBeNotPresentTestStepRunner,
     );
   }
 
@@ -47,15 +46,15 @@ export class WaitForElementToBePresentTestStepRunner extends ITestStepRunner<Wai
     }
 
     this.logger.info(
-      `Waiting for element ${selector} to be present and visible for ${timeout} seconds.`,
+      `Waiting for element ${selector} to be not present for ${timeout} seconds.`,
     );
 
     await state.currentDriver.wait(
-      until.elementLocated(selector.by),
+      Waits.untilNotPresent(this.props.selector.by),
       timeout * 1000,
-      `Element ${selector} wasn't present for ${timeout} seconds`,
+      `Element ${selector} was present for ${timeout} seconds`,
     );
 
-    this.logger.info(`Element ${selector} was sucessfully located`);
+    this.logger.info(`Element ${selector} was sucessfully not found`);
   }
 }
