@@ -2,34 +2,46 @@ import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsR
 import { TestRunState } from '../../models/runners/testRunState';
 import {
   ITestStepRunner,
-  ITestStepRunnerProperties,
+  TestStepWithStepsProperties,
 } from '../../models/runners/iTestStepRunner';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
-import { TestStep } from '../../models/tests/testStep';
-import { Variables } from '../../models/tests/variables';
+import { VariablesContainer } from '../../models/variables/variablesContainer';
 import { runTestSteps } from '../../helpers/steps/stepsRunner';
 
+/**
+ * Properties for {@link ForEachElementTestStepRunner}
+ */
 export class ForEachElementTestStepRunnerProperties
-  implements ITestStepRunnerProperties
+  extends TestStepWithStepsProperties
 {
+  /**
+   * Elements selector
+   */
   @Type(() => Selector)
   selector: Selector;
-
-  steps: TestStep[];
 }
 
+/** Name of the variable where each element will be stored */
 export const ELEMENT_VARIABLE = 'ELEMENT';
-export const ELEMENT_NUMBER_VARIABLE = 'ELEMENT_NUMBER';
+
+/** Name of the variable where the zero-based index of each element will be stored */
+export const ELEMENT_INDEX_VARIABLE = 'ELEMENT_INDEX';
+
+/** Runner type aliases for {@link ForEachElementTestStepRunner} */
+export const ForEachElementTestStepRunnerTypeAliases = ['for-each-element'] as const;
 
 /**
  * Runs specified test step for each of the elements of the selector.
- * Each element will be stored in variable ELEMENT
+ * @parameters {@link ForEachElementTestStepRunnerProperties}
+ * @runnerType {@link ForEachElementTestStepRunnerTypeAliases}
+ * @variable {@link ELEMENT_VARIABLE} Where current element is stored
+ * @variable {@link ELEMENT_INDEX_VARIABLE} Where the index of current element is stored
  */
-@Register(ForEachElementTestStepRunnerProperties, 'for-each-element')
+@Register(ForEachElementTestStepRunnerProperties, ...ForEachElementTestStepRunnerTypeAliases)
 export class ForEachElementTestStepRunner extends ITestStepRunner<ForEachElementTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -53,7 +65,7 @@ export class ForEachElementTestStepRunner extends ITestStepRunner<ForEachElement
     }
 
     const elements = await state.currentDriver.findElements(selector.by);
-    const basicStepNumber = state.variables.get(Variables.TASK_STEP_NUMBER);
+    const basicStepNumber = state.variables.get(VariablesContainer.TASK_STEP_NUMBER);
 
     this.logger.info(
       `Running ${this.props.steps.length} steps for ${elements.length} elements`,
@@ -62,7 +74,7 @@ export class ForEachElementTestStepRunner extends ITestStepRunner<ForEachElement
     let elementNumber = 0;
     for (const element of elements) {
       state.variables.put(ELEMENT_VARIABLE, element);
-      state.variables.put(ELEMENT_NUMBER_VARIABLE, elementNumber);
+      state.variables.put(ELEMENT_INDEX_VARIABLE, elementNumber);
 
       await runTestSteps(
         this.props.steps,
@@ -75,6 +87,6 @@ export class ForEachElementTestStepRunner extends ITestStepRunner<ForEachElement
       elementNumber++;
     }
 
-    this.logger.info(`Succesfully run all steps for all elements`);
+    this.logger.info(`Successfully run all steps for all elements`);
   }
 }

@@ -1,149 +1,314 @@
 name: Example
 variables:
-  baseUrl: https://www.saucedemo.com/
-  username: standard_user
-  password: secret_sauce
   item_text: Sauce Labs Backpack
-  signInBtnId: login-button
   productId: sauce-labs-backpack
-  signInBtn:
-    type: id
-    value: $(signInBtnId)
-  addToCartBtn:
-    type: id
-    value: add-to-cart-$(productId)
-  removeFromCartBtn:
-    type: id
-    value: remove-$(productId)
-  cartBadge:
-    type: class
-    value: shopping_cart_badge
-  usernameInput:
-    type: id
-    value: user-name
-  logoutLink:
-    type: id
-    value: logout_sidebar_link
+  password: secret_sauce
   elementWaitTimeout: 3
+pages:
+  - name: signin
+    displayName: Login Page
+    variables:
+      url: https://www.saucedemo.com/
+      usernameInput:
+        type: id
+        value: user-name
+      username: standard_user
+      password: secret_sauce_wrong
+      signInBtnId: login-button
+      signInBtn:
+        type: id
+        value: $(signInBtnId)
+    actions:
+      signin:
+        - name: Open Url
+          type: open-url
+          values:
+            url: $(url)
+        - name: Wait for login page to load
+          type: run
+          values:
+            steps: $(pages.signin.actions.waitToLoad)
+        - name: Type username
+          type: type
+          values:
+            text: $(username)
+            selector: $(usernameInput)
+        - name: Type password
+          type: type
+          values:
+            text: $(password)
+            selector:
+              type: id
+              value: password
+        - name: Click on sign in button
+          type: click
+          values:
+            selector: $(signInBtn)
+      waitToLoad:
+        - name: Wait for username input to be available
+          type: wait
+          values:
+            selector: $(usernameInput)
+            timeout: $(elementWaitTimeout)
+  - name: shop
+    displayName: Shop
+    variables:
+      addToCartBtn:
+        type: id
+        value: add-to-cart-$(productId)
+      removeFromCartBtn:
+        type: id
+        value: remove-$(productId)
+      cartBadge:
+        type: class
+        value: shopping_cart_badge
+      logoutLink:
+        type: id
+        value: logout_sidebar_link
+    actions:
+      waitForItemsToLoad:
+        - name: Wait for items to load
+          type: wait
+          values:
+            selector:
+              type: class
+              value: inventory_list
+            timeout: $(elementWaitTimeout)
+      checkAddRemoveCart:
+        - name: Click on add item
+          type: click
+          values:
+            selector: $(addToCartBtn)
+        - name: Check number of items in cart
+          type: compare-element-text
+          values:
+            selector: $(cartBadge)
+            compare:
+              type: equals
+              value: '1'
+        - name: Create items array
+          type: set-variable
+          values:
+            variable: EXPECTED_ITEMS
+            value: []
+        - name: Get name
+          type: get-text
+          values:
+            variable: NAME
+            selector:
+              type: class
+              value: inventory_item_name
+              relative:
+                - type: above
+                  to: $(removeFromCartBtn)   
+        - name: Get description
+          type: get-text
+          values:
+            variable: DESC
+            selector:
+              type: class
+              value: inventory_item_desc
+              relative:
+                - type: above
+                  to: $(removeFromCartBtn)    
+        - name: Get price
+          type: get-text
+          values:
+            variable: PRICE
+            selector:
+              type: class
+              value: inventory_item_price
+              relative:
+                - type: left
+                  to: $(removeFromCartBtn)   
+        - name: Add item to expected
+          type: add-to-array-variable
+          values:
+            value: '$({name: NAME, desc: DESC, price: PRICE})'
+            variable: EXPECTED_ITEMS     
+        - name: Open cart
+          type: run
+          values:
+            steps: $(pages.cart.actions.open)
+        - name: Check cart
+          type: run
+          values:
+            steps: $(pages.cart.actions.checkItems)
+        - name: Continue shopping
+          type: run
+          values:
+            steps: $(pages.cart.actions.continueShopping)
+        - name: Wait for items to load
+          type: run
+          values:
+            steps: $(pages.shop.actions.waitForItemsToLoad)
+        - name: Click on remove item
+          type: click
+          values:
+            selector: $(removeFromCartBtn)
+        - name: Check that there is no items in a cart
+          type: wait-to-be-not-present
+          values:
+            selector: $(cartBadge)
+      checkSort:
+        - name: Click on sort
+          type: click
+          values:
+            selector:
+              type: class
+              value: product_sort_container
+        - name: Click on Price low-high option
+          type: click
+          values:
+            selector:
+              type: css
+              value: .product_sort_container > [value=lohi]
+        - name: Create prices array
+          type: set-variable
+          values:
+            variable: prices
+            value: []
+        - name: Get price for each item
+          type: for-each-element
+          values:
+            selector:
+              type: class
+              value: inventory_item_price
+            steps:
+              - name: Get price
+                type: set-variable
+                values:
+                  variable: price
+                  value: $((await ELEMENT.getText()).trim().substr(1))
+              - name: Add price to array
+                type: add-to-array-variable
+                values:
+                  value: $(parseFloat(price))
+                  variable: prices
+        - name: Check prices are sorted from low to high
+          type: for-each-item
+          values:
+            array: $(prices)
+            steps:
+              - name: Compare to previous
+                type: compare-numbers
+                condition: INDEX > 0
+                values:
+                  compare:
+                    type: '<='
+                    value: $(prices[INDEX-1])
+                  to: $(ITEM)
+      logout:
+        - name: Click burger menu
+          type: click
+          values:
+            selector:
+              type: id
+              value: react-burger-menu-btn
+        - name: Wait for sidebar to show
+          type: wait-to-be-interactable
+          values:
+            selector: $(logoutLink)
+            timeout: $(elementWaitTimeout)
+        - name: Click logout link
+          type: click
+          values:
+            selector: $(logoutLink)
+        - name: Wait for login page to load
+          type: run
+          values:
+            steps: $(pages.signin.actions.waitToLoad)
+  - name: cart
+    displayName: Cart
+    variables:
+      link:
+        type: class
+        value: shopping_cart_link
+      cart_item:
+        type: class
+        value: cart_item
+      checkout_btn:
+        type: id
+        value: checkout
+      item_name_class: inventory_item_name
+      item_desc_class: inventory_item_desc
+      item_price_class: inventory_item_price
+    actions:
+      open:
+        - name: Click on cart icon
+          type: click
+          values:
+            selector: $(link)
+        - name: Wait for cart to load
+          type: wait
+          values: 
+            selector: $(checkout_btn)
+      continueShopping:
+        - name: Click on continue shopping
+          type: click
+          values:
+            selector:
+              type: id
+              value: continue-shopping
+      checkItems:
+        - name: Set count to zero
+          type: set-variable
+          values:
+            variable: actual_items
+            value: []
+        - name: Count items
+          type: for-each-element
+          values:
+            selector: $(cart_item)
+            steps:
+              - name: Check name
+                type: compare-strings
+                values:
+                  compare:
+                    type: equals
+                    value: $(EXPECTED_ITEMS[ELEMENT_INDEX].name)
+                  to: '$(await ELEMENT.findElement({type:"class", value: item_name_class}).getText())'
+              - name: Check desc
+                type: compare-strings
+                values:
+                  compare:
+                    type: equals
+                    value: $(EXPECTED_ITEMS[ELEMENT_INDEX].desc)
+                  to: '$(await ELEMENT.findElement({type:"class", value: item_desc_class}).getText())'
+              - name: Check price
+                type: compare-strings
+                values:
+                  compare:
+                    type: equals
+                    value: $(EXPECTED_ITEMS[ELEMENT_INDEX].price)
+                  to: '$(await ELEMENT.findElement({type:"class", value: item_price_class}).getText())'
+
 steps:
   - name: Open Browser
     type: open-browser
     values:
       browser: chrome
       headless: true
-  - name: Open Url
-    type: open-url
+  - name: Sign in
+    type: run
     values:
-      url: $(baseUrl)
-  - name: Type username
-    type: type
+      steps: $(pages.signin.actions.signin)
+  - name: Wait for shop page to load
+    type: run
     values:
-      text: $(username)
-      selector: $(usernameInput)
-  - name: Type password
-    type: type
+      steps: $(pages.shop.actions.waitForItemsToLoad)
+  - name: Check add/remove to cart works
+    type: run
     values:
-      text: $(password)
-      selector:
-        type: id
-        value: password
-  - name: Click on sign in button
-    type: click
+      steps: $(pages.shop.actions.checkAddRemoveCart)
+  - name: Check that sorting works
+    type: run
     values:
-      selector: $(signInBtn)
-  - name: Wait for items to load
-    type: wait
+      steps: $(pages.shop.actions.checkSort)
+  - name: Log out
+    type: run
     values:
-      selector:
-        type: text
-        value: $(item_text)
-      timeout: $(elementWaitTimeout)
-  - name: Click on add backpack
-    type: click
-    values:
-      selector: $(addToCartBtn)
-  - name: Check number of items in cart
-    type: compare-element-text
-    values:
-      selector: $(cartBadge)
-      compare:
-        type: equals
-        value: '1'
-  - name: Click on remove backpack
-    type: click
-    values:
-      selector: $(removeFromCartBtn)
-  - name: Check that there is no items in a cart
-    type: wait-to-be-not-present
-    values:
-      selector: $(cartBadge)
-  - name: Click on sort
-    type: click
-    values:
-      selector:
-        type: class
-        value: product_sort_container
-  - name: Click on Price low-high option
-    type: click
-    values:
-      selector:
-        type: css
-        value: .product_sort_container > [value=lohi]
-  - name: Create prices array
-    type: set-variable
-    values:
-      variable: prices
-      value: []
-  - name: Get price for each item
-    type: for-each-element
-    values:
-      selector:
-        type: class
-        value: inventory_item_price
-      steps:
-        - name: Get price
-          type: set-variable
-          values:
-            variable: price
-            value: $((await ELEMENT.getText()).trim().substr(1))
-        - name: Add price to array
-          type: add-to-array-variable
-          values:
-            value: $(parseFloat(price))
-            variable: prices
-  - name: Check prices are sorted from low to high
-    type: for-each-item
-    values:
-      array: $(prices)
-      steps:
-        - name: Compare to previous
-          type: compare-numbers
-          condition: INDEX > 0
-          values:
-            compare:
-              type: '<='
-              value: $(prices[INDEX-1])
-            to: $(ITEM)
-  - name: Click burger menu
-    type: click
-    values:
-      selector:
-        type: id
-        value: react-burger-menu-btn
-  - name: Wait for sidebar to show
-    type: wait-to-be-interactable
-    values:
-      selector: $(logoutLink)
-      timeout: $(elementWaitTimeout)
-  - name: Click logout link
-    type: click
-    values:
-      selector: $(logoutLink)
-  - name: Wait for login page to load
-    type: wait
-    values:
-      selector: $(usernameInput)
-      timeout: $(elementWaitTimeout)
+      steps: $(pages.shop.actions.logout)  
   - name: Make screenshot
     type: screenshot
     runOnFailure: true

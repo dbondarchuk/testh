@@ -1,4 +1,6 @@
-import { Variables } from '../../models/tests/variables';
+import { VariablesContainer } from '../../models/variables/variablesContainer';
+import { isEvaluateOnlyIfStringProperty } from './models/evaluateOnlyIfString';
+import { WrapperWithVariables } from './models/valueWithBaseVariables';
 
 /**
  * Helper to run JS code
@@ -48,7 +50,8 @@ export class JsEngine {
    */
   public static async replaceVariables(
     value: string,
-    variables: Variables,
+    variables: VariablesContainer,
+    recursive = true
   ): Promise<string | any | undefined> {
     if (!value) return undefined;
 
@@ -66,7 +69,9 @@ export class JsEngine {
           variables?.variables,
         );
 
-        result = await JsEngine.evaluateProperties(result, variables);
+        if (recursive) {
+          result = await JsEngine.evaluateProperties(result, variables);
+        }
 
         if (match === value) {
           replacedValue = result;
@@ -82,28 +87,49 @@ export class JsEngine {
 
   public static evaluateProperties = async (
     obj: any,
-    variables: Variables,
+    variables: VariablesContainer,
+    recursive = true
   ): Promise<any> => {
     let newValue: any;
 
     switch (typeof obj) {
       case 'string':
-        newValue = await JsEngine.replaceVariables(obj, variables);
+        newValue = await JsEngine.replaceVariables(obj, variables, recursive);
         break;
 
       case 'object':
+        if (!recursive) {
+          newValue = obj;
+          break;
+        }
+
         if (Array.isArray(obj)) {
           newValue = [];
+          if (Object.hasOwn(obj, 'variables')) {
+            newValue = [] as WrapperWithVariables<any>;
+            newValue.variables = variables
+          }
+
+          const isObjEvaluateOnlyIfString = isEvaluateOnlyIfStringProperty(obj);
           for (const item of obj as any[]) {
-            newValue.push(await JsEngine.evaluateProperties(item, variables));
+            if (isObjEvaluateOnlyIfString || isEvaluateOnlyIfStringProperty(item)) {
+              newValue.push(typeof item === 'string'
+                ? await JsEngine.evaluateProperties(item, variables, false)
+                : item);
+            } else {
+              newValue.push(await JsEngine.evaluateProperties(item, variables, recursive));
+            }
           }
         } else {
           newValue = {};
           for (const key in obj) {
-            newValue[key] =
-              key !== 'steps'
-                ? await JsEngine.evaluateProperties(obj[key], variables)
+            if (key === 'steps') {
+              newValue[key] = typeof obj[key] === 'string'
+                ? await JsEngine.evaluateProperties(obj[key], variables, false)
                 : obj[key];
+            } else {
+              newValue[key] = await JsEngine.evaluateProperties(obj[key], variables, recursive);
+            }
           }
         }
 

@@ -12,20 +12,28 @@ import { Type } from 'class-transformer';
 import { StringComparison } from '../../models/comparison/stringComparison';
 import { Assert } from '../../helpers/assert';
 
+/** Properties for {@link CheckElementTextTestStepRunner} */
 export class CheckElementTextTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /** Element selector */
   @Type(() => Selector)
   selector: Selector;
 
+  /** Comparison value */
   @Type(() => StringComparison)
   compare: StringComparison;
 }
 
+/** Runner type aliases for {@link CheckElementTextTestStepRunner} */
+export const CheckElementTextTestStepRunnerTypeAliases = ['compare-element-text'] as const;
+
 /**
  * Checks a web element text
+ * @properties {@link CheckElementTextTestStepRunnerProperties}
+ * @runnerType {@link CheckElementTextTestStepRunnerTypeAliases}
  */
-@Register(CheckElementTextTestStepRunnerProperties, 'compare-element-text')
+@Register(CheckElementTextTestStepRunnerProperties, ...CheckElementTextTestStepRunnerTypeAliases)
 export class CheckElementTextTestStepRunner extends ITestStepRunner<CheckElementTextTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -51,7 +59,7 @@ export class CheckElementTextTestStepRunner extends ITestStepRunner<CheckElement
       `Comparing element ${selector} text '${elementText}' to '${this.props.compare}'`,
     );
 
-    Assert.assertComparison(this.props.compare, elementText);
+    Assert.assertStringComparison(this.props.compare, elementText);
 
     this.logger.info(
       `Element ${selector} text successfully matched ${this.props.compare}`,

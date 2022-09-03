@@ -1,8 +1,8 @@
 import { UnknownOptionException } from '../exceptions/unknownOptionException';
-import { IComparisson as IComparison } from './iComparison';
+import { IComparison as IComparison } from './iComparison';
 
 /**
- * Comparisson type for the strings
+ * Comparison type for the strings
  */
 export type StringComparisonType =
   | 'equals'
@@ -12,10 +12,10 @@ export type StringComparisonType =
   | 'regex';
 
 /**
- * Describes a comparisson of the strings
+ * Describes a comparison of the strings
  */
 export class StringComparison implements IComparison<string, string> {
-  /** Comparisson type */
+  /** Comparison type */
   type: string;
 
   /** Value to compare to */

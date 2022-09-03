@@ -5,24 +5,35 @@ import {
 } from '../../models/runners/iTestStepRunner';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
-import { LoggerFactory } from '../../logger/loggerFactory';
+import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 
+/**
+ * Properties for {@link OpenUrlTestStepRunner}
+ */
 export class OpenUrlTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Url to open
+   */
   url: string;
 }
 
+/** Runner types for {@link OpenUrlTestStepRunner} */
+export const OpenUrlTestStepRunnerTypeAliases = ['open-url'] as const;
+
 /**
  * Navigates to a given url
+ * @properties {@link OpenUrlTestStepRunnerProperties}
+ * @runnerType {@link OpenUrlTestStepRunnerTypeAliases}
  */
-@Register(OpenUrlTestStepRunnerProperties, 'open-url')
+@Register(OpenUrlTestStepRunnerProperties, ...OpenUrlTestStepRunnerTypeAliases)
 export class OpenUrlTestStepRunner extends ITestStepRunner<OpenUrlTestStepRunnerProperties> {
   private readonly logger: ILogger;
 
   constructor(
     props: OpenUrlTestStepRunnerProperties,
-    loggerFactory: LoggerFactory,
+    loggerFactory: ILoggerFactory,
   ) {
     super(props);
     this.logger = loggerFactory.get<OpenUrlTestStepRunner>(
@@ -36,6 +47,6 @@ export class OpenUrlTestStepRunner extends ITestStepRunner<OpenUrlTestStepRunner
     this.logger.info(`Opening url '${this.props.url}'.`);
     await driver.get(this.props.url);
 
-    this.logger.info(`Url '${this.props.url} was succesfully opened.`);
+    this.logger.info(`Url '${this.props.url} was successfully opened.`);
   }
 }

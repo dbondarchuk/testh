@@ -1,14 +1,14 @@
 import { WebDriver } from 'selenium-webdriver';
 import { DriverException } from '../exceptions/driverException';
 import { Test } from '../tests/test';
-import { Variables } from '../tests/variables';
+import { VariablesContainer } from '../variables/variablesContainer';
 
 /**
  * Describes a current state of the run
  */
 export class TestRunState {
   private readonly _drivers: WebDriver[] = [];
-  private readonly _variables: Variables;
+  private readonly _variables: VariablesContainer;
   private readonly _testName: string;
 
   private _currentDriverIndex = -1;
@@ -19,7 +19,7 @@ export class TestRunState {
    */
   public constructor(test: Test) {
     this._testName = test.name;
-    this._variables = new Variables(test.variables);
+    this._variables = new VariablesContainer(test.variables);
   }
 
   /**
@@ -32,7 +32,7 @@ export class TestRunState {
   /**
    * Gets variables
    */
-  public get variables(): Variables {
+  public get variables(): VariablesContainer {
     return this._variables;
   }
 
@@ -50,15 +50,15 @@ export class TestRunState {
   }
 
   /**
-   *
-   * @param driver Adds a new driver and switches to it
+   * Adds a new driver, creates proxy, and switches to it
+   * @param driver Driver to add
    * @param dontSwitchToNewDriver If true, will not switch to the added driver
    * @returns {WebDriver} The added driver
    */
-  public addDriver(
+  public async addDriver(
     driver: WebDriver,
     dontSwitchToNewDriver = false,
-  ): WebDriver {
+  ): Promise<WebDriver> {
     this._drivers.push(driver);
 
     if (!dontSwitchToNewDriver) {

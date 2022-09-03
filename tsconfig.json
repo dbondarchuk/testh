@@ -4,7 +4,9 @@
     "emitDecoratorMetadata": true,
     "target": "ES2022",
     "module": "commonjs",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "moduleResolution": "node",
     "rootDir": ".",
     "outDir": "build",
@@ -22,5 +24,10 @@
     "strictNullChecks": false,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "__tests__/**/*"]
+  "typedocOptions": {
+  },
+  "include": [
+    "src/**/*",
+    "__tests__/**/*"
+  ]
 }

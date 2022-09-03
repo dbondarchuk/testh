@@ -11,36 +11,68 @@ import { isHeadlessEnvironment } from '../../helpers/configuration/environment';
 import { DriverException } from '../../models/exceptions/driverException';
 import * as chrome from 'selenium-webdriver/chrome';
 
+/** Mobile emulation using predefined device */
 export type MobileEmulationDeviceOptions = {
+  /** Name of the predefined device */
   deviceName: string;
 };
 
+/** Manual configuration for the mobile emulation */
 export type MobileEmulationConfigurableOptions = {
+  /** Device width */
   width: number;
+
+  /** Device height */
   height: number;
+
+  /** Device pixel ratio */
   pixelRatio: number;
 };
 
+/** Options for mobile emulation */
 export type MobileEmulationOptions =
   | MobileEmulationDeviceOptions
   | MobileEmulationConfigurableOptions;
 
+/**
+ * Properties for {@link OpenBrowserTestStepRunner}
+ */
 export class OpenBrowserTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
-  browser: string;
+  /** Browser type */
+  browser: 'chrome' | string;
+
+  /** Determines whether to ignore SSL errors */
   ssl?: boolean;
+
+  /** If set, browser mobile emulation will be used */
   mobileEmulation?: MobileEmulationOptions;
+
+  /** Determines whether to run browser in headless mode */
   headless?: boolean;
+
+  /** Browser locale */
   locale?: string;
+
+  /** Browser window width */
   width?: number;
+
+  /** Browser window height */
   height?: number;
 }
 
 /**
- * Opens a new browser
+ * Runner type aliases
  */
-@Register(OpenBrowserTestStepRunnerProperties, 'open-browser')
+export const OpenBrowserTestStepRunnerTypeAliases = ['open', 'open-browser'] as const;
+
+/**
+ * Opens a new browser and switches to its' driver
+ * @properties {@link OpenBrowserTestStepRunnerProperties}
+ * @runnerType {@link OpenBrowserTestStepRunnerTypeAliases}
+ */
+@Register(OpenBrowserTestStepRunnerProperties, ...OpenBrowserTestStepRunnerTypeAliases)
 export class OpenBrowserTestStepRunner extends ITestStepRunner<OpenBrowserTestStepRunnerProperties> {
   private readonly logger: ILogger;
 
@@ -58,7 +90,7 @@ export class OpenBrowserTestStepRunner extends ITestStepRunner<OpenBrowserTestSt
   public async run(state: TestRunState): Promise<void> {
     const driver = await this.createWebDriverInstance();
 
-    state.addDriver(driver);
+    await state.addDriver(driver);
 
     // // Only Chrome can get normal browser logs
     // switch (browser.toLowerCase()){

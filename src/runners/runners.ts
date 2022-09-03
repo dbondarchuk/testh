@@ -5,3 +5,4 @@ export * from './waits';
 export * from './screenshot';
 export * from './checks';
 export * from './variables';
+export * from './steps';

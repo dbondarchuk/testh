@@ -11,21 +11,35 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
+/**
+ * Properties for {@link WaitForElementToBePresentTestStepRunner}
+ */
 export class WaitForElementToBePresentTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Element selector
+   */
   @Type(() => Selector)
   selector: Selector;
+
+  /**
+   * Wait timeout in seconds
+   */
   timeout: number;
 }
 
+/** Runner type aliases for {@link WaitForElementToBePresentTestStepRunner} */
+export const WaitForElementToBePresentTestStepRunnerTypeAliases = ['wait', 'wait-to-be-present'] as const;
+
 /**
  * Waits for a web element to be present
+ * @properties {@link WaitForElementToBePresentTestStepRunnerProperties}
+ * @runnerType {@link WaitForElementToBePresentTestStepRunnerTypeAliases}
  */
 @Register(
   WaitForElementToBePresentTestStepRunnerProperties,
-  'wait',
-  'wait-to-be-present',
+  ...WaitForElementToBePresentTestStepRunnerTypeAliases
 )
 export class WaitForElementToBePresentTestStepRunner extends ITestStepRunner<WaitForElementToBePresentTestStepRunnerProperties> {
   private readonly logger: ILogger;

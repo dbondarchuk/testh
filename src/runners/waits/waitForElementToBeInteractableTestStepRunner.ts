@@ -10,20 +10,35 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
+/**
+ * Properties for {@link WaitForElementToBeInteractableTestStepRunner}
+ */
 export class WaitForElementToBeInteractableTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Element selector
+   */
   @Type(() => Selector)
   selector: Selector;
+
+  /**
+   * Wait timeout in seconds
+   */
   timeout: number;
 }
 
+/** Runner type aliases for {@link WaitForElementToBeInteractableTestStepRunnerTypeAliases} */
+export const WaitForElementToBeInteractableTestStepRunnerTypeAliases = ['wait-to-be-interactable'] as const;
+
 /**
  * Waits for a web element to be interactable
+ * @parameters {@link WaitForElementToBeInteractableTestStepRunnerProperties}
+ * @runnerType {@link WaitForElementToBeInteractableTestStepRunnerTypeAliases}
  */
 @Register(
   WaitForElementToBeInteractableTestStepRunnerProperties,
-  'wait-to-be-interactable',
+  ...WaitForElementToBeInteractableTestStepRunnerTypeAliases,
 )
 export class WaitForElementToBeInteractableTestStepRunner extends ITestStepRunner<WaitForElementToBeInteractableTestStepRunnerProperties> {
   private readonly logger: ILogger;

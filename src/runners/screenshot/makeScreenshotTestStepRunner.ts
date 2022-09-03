@@ -6,7 +6,7 @@ import {
 } from '../../models/runners/iTestStepRunner';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { mkdir, writeFile } from 'fs/promises';
-import { Variables } from '../../models/tests/variables';
+import { VariablesContainer } from '../../models/variables/variablesContainer';
 import { dirname } from 'path';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -15,20 +15,47 @@ import { Type } from 'class-transformer';
 import { TestStep } from '../../models/tests/testStep';
 import { UnknownOptionException } from '../../models/exceptions/unknownOptionException';
 
-export type ScreenshotType = 'element' | 'all-page' | 'visible-page' | 'page';
+/** Screenshot type */
+export type ScreenshotType = 
+  /** Specific element */
+  'element' 
 
+  /** All page */
+  | 'all-page' 
+  
+  /** Currently visible page */
+  | 'visible-page' 
+  
+  /** Alias for {@link ScreenshotType."visible-page"} */
+  | 'page';
+
+/**
+ * Properties for {@link MakeScreenshotTestStepRunner}
+ */
 export class MakeScreenshotTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Screenshot type
+   */
   type: ScreenshotType;
+
+  /**
+   * Element select if type is 'element'
+   */
   @Type(() => Selector)
   selector?: Selector;
 }
 
+/** Runner type aliases for {@link MakeScreenshotTestStepRunner} */
+export const MakeScreenshotTestStepRunnerTypeAliases = ['screenshot'] as const;
+
 /**
- * Waits for a web element to be present
+ * Makes a screenshot
+ * @properties {@link MakeScreenshotTestStepRunnerProperties}
+ * @runnerType {@link MakeScreenshotTestStepRunnerTypeAliases}
  */
-@Register(MakeScreenshotTestStepRunnerProperties, 'screenshot')
+@Register(MakeScreenshotTestStepRunnerProperties, ...MakeScreenshotTestStepRunnerTypeAliases)
 export class MakeScreenshotTestStepRunner extends ITestStepRunner<MakeScreenshotTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -60,7 +87,7 @@ export class MakeScreenshotTestStepRunner extends ITestStepRunner<MakeScreenshot
         this.logger.info('Making a screenshot of the visible page');
         const screenshotPath = `screenshots/${
           state.testName
-        }-${state.variables.get(Variables.TASK_STEP_NUMBER)}-${step.name}.png`;
+        }-${state.variables.get(VariablesContainer.TASK_STEP_NUMBER)}-${step.name}.png`;
 
         const data = await driver.takeScreenshot();
         await this.writeScreenshot(data, screenshotPath);

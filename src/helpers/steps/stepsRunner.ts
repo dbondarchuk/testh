@@ -4,8 +4,8 @@ import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { TestRunState } from '../../models/runners/testRunState';
 import { getImplementations } from '../../models/runners/testStepRunnerRegistry';
-import { getProperties, TestStep } from '../../models/tests/testStep';
-import { updateStepNumber } from '../../models/tests/variables';
+import { getProperties, TestSteps } from '../../models/tests/testStep';
+import { getCurrentStepNumber, updateStepNumber } from '../../models/variables/variablesContainer';
 import { JsEngine } from '../js/jsEngine';
 
 /**
@@ -17,7 +17,7 @@ import { JsEngine } from '../js/jsEngine';
  * @param stepNumberFn Function to get step number
  */
 export const runTestSteps = async (
-  steps: TestStep[],
+  steps: TestSteps,
   state: TestRunState,
   logger: ILogger,
   loggerFactory: ILoggerFactory,
@@ -26,17 +26,25 @@ export const runTestSteps = async (
   let isFailed = false;
   let error: Error = undefined;
   let stepNumber = 0;
+  
   for (const step of steps) {
+
+    if (steps.variables) {
+      const baseVariables = steps.variables;
+      state.variables.merge(baseVariables);
+    }
+  
     updateStepNumber(state.variables, stepNumberFn(stepNumber++));
 
+    const currentStepNumber = getCurrentStepNumber(state.variables);
     if (step.disabled) {
-      logger.info(`Step '${step.name}' is disabled. Skipping it.`);
+      logger.info(`Step #${currentStepNumber} '${step.name}' is disabled. Skipping it.`);
       continue;
     }
 
     if (!step.runOnFailure && isFailed) continue;
 
-    logger.info(`Running a step '${step.name}'`);
+    logger.info(`Running a step #${currentStepNumber} '${step.name}'`);
 
     const runners = getImplementations();
 
@@ -58,9 +66,10 @@ export const runTestSteps = async (
       }
     }
 
+    const propsPlain = await getProperties(step, state.variables);
     const props = plainToClass(
       runnerType.propertiesType,
-      await getProperties(step, state.variables),
+      propsPlain,
     );
 
     const runner = new runnerType.ctor(props, loggerFactory);

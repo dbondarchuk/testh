@@ -11,20 +11,35 @@ import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 import { Waits } from '../../helpers/selenium/waits';
 
+/**
+ * Properties for {@link WaitForElementToBeNotPresentTestStepRunner}
+ */
 export class WaitForElementToBeNotPresentTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Element selector
+   */
   @Type(() => Selector)
   selector: Selector;
+
+  /**
+   * Wait timeout in seconds
+   */
   timeout: number;
 }
 
+/** Runner type aliases for {@link WaitForElementToBeNotPresentTestStepRunner}  */
+export const WaitForElementToBeNotPresentTestStepRunnerPropertiesTypeAliases = ['wait-to-be-not-present'] as const;
+
 /**
  * Waits for a web element to be not present
+ * @properties {@link WaitForElementToBeNotPresentTestStepRunnerProperties}
+ * @runnerType {@link WaitForElementToBeNotPresentTestStepRunnerPropertiesTypeAliases}
  */
 @Register(
   WaitForElementToBeNotPresentTestStepRunnerProperties,
-  'wait-to-be-not-present',
+  ...WaitForElementToBeNotPresentTestStepRunnerPropertiesTypeAliases,
 )
 export class WaitForElementToBeNotPresentTestStepRunner extends ITestStepRunner<WaitForElementToBeNotPresentTestStepRunnerProperties> {
   private readonly logger: ILogger;

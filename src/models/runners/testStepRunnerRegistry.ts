@@ -10,8 +10,8 @@ export type TestStepRunnerImplementationType = {
 };
 
 /**
- * Gets all implementation of {ITestStepRunner}
- * @returns All implementations of {ITestStepRunner}
+ * Gets all implementation of {@link ITestStepRunner}
+ * @returns All implementations of {@link ITestStepRunner}
  */
 export function getImplementations(): Record<
   string,

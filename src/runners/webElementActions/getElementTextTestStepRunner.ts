@@ -10,21 +10,35 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
+/**
+ * Properties for {@link GetElementTextTestStepRunner}
+ */
 export class GetElementTextTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Element selector
+   */
   @Type(() => Selector)
   selector: Selector;
+
+  /**
+   * Name of the variable where to save element's text
+   */
   variable: string;
 }
 
+/** Runner type aliases for {@link GetElementTextTestStepRunner} */
+export const GetElementTextTestStepRunnerTypeAliases = ['get-text', 'get-element-text'] as const;
+
 /**
  * Gets a web element text and stores it into a variable
+ * @properties {@link GetElementTextTestStepRunnerProperties}
+ * @runnerType {@link GetElementTextTestStepRunnerTypeAliases}
  */
 @Register(
   GetElementTextTestStepRunnerProperties,
-  'get-text',
-  'get-element-text',
+  ...GetElementTextTestStepRunnerTypeAliases
 )
 export class GetElementTextTestStepRunner extends ITestStepRunner<GetElementTextTestStepRunnerProperties> {
   private readonly logger: ILogger;
@@ -55,7 +69,7 @@ export class GetElementTextTestStepRunner extends ITestStepRunner<GetElementText
     variable = state.variables.put(variable, elementText);
 
     this.logger.info(
-      `Succesfully stored text '${elementText}' of the element ${selector} into '${variable}' variable`,
+      `Successfully stored text '${elementText}' of the element ${selector} into '${variable}' variable`,
     );
   }
 }

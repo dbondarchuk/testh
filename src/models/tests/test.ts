@@ -1,9 +1,11 @@
-import { TestStep } from './testStep';
+import { Type } from 'class-transformer';
+import { Page } from './page';
+import { TestSteps } from './testStep';
 
 /**
  * Describes a test
  */
-export interface Test {
+export class Test {
   /**
    * Name of the test
    */
@@ -15,7 +17,13 @@ export interface Test {
   variables?: Record<string, any>;
 
   /**
+   * Page objects
+   */
+  @Type(() => Page)
+  pages?: Page[];
+
+  /**
    * Steps to run
    */
-  steps: TestStep[];
+  steps: TestSteps;
 }

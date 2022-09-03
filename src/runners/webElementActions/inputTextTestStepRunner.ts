@@ -10,20 +10,38 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
+/**
+ * Properties for {@link InputTextTestStepRunner}
+ */
 export class InputTextTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Element selector
+   */
   @Type(() => Selector)
   selector: Selector;
 
+  /**
+   * Text to input
+   */
   text?: string;
+
+  /**
+   * Determines whether element text should be cleared before the input
+   */
   clear?: boolean;
 }
 
+/** Runner type aliases for {@link InputTextTestStepRunner} */
+export const InputTextTestStepRunnerTypeAliases = ['input', 'type'] as const;
+
 /**
- * Clicks on a web element
+ * Inputs text into the web element
+ * @properties {@link InputTextTestStepRunnerProperties}
+ * @runnerType {@link InputTextTestStepRunnerTypeAliases}
  */
-@Register(InputTextTestStepRunnerProperties, 'input', 'type')
+@Register(InputTextTestStepRunnerProperties, ...InputTextTestStepRunnerTypeAliases)
 export class InputTextTestStepRunner extends ITestStepRunner<InputTextTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -48,13 +66,13 @@ export class InputTextTestStepRunner extends ITestStepRunner<InputTextTestStepRu
       this.logger.info(`Clearing input ${selector}`);
       await element.clear();
 
-      this.logger.info(`Succesfully cleared element ${selector}`);
+      this.logger.info(`Successfully cleared element ${selector}`);
     }
 
     if (this.props.text) {
       this.logger.info(`Typing ${this.props.text} into ${selector}`);
       await element.sendKeys(this.props.text);
-      this.logger.info(`Succesfully typed into element ${selector}`);
+      this.logger.info(`Successfully typed into element ${selector}`);
     }
   }
 }

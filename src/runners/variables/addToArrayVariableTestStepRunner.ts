@@ -8,17 +8,34 @@ import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 
+/**
+ * Properties for {@link AddToArrayVariableTestStepRunner}
+ */
 export class AddToArrayVariableTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Name of the array variable 
+   */
   variable: string;
+
+  /**
+   * Value to add
+   */
   value: any;
 }
 
 /**
- * Sets a value into a variable
+ * Runner type aliases for {@link AddToArrayVariableTestStepRunner}
  */
-@Register(AddToArrayVariableTestStepRunnerProperties, 'add-to-array-variable')
+export const AddToArrayVariableTestStepRunnerTypeAliases = ['add-to-array-variable'] as const;
+
+/**
+ * Sets a value into a variable
+ * @properties {@link AddToArrayVariableTestStepRunnerProperties}
+ * @runnerType {@link AddToArrayVariableTestStepRunnerTypeAliases}
+ */
+@Register(AddToArrayVariableTestStepRunnerProperties, ...AddToArrayVariableTestStepRunnerTypeAliases)
 export class AddToArrayVariableTestStepRunner extends ITestStepRunner<AddToArrayVariableTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(

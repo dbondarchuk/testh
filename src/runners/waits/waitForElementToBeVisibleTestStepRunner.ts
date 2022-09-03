@@ -11,20 +11,34 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
+/**
+ * Properties for {@link WaitForElementToBeVisibleTestStepRunner}
+ */
 export class WaitForElementToBeVisibleTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Element selector
+   */
   @Type(() => Selector)
   selector: Selector;
+
+  /**
+   * Wait timeout in seconds
+   */
   timeout: number;
 }
 
+export const WaitForElementToBeVisibleTestStepRunnerTypeAliases = ['wait-to-be-visible'] as const;
+
 /**
- * Waits for a web element to be present
+ * Waits for a web element to be visible
+ * @properties {@link WaitForElementToBeVisibleTestStepRunnerProperties}
+ * @runnerType {@link WaitForElementToBeVisibleTestStepRunner}
  */
 @Register(
   WaitForElementToBeVisibleTestStepRunnerProperties,
-  'wait-to-be-visible',
+  ...WaitForElementToBeVisibleTestStepRunnerTypeAliases,
 )
 export class WaitForElementToBeVisibleTestStepRunner extends ITestStepRunner<WaitForElementToBeVisibleTestStepRunnerProperties> {
   private readonly logger: ILogger;

@@ -11,19 +11,27 @@ import { Type } from 'class-transformer';
 import { Assert } from '../../helpers/assert';
 import { NumberComparison } from '../../models/comparison/numberComparison';
 
+/** Properties for {@link CompareNumbersTestStepRunner} */
 export class CompareNumbersTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /** Comparison value */
   @Type(() => NumberComparison)
   compare: NumberComparison;
 
+  /** Value to compare */
   to: number;
 }
 
+/** Runner type aliases for {@link CompareNumbersTestStepRunner} */
+export const CompareNumbersTestStepRunnerTypeAliases = ['compare-numbers'] as const;
+
 /**
- * Checks a web element text
+ * Compares two numbers
+ * @properties {@link CompareNumbersTestStepRunnerProperties}
+ * @runnerType {@link CompareNumbersTestStepRunnerTypeAliases}
  */
-@Register(CompareNumbersTestStepRunnerProperties, 'compare-numbers')
+@Register(CompareNumbersTestStepRunnerProperties, ...CompareNumbersTestStepRunnerTypeAliases)
 export class CompareNumbersTestStepRunner extends ITestStepRunner<CompareNumbersTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -47,7 +55,7 @@ export class CompareNumbersTestStepRunner extends ITestStepRunner<CompareNumbers
     Assert.assertNumberComparison(this.props.compare, this.props.to);
 
     this.logger.info(
-      `Element ${compare} text successfully matched ${this.props.compare}`,
+      `Value ${this.props.to} successfully matched ${this.props.compare}`,
     );
   }
 }

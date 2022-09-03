@@ -1,5 +1,6 @@
 import { JsEngine } from '../../helpers/js/jsEngine';
-import { Variables } from './variables';
+import { Variables } from '../variables/variables';
+import { VariablesContainer } from '../variables/variablesContainer';
 
 /**
  * Describes a test step value
@@ -170,9 +171,32 @@ export interface TestStep {
  */
 export const getProperties = async (
   step: TestStep,
-  variables?: Variables,
+  variables?: VariablesContainer,
 ): Promise<Record<string, any>> => {
   if (!variables) return step.values;
 
   return await JsEngine.evaluateProperties(step.values, variables);
 };
+
+/**
+ * Describes a list of tests steps with additional variables for those steps
+ */
+export class TestSteps extends Array<TestStep> {
+  /**
+   * Additional base variables for the steps
+   */
+  variables: Variables;
+}
+
+/**
+ * Creates new TestSteps from list steps and additional variables
+ * @param steps List of steps
+ * @param variables Additional variables
+ * @returns {TestSteps} Wrapper around test steps and variables
+ */
+export function stepsWrapper(steps: TestStep[], variables: Variables): TestSteps {
+    const wrapper = new TestSteps(...steps);
+    wrapper.variables = variables;
+
+    return wrapper;
+}

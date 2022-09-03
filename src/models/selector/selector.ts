@@ -1,10 +1,13 @@
-import { By } from 'selenium-webdriver';
-import { InvalidSelectorTypeException } from '../exceptions/invalidSelectorTypeException';
+import { Type } from "class-transformer";
+import { By, locateWith, RelativeBy } from "selenium-webdriver";
+import { InvalidSelectorTypeException } from "../exceptions/invalidSelectorTypeException";
+import { RelativeSelector } from "./relativeSelector";
 
 /**
  * Describes a selector
  */
 export class Selector {
+
   /**
    * Type of the Selector
    */
@@ -15,36 +18,69 @@ export class Selector {
    */
   public value: string;
 
+  @Type(() => RelativeSelector)
+  public relative?: RelativeSelector[]
+
   /**
    * Gets selenium By object
    */
-  public get by(): By {
+  public get by(): By | RelativeBy {
+    let by: By;
     switch (this.type) {
       case 'xpath':
-        return By.xpath(this.value);
+        by = By.xpath(this.value);
+        break;
 
       case 'css':
-        return By.css(this.value);
+        by = By.css(this.value);
+        break;
 
       case 'id':
-        return By.id(this.value);
+        by = By.id(this.value);
+        break;
 
       case 'class':
-        return By.className(this.value);
+        by = By.className(this.value);
+        break;
 
       case 'name':
-        return By.name(this.value);
+        by = By.name(this.value);
+        break;
 
       /*  Only xpath allows text based search */
       case 'text':
-        return By.xpath(`//*[contains(text(), '${this.value}')]`);
+        by = By.xpath(`//*[contains(text(), '${this.value}')]`);
+        break;
 
       default:
         throw new InvalidSelectorTypeException(this.type);
     }
+
+    if (!this.relative || this.relative.length == 0) {
+      return by;
+    }
+
+    const relative = this.relative.reduce((relativeBy, item) => {
+      switch (item.type) {
+        case 'above':
+          return relativeBy.above(item.element ?? item.to.by);
+        case 'below':
+          return relativeBy.below(item.element ?? item.to.by);
+        case 'left':
+          return relativeBy.toLeftOf(item.element ?? item.to.by);
+        case 'right':
+          return relativeBy.toRightOf(item.element ?? item.to.by);
+        case 'near':
+          return relativeBy.near(item.element ?? item.to.by);
+        default:
+          throw new InvalidSelectorTypeException(`Unknown relative selector type: ${item.type}`);
+      }
+    }, locateWith(by));
+
+    return relative;
   }
 
   toString(): string {
-    return `type=${this.type},value=${this.value}`;
+    return `type=${this.type},value=${this.value},relative=${this.relative ? JSON.stringify(this.relative) : 'none'}`;
   }
 }

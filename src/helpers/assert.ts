@@ -32,7 +32,7 @@ export class Assert {
    * @param text target string
    * @param message the assertion error message
    */
-  public static assertComparison(
+  public static assertStringComparison(
     comparison: StringComparison,
     text: string,
     message?: string,

@@ -11,17 +11,28 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 
+/**
+ * Properties for {@link ClickOnElementTestStepRunner}
+ */
 export class ClickOnElementTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
+  /**
+   * Element selector
+   */
   @Type(() => Selector)
   selector: Selector;
 }
 
+/** Runner type aliases for {@link ClickOnElementTestStepRunner} */
+export const ClickOnElementTestStepRunnerTypeAliases = ['click'] as const;
+
 /**
  * Clicks on a web element
+ * @properties {@link ClickOnElementTestStepRunnerProperties}
+ * @runnerType {@link ClickOnElementTestStepRunnerTypeAliases}
  */
-@Register(ClickOnElementTestStepRunnerProperties, 'click')
+@Register(ClickOnElementTestStepRunnerProperties, ...ClickOnElementTestStepRunnerTypeAliases)
 export class ClickOnElementTestStepRunner extends ITestStepRunner<ClickOnElementTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -41,6 +52,7 @@ export class ClickOnElementTestStepRunner extends ITestStepRunner<ClickOnElement
     }
 
     this.logger.info(`Clicking on element ${selector}`);
+
     const element = await state.currentDriver.findElement(selector.by);
     if (!element) {
       throw new ElementNotFoundException(selector);
@@ -48,6 +60,6 @@ export class ClickOnElementTestStepRunner extends ITestStepRunner<ClickOnElement
 
     await element.click();
 
-    this.logger.info(`Succesfully clicked on element ${selector}`);
+    this.logger.info(`Successfully clicked on element ${selector}`);
   }
 }

@@ -1,16 +1,16 @@
 import { UnknownOptionException } from '../exceptions/unknownOptionException';
-import { IComparisson as IComparison } from './iComparison';
+import { IComparison as IComparison } from './iComparison';
 
 /**
- * Comparisson type for the strings
+ * Comparison type for the strings
  */
 export type NumberComparisonType = '>' | '>=' | '==' | '!=' | '<' | '<=';
 
 /**
- * Describes a comparisson of the strings
+ * Describes a comparison of the strings
  */
 export class NumberComparison implements IComparison<number, number> {
-  /** Comparisson type */
+  /** Comparison type */
   type: string;
 
   /** Value to compare to */

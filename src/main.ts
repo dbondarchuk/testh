@@ -1,3 +1,6 @@
+import 'reflect-metadata';
+import './helpers/selenium/webDriverProxy'
+
 import { readFileSync } from 'fs';
 import * as YAML from 'yaml';
 import { Test } from './models/tests/test';

@@ -1,10 +1,22 @@
 import { TestRunState } from './testRunState';
-import { TestStep } from '../tests/testStep';
+import { TestStep, TestSteps } from '../tests/testStep';
+import { Transform } from 'class-transformer';
 
 /**
  * Base type for test step runner properties
  */
 export type ITestStepRunnerProperties = Record<string, any>;
+
+/**
+ * Describes a class for step runner properties which runs additional test steps
+ */
+export class TestStepWithStepsProperties implements ITestStepRunnerProperties {
+  /**
+   * Steps to run
+   */
+  @Transform((params) => { return params.obj[params.key]; })
+  steps: TestSteps;
+}
 
 /**
  * Base class for the test step runners
