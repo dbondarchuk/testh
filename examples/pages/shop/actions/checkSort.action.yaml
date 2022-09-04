@@ -1,0 +1,47 @@
+- name: Click on sort
+  type: click
+  values:
+    selector:
+      type: class
+      value: product_sort_container
+- name: Click on Price low-high option
+  type: click
+  values:
+    selector:
+      type: css
+      value: .product_sort_container > [value=lohi]
+- name: Create prices array
+  type: set-variable
+  values:
+    variable: prices
+    value: []
+- name: Get price for each item
+  type: for-each-element
+  values:
+    selector:
+      type: class
+      value: inventory_item_price
+    steps:
+      - name: Get price
+        type: set-variable
+        values:
+          variable: price
+          value: $((await ELEMENT.getText()).trim().substr(1))
+      - name: Add price to array
+        type: add-to-array-variable
+        values:
+          value: $(parseFloat(price))
+          variable: prices
+- name: Check prices are sorted from low to high
+  type: for-each-item
+  values:
+    array: $(prices)
+    steps:
+      - name: Compare to previous
+        type: compare-numbers
+        condition: INDEX > 0
+        values:
+          compare:
+            type: '<='
+            value: $(prices[INDEX-1])
+          to: $(ITEM)

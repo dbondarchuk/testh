@@ -2,8 +2,8 @@ import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsR
 import { TestRunState } from '../../models/runners/testRunState';
 import {
   ITestStepRunner,
-  ITestStepRunnerProperties,
 } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { mkdir, writeFile } from 'fs/promises';
 import { VariablesContainer } from '../../models/variables/variablesContainer';

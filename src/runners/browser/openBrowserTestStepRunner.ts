@@ -1,8 +1,8 @@
 import { TestRunState } from '../../models/runners/testRunState';
 import {
   ITestStepRunner,
-  ITestStepRunnerProperties,
 } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Browser, Builder, logging, WebDriver } from 'selenium-webdriver';

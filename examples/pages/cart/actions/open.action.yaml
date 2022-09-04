@@ -1,0 +1,8 @@
+- name: Click on cart icon
+  type: click
+  values:
+    selector: $(link)
+- name: Wait for cart to load
+  type: wait
+  values: 
+    selector: $(checkout_btn)

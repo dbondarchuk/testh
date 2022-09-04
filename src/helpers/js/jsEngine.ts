@@ -90,6 +90,7 @@ export class JsEngine {
     variables: VariablesContainer,
     recursive = true
   ): Promise<any> => {
+    if (!variables) return obj;
     let newValue: any;
 
     switch (typeof obj) {

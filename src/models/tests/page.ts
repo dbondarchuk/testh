@@ -1,6 +1,7 @@
 import { Expose } from "class-transformer";
 import { Variables } from "../variables/variables";
-import { stepsWrapper, TestStep, TestSteps } from "./testStep";
+import { TestStep } from "./testStep";
+import { stepsWrapper, TestSteps } from "./testSteps";
 import { setEvaluateOnlyIfString } from "../../helpers/js/models/evaluateOnlyIfString";
 
 /**
@@ -8,14 +9,9 @@ import { setEvaluateOnlyIfString } from "../../helpers/js/models/evaluateOnlyIfS
  */
 export class Page {
     /** 
-     * Unique name to be used in tests
-     */
-    name: string;
-
-    /** 
      * Human friendly display name
      */
-    displayName: string;
+    name: string;
 
     /**
      * List of predefined variables. Will be merged with variables from the test execution. Test's variables will have higher priority.

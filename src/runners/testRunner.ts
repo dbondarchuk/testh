@@ -19,16 +19,16 @@ export class TestRunner {
     const loggerFactory = new LoggerFactory();
     const logger = loggerFactory.get<TestRunner>(TestRunner);
 
-    const pages = this.test.pages.reduce((record, current) => {
-      record[current.name] = {
-        actions: current.actions,
-        variables: current.variables
-      };
+    // const pages = this.test.pages.reduce((record, current) => {
+    //   record[current.name] = {
+    //     actions: current.actions,
+    //     variables: current.variables
+    //   };
 
-      return record;
-    }, {});
+    //   return record;
+    // }, {});
 
-    this.state.variables.put('pages', pages);
+    if (this.test.pages) this.state.variables.put('pages', this.test.pages);
 
     logger.info(`Running a test '${this.test.name}'...`);
 

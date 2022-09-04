@@ -1,0 +1,16 @@
+name: Shop
+variables:
+  addToCartBtn:
+    type: id
+    value: add-to-cart-$(productId)
+  removeFromCartBtn:
+    type: id
+    value: remove-$(productId)
+  cartBadge:
+    type: class
+    value: shopping_cart_badge
+  logoutLink:
+    type: id
+    value: logout_sidebar_link
+actions: !!inc/dir ['actions', {extensions: ['.action.yaml']}]
+    

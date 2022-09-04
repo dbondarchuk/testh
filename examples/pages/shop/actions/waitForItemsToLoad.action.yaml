@@ -1,0 +1,7 @@
+- name: Wait for items to load
+  type: wait
+  values:
+    selector:
+      type: class
+      value: inventory_list
+    timeout: $(elementWaitTimeout)

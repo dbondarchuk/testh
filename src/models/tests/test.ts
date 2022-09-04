@@ -1,6 +1,6 @@
-import { Type } from 'class-transformer';
+import { RecordType } from '../../helpers/types/recordType';
 import { Page } from './page';
-import { TestSteps } from './testStep';
+import { TestSteps } from "./testSteps";
 
 /**
  * Describes a test
@@ -19,8 +19,8 @@ export class Test {
   /**
    * Page objects
    */
-  @Type(() => Page)
-  pages?: Page[];
+  @RecordType(Page)
+  pages?: Record<string, Page>;
 
   /**
    * Steps to run

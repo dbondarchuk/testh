@@ -1,0 +1,41 @@
+- name: Click on add item
+  type: click
+  values:
+    selector: $(addToCartBtn)
+- name: Check number of items in cart
+  type: compare-element-text
+  values:
+    selector: $(cartBadge)
+    compare:
+      type: equals
+      value: '1'
+- name: Create items array
+  type: set-variable
+  values:
+    variable: EXPECTED_ITEMS
+    value:
+      - __execute__: !!inc/file ../snippets/getItem.snippet.yaml        
+- name: Open cart
+  type: run
+  values:
+    steps: $(pages.cart.actions.open)
+- name: Check cart
+  type: run
+  values:
+    steps: $(pages.cart.actions.checkItems)
+- name: Continue shopping
+  type: run
+  values:
+    steps: $(pages.cart.actions.continueShopping)
+- name: Wait for items to load
+  type: run
+  values:
+    steps: !!inc/file waitForItemsToLoad.action.yaml
+- name: Click on remove item
+  type: click
+  values:
+    selector: $(removeFromCartBtn)
+- name: Check that there is no items in a cart
+  type: wait-to-be-not-present
+  values:
+    selector: $(cartBadge)

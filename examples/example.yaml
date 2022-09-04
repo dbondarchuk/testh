@@ -1,0 +1,38 @@
+name: Example
+variables:
+  item_text: Sauce Labs Backpack
+  productId: sauce-labs-backpack
+  password: secret_sauce
+  elementWaitTimeout: 3
+pages: !!inc/dir ['pages', {extensions: ['.page.yaml']}]
+steps:
+  - name: Open Browser
+    type: open-browser
+    values:
+      browser: chrome
+      headless: true
+  - name: Sign in
+    type: run
+    values:
+      steps: $(pages.signin.actions.signin)
+  - name: Wait for shop page to load
+    type: run
+    values:
+      steps: $(pages.shop.actions.waitForItemsToLoad)
+  - name: Check add/remove to cart works
+    type: run
+    values:
+      steps: $(pages.shop.actions.checkAddRemoveCart)
+  - name: Check that sorting works
+    type: run
+    values:
+      steps: $(pages.shop.actions.checkSort)
+  - name: Log out
+    type: run
+    values:
+      steps: $(pages.shop.actions.logout)  
+  - name: Make screenshot
+    type: screenshot
+    runOnFailure: true
+    values:
+      type: page

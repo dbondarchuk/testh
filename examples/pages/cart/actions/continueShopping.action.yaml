@@ -1,0 +1,6 @@
+- name: Click on continue shopping
+  type: click
+  values:
+    selector:
+      type: id
+      value: continue-shopping

@@ -1,0 +1,5 @@
+- name: Wait for username input to be available
+  type: wait
+  values:
+    selector: $(usernameInput)
+    timeout: $(elementWaitTimeout)

@@ -1,0 +1,16 @@
+name: Cart
+variables:
+  link:
+    type: class
+    value: shopping_cart_link
+  cart_item:
+    type: class
+    value: cart_item
+  checkout_btn:
+    type: id
+    value: checkout
+  item_name_class: inventory_item_name
+  item_desc_class: inventory_item_desc
+  item_price_class: inventory_item_price
+actions: !!inc/dir ['actions', {extensions: ['.action.yaml']}]
+    

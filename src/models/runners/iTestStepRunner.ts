@@ -1,27 +1,11 @@
 import { TestRunState } from './testRunState';
-import { TestStep, TestSteps } from '../tests/testStep';
-import { Transform } from 'class-transformer';
-
-/**
- * Base type for test step runner properties
- */
-export type ITestStepRunnerProperties = Record<string, any>;
-
-/**
- * Describes a class for step runner properties which runs additional test steps
- */
-export class TestStepWithStepsProperties implements ITestStepRunnerProperties {
-  /**
-   * Steps to run
-   */
-  @Transform((params) => { return params.obj[params.key]; })
-  steps: TestSteps;
-}
+import { TestStep } from '../tests/testStep';
+import { ITestStepRunnerProperties } from './ITestStepRunnerProperties';
 
 /**
  * Base class for the test step runners
  */
-export abstract class ITestStepRunner<Props extends ITestStepRunnerProperties> {
+export abstract class ITestStepRunner<Props extends ITestStepRunnerProperties, T = void> {
   /**
    * @param props Properties
    */
@@ -31,6 +15,7 @@ export abstract class ITestStepRunner<Props extends ITestStepRunnerProperties> {
    * Test step entry point
    * @param state Current state
    * @param step Test step
+   * @returns
    */
-  public abstract run(state: TestRunState, step: TestStep): Promise<void>;
+  public abstract run(state: TestRunState, step: TestStep): Promise<T>;
 }

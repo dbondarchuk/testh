@@ -1,0 +1,40 @@
+- name: Create Object
+  type: create-object
+  values:
+    properties:
+      name:
+        __execute__:
+          - name: Get name
+            type: get-text
+            values:
+              variable: NAME
+              selector:
+                type: class
+                value: inventory_item_name
+                relative:
+                  - type: above
+                    to: $(removeFromCartBtn)
+      desc:
+        __execute__:
+          - name: Get description
+            type: get-text
+            values:
+              variable: DESC
+              selector:
+                type: class
+                value: inventory_item_desc
+                relative:
+                  - type: above
+                    to: $(removeFromCartBtn) 
+      price:
+        __execute__:
+          - name: Get price
+            type: get-text
+            values:
+              variable: PRICE
+              selector:
+                type: class
+                value: inventory_item_price
+                relative:
+                  - type: left
+                    to: $(removeFromCartBtn)   

@@ -1,11 +1,12 @@
-import { ITestStepRunner, ITestStepRunnerProperties } from './iTestStepRunner';
+import { ITestStepRunner } from './iTestStepRunner';
+import { ITestStepRunnerProperties } from "./ITestStepRunnerProperties";
 
 export type Constructor<T> = new (...args: any[]) => T;
 
-const implementations: Record<string, TestStepRunnerImplementationType> = {};
+const implementations: Record<string, TestStepRunnerImplementationType<any>> = {};
 
-export type TestStepRunnerImplementationType = {
-  ctor: Constructor<ITestStepRunner<ITestStepRunnerProperties>>;
+export type TestStepRunnerImplementationType<T> = {
+  ctor: Constructor<ITestStepRunner<ITestStepRunnerProperties, T>>;
   propertiesType: Constructor<ITestStepRunnerProperties>;
 };
 
@@ -15,7 +16,7 @@ export type TestStepRunnerImplementationType = {
  */
 export function getImplementations(): Record<
   string,
-  TestStepRunnerImplementationType
+  TestStepRunnerImplementationType<any>
 > {
   return implementations;
 }
@@ -25,7 +26,7 @@ export function getImplementations(): Record<
  * @param aliases Names to register test step runner
  */
 export function Register<
-  T extends Constructor<ITestStepRunner<Props>>,
+  T extends Constructor<ITestStepRunner<Props, any>>,
   Props extends ITestStepRunnerProperties,
 >(propertiesType: Constructor<Props>, ...aliases: string[]): (ctor: T) => any {
   return (ctor: T) => {

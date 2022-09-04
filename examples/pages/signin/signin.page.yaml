@@ -1,0 +1,13 @@
+name: Login Page
+variables:
+  url: https://www.saucedemo.com/
+  usernameInput:
+    type: id
+    value: user-name
+  username: standard_user
+  password: secret_sauce_wrong
+  signInBtnId: login-button
+  signInBtn:
+    type: id
+    value: $(signInBtnId)
+actions: !!inc/dir ['actions', {extensions: ['.action.yaml']}]

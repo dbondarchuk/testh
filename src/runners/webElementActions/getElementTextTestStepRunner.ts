@@ -2,8 +2,8 @@ import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsR
 import { TestRunState } from '../../models/runners/testRunState';
 import {
   ITestStepRunner,
-  ITestStepRunnerProperties,
 } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -21,26 +21,22 @@ export class GetElementTextTestStepRunnerProperties
    */
   @Type(() => Selector)
   selector: Selector;
-
-  /**
-   * Name of the variable where to save element's text
-   */
-  variable: string;
 }
 
 /** Runner type aliases for {@link GetElementTextTestStepRunner} */
 export const GetElementTextTestStepRunnerTypeAliases = ['get-text', 'get-element-text'] as const;
 
 /**
- * Gets a web element text and stores it into a variable
+ * Gets a web element text and returns it
  * @properties {@link GetElementTextTestStepRunnerProperties}
  * @runnerType {@link GetElementTextTestStepRunnerTypeAliases}
+ * @returns {string} Element's text
  */
 @Register(
   GetElementTextTestStepRunnerProperties,
   ...GetElementTextTestStepRunnerTypeAliases
 )
-export class GetElementTextTestStepRunner extends ITestStepRunner<GetElementTextTestStepRunnerProperties> {
+export class GetElementTextTestStepRunner extends ITestStepRunner<GetElementTextTestStepRunnerProperties, string> {
   private readonly logger: ILogger;
   constructor(
     props: GetElementTextTestStepRunnerProperties,
@@ -52,24 +48,19 @@ export class GetElementTextTestStepRunner extends ITestStepRunner<GetElementText
     );
   }
 
-  public async run(state: TestRunState): Promise<void> {
+  public async run(state: TestRunState): Promise<string> {
     const selector = this.props.selector;
     if (!selector) {
       throw new PropertyIsRequiredException('selector');
     }
 
-    let variable = this.props.variable;
-    if (!variable) {
-      throw new PropertyIsRequiredException('variable');
-    }
-
     const element = await state.currentDriver.findElement(selector.by);
     const elementText = await element.getText();
 
-    variable = state.variables.put(variable, elementText);
-
     this.logger.info(
-      `Successfully stored text '${elementText}' of the element ${selector} into '${variable}' variable`,
+      `Successfully got text '${elementText}' of the element ${selector}`,
     );
+
+    return elementText;
   }
 }

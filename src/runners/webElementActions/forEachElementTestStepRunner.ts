@@ -1,8 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
 import {
-  ITestStepRunner,
-  TestStepWithStepsProperties,
+  ITestStepRunner
 } from '../../models/runners/iTestStepRunner';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
@@ -11,6 +10,7 @@ import { Selector } from '../../models/selector/selector';
 import { Type } from 'class-transformer';
 import { VariablesContainer } from '../../models/variables/variablesContainer';
 import { runTestSteps } from '../../helpers/steps/stepsRunner';
+import { TestStepWithStepsProperties } from '../../models/runners/ITestStepRunnerProperties';
 
 /**
  * Properties for {@link ForEachElementTestStepRunner}

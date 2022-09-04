@@ -1,8 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
 import {
-  ITestStepRunner,
-  TestStepWithStepsProperties,
+  ITestStepRunner
 } from '../../models/runners/iTestStepRunner';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
@@ -10,6 +9,7 @@ import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { VariablesContainer } from '../../models/variables/variablesContainer';
 import { InvalidOperationException } from '../../models/exceptions/invalidOperationException';
 import { runTestSteps } from '../../helpers/steps/stepsRunner';
+import { TestStepWithStepsProperties } from '../../models/runners/ITestStepRunnerProperties';
 
 /**
  * Properties for {@link RunStepsTestStepRunner}
