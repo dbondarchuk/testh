@@ -2,6 +2,7 @@
   "singleQuote": true,
   "tabWidth": 2,
   "trailingComma": "all",
+  
   "overrides": [
     {
       "files": ["*.ts", "*.mts"],
