@@ -12,5 +12,4 @@ variables:
   item_name_class: inventory_item_name
   item_desc_class: inventory_item_desc
   item_price_class: inventory_item_price
-actions: !!inc/dir ['actions', {extensions: ['.action.yaml']}]
-    
+actions: !!inc/dir ['actions', { extensions: ['.action.yaml'] }]

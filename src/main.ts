@@ -1,22 +1,38 @@
 import 'reflect-metadata';
-import './helpers/selenium/webDriverProxy'
+import './helpers/selenium/webDriverProxy';
 
-import * as yaml from 'js-yaml';
+import { container } from 'tsyringe';
 
 import { Test } from './models/tests/test';
 import { TestRunner } from './runners/testRunner';
-import { readFile } from 'fs/promises';
-import { setBaseFile, YAML_INCLUDE_SCHEMA } from './yaml-include';
+
+import { YamlInclude } from 'yaml-js-include';
+import { LoggerFactoryInjectionToken } from './models/logger/iLoggerFactory';
+import { LoggerFactory } from './logger/loggerFactory';
+import { PropertiesEvaluatorInjectionToken } from './helpers/properties/iPropertiesEvaluator';
+import { PropertiesEvaluator } from './helpers/properties/propertiesEvaluator';
+import { StepsRunner } from './helpers/steps/stepsRunner';
+import { StepsRunnerInjectionToken } from './helpers/steps/iStepsRunner';
+
+function registerServices() {
+  container.registerSingleton(LoggerFactoryInjectionToken, LoggerFactory);
+  container.registerSingleton(
+    PropertiesEvaluatorInjectionToken,
+    PropertiesEvaluator,
+  );
+  container.registerSingleton(StepsRunnerInjectionToken, StepsRunner);
+}
 
 async function main(pathToTest: string): Promise<number> {
+  registerServices();
+
   let test: Test = null;
   // if (pathToTest?.endsWith('.json')) {
   //   test = JSON.parse(readFileSync(pathToTest).toString()) as Test;
-  // } else 
+  // } else
   if (pathToTest?.endsWith('.yaml') || pathToTest?.endsWith('.yml')) {
-    setBaseFile(pathToTest)
-    const src = await readFile(pathToTest, 'utf8');
-    test = yaml.load(src, { schema: YAML_INCLUDE_SCHEMA, filename: pathToTest }) as Test;
+    const yaml = new YamlInclude();
+    test = await yaml.loadAsync<Test>(pathToTest);
   } else {
     console.error('Unknown file type');
 

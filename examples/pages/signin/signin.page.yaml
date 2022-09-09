@@ -10,4 +10,4 @@ variables:
   signInBtn:
     type: id
     value: $(signInBtnId)
-actions: !!inc/dir ['actions', {extensions: ['.action.yaml']}]
+actions: !!inc/dir ['actions', { extensions: ['.action.yaml'] }]

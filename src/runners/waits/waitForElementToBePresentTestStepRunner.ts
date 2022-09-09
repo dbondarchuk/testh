@@ -1,10 +1,8 @@
 import { until } from 'selenium-webdriver';
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -30,7 +28,10 @@ export class WaitForElementToBePresentTestStepRunnerProperties
 }
 
 /** Runner type aliases for {@link WaitForElementToBePresentTestStepRunner} */
-export const WaitForElementToBePresentTestStepRunnerTypeAliases = ['wait', 'wait-to-be-present'] as const;
+export const WaitForElementToBePresentTestStepRunnerTypeAliases = [
+  'wait',
+  'wait-to-be-present',
+] as const;
 
 /**
  * Waits for a web element to be present
@@ -39,7 +40,7 @@ export const WaitForElementToBePresentTestStepRunnerTypeAliases = ['wait', 'wait
  */
 @Register(
   WaitForElementToBePresentTestStepRunnerProperties,
-  ...WaitForElementToBePresentTestStepRunnerTypeAliases
+  ...WaitForElementToBePresentTestStepRunnerTypeAliases,
 )
 export class WaitForElementToBePresentTestStepRunner extends ITestStepRunner<WaitForElementToBePresentTestStepRunnerProperties> {
   private readonly logger: ILogger;

@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -41,7 +39,10 @@ export const InputTextTestStepRunnerTypeAliases = ['input', 'type'] as const;
  * @properties {@link InputTextTestStepRunnerProperties}
  * @runnerType {@link InputTextTestStepRunnerTypeAliases}
  */
-@Register(InputTextTestStepRunnerProperties, ...InputTextTestStepRunnerTypeAliases)
+@Register(
+  InputTextTestStepRunnerProperties,
+  ...InputTextTestStepRunnerTypeAliases,
+)
 export class InputTextTestStepRunner extends ITestStepRunner<InputTextTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(

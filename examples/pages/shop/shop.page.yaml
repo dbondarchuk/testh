@@ -12,5 +12,4 @@ variables:
   logoutLink:
     type: id
     value: logout_sidebar_link
-actions: !!inc/dir ['actions', {extensions: ['.action.yaml']}]
-    
+actions: !!inc/dir ['actions', { extensions: ['.action.yaml'] }]

@@ -1,6 +1,6 @@
 import { RecordType } from '../../helpers/types/recordType';
 import { Page } from './page';
-import { TestSteps } from "./testSteps";
+import { TestSteps } from './testSteps';
 
 /**
  * Describes a test

@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -29,7 +27,10 @@ export class GetElementTextToVariableTestStepRunnerProperties
 }
 
 /** Runner type aliases for {@link GetElementTextToVariableTestStepRunner} */
-export const GetElementTextToVariableTestStepRunnerTypeAliases = ['get-text-to-variable', 'get-element-text-to-variable'] as const;
+export const GetElementTextToVariableTestStepRunnerTypeAliases = [
+  'get-text-to-variable',
+  'get-element-text-to-variable',
+] as const;
 
 /**
  * Gets a web element text and stores it into a variable
@@ -38,7 +39,7 @@ export const GetElementTextToVariableTestStepRunnerTypeAliases = ['get-text-to-v
  */
 @Register(
   GetElementTextToVariableTestStepRunnerProperties,
-  ...GetElementTextToVariableTestStepRunnerTypeAliases
+  ...GetElementTextToVariableTestStepRunnerTypeAliases,
 )
 export class GetElementTextToVariableTestStepRunner extends ITestStepRunner<GetElementTextToVariableTestStepRunnerProperties> {
   private readonly logger: ILogger;

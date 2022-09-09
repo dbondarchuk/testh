@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { ILogger } from '../models/logger/iLogger';
 
+/** Console logger */
 export class ConsoleLogger implements ILogger {
   constructor(private readonly typeName: string) {}
 

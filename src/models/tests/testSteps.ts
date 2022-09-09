@@ -18,7 +18,10 @@ export class TestSteps extends Array<TestStep> {
  * @param variables Additional variables
  * @returns {TestSteps} Wrapper around test steps and variables
  */
- export function stepsWrapper(steps: TestStep[], variables: Variables): TestSteps {
+export function stepsWrapper(
+  steps: TestStep[],
+  variables: Variables,
+): TestSteps {
   const wrapper = new TestSteps(...steps);
   wrapper.variables = variables;
 

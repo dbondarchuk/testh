@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { mkdir, writeFile } from 'fs/promises';
 import { VariablesContainer } from '../../models/variables/variablesContainer';
@@ -16,16 +14,16 @@ import { TestStep } from '../../models/tests/testStep';
 import { UnknownOptionException } from '../../models/exceptions/unknownOptionException';
 
 /** Screenshot type */
-export type ScreenshotType = 
+export type ScreenshotType =
   /** Specific element */
-  'element' 
+  | 'element'
 
   /** All page */
-  | 'all-page' 
-  
+  | 'all-page'
+
   /** Currently visible page */
-  | 'visible-page' 
-  
+  | 'visible-page'
+
   /** Alias for {@link ScreenshotType."visible-page"} */
   | 'page';
 
@@ -55,7 +53,10 @@ export const MakeScreenshotTestStepRunnerTypeAliases = ['screenshot'] as const;
  * @properties {@link MakeScreenshotTestStepRunnerProperties}
  * @runnerType {@link MakeScreenshotTestStepRunnerTypeAliases}
  */
-@Register(MakeScreenshotTestStepRunnerProperties, ...MakeScreenshotTestStepRunnerTypeAliases)
+@Register(
+  MakeScreenshotTestStepRunnerProperties,
+  ...MakeScreenshotTestStepRunnerTypeAliases,
+)
 export class MakeScreenshotTestStepRunner extends ITestStepRunner<MakeScreenshotTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -87,7 +88,9 @@ export class MakeScreenshotTestStepRunner extends ITestStepRunner<MakeScreenshot
         this.logger.info('Making a screenshot of the visible page');
         const screenshotPath = `screenshots/${
           state.testName
-        }-${state.variables.get(VariablesContainer.TASK_STEP_NUMBER)}-${step.name}.png`;
+        }-${state.variables.get(VariablesContainer.TASK_STEP_NUMBER)}-${
+          step.name
+        }.png`;
 
         const data = await driver.takeScreenshot();
         await this.writeScreenshot(data, screenshotPath);

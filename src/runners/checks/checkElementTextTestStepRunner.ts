@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -26,14 +24,19 @@ export class CheckElementTextTestStepRunnerProperties
 }
 
 /** Runner type aliases for {@link CheckElementTextTestStepRunner} */
-export const CheckElementTextTestStepRunnerTypeAliases = ['compare-element-text'] as const;
+export const CheckElementTextTestStepRunnerTypeAliases = [
+  'compare-element-text',
+] as const;
 
 /**
  * Checks a web element text
  * @properties {@link CheckElementTextTestStepRunnerProperties}
  * @runnerType {@link CheckElementTextTestStepRunnerTypeAliases}
  */
-@Register(CheckElementTextTestStepRunnerProperties, ...CheckElementTextTestStepRunnerTypeAliases)
+@Register(
+  CheckElementTextTestStepRunnerProperties,
+  ...CheckElementTextTestStepRunnerTypeAliases,
+)
 export class CheckElementTextTestStepRunner extends ITestStepRunner<CheckElementTextTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(

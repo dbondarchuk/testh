@@ -1,13 +1,12 @@
-import { Type } from "class-transformer";
-import { By, locateWith, RelativeBy } from "selenium-webdriver";
-import { InvalidSelectorTypeException } from "../exceptions/invalidSelectorTypeException";
-import { RelativeSelector } from "./relativeSelector";
+import { Type } from 'class-transformer';
+import { By, locateWith, RelativeBy } from 'selenium-webdriver';
+import { InvalidSelectorTypeException } from '../exceptions/invalidSelectorTypeException';
+import { RelativeSelector } from './relativeSelector';
 
 /**
  * Describes a selector
  */
 export class Selector {
-
   /**
    * Type of the Selector
    */
@@ -19,7 +18,7 @@ export class Selector {
   public value: string;
 
   @Type(() => RelativeSelector)
-  public relative?: RelativeSelector[]
+  public relative?: RelativeSelector[];
 
   /**
    * Gets selenium By object
@@ -73,7 +72,9 @@ export class Selector {
         case 'near':
           return relativeBy.near(item.element ?? item.to.by);
         default:
-          throw new InvalidSelectorTypeException(`Unknown relative selector type: ${item.type}`);
+          throw new InvalidSelectorTypeException(
+            `Unknown relative selector type: ${item.type}`,
+          );
       }
     }, locateWith(by));
 
@@ -81,6 +82,8 @@ export class Selector {
   }
 
   toString(): string {
-    return `type=${this.type},value=${this.value},relative=${this.relative ? JSON.stringify(this.relative) : 'none'}`;
+    return `type=${this.type},value=${this.value},relative=${
+      this.relative ? JSON.stringify(this.relative) : 'none'
+    }`;
   }
 }

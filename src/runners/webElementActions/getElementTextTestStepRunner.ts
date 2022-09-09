@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -24,7 +22,10 @@ export class GetElementTextTestStepRunnerProperties
 }
 
 /** Runner type aliases for {@link GetElementTextTestStepRunner} */
-export const GetElementTextTestStepRunnerTypeAliases = ['get-text', 'get-element-text'] as const;
+export const GetElementTextTestStepRunnerTypeAliases = [
+  'get-text',
+  'get-element-text',
+] as const;
 
 /**
  * Gets a web element text and returns it
@@ -34,9 +35,12 @@ export const GetElementTextTestStepRunnerTypeAliases = ['get-text', 'get-element
  */
 @Register(
   GetElementTextTestStepRunnerProperties,
-  ...GetElementTextTestStepRunnerTypeAliases
+  ...GetElementTextTestStepRunnerTypeAliases,
 )
-export class GetElementTextTestStepRunner extends ITestStepRunner<GetElementTextTestStepRunnerProperties, string> {
+export class GetElementTextTestStepRunner extends ITestStepRunner<
+  GetElementTextTestStepRunnerProperties,
+  string
+> {
   private readonly logger: ILogger;
   constructor(
     props: GetElementTextTestStepRunnerProperties,

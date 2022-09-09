@@ -1,22 +1,23 @@
+import { container } from 'tsyringe';
+
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner
-} from '../../models/runners/iTestStepRunner';
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { VariablesContainer } from '../../models/variables/variablesContainer';
 import { InvalidOperationException } from '../../models/exceptions/invalidOperationException';
-import { runTestSteps } from '../../helpers/steps/stepsRunner';
 import { TestStepWithStepsProperties } from '../../models/runners/ITestStepRunnerProperties';
+import {
+  IStepsRunner,
+  StepsRunnerInjectionToken,
+} from '../../helpers/steps/iStepsRunner';
 
 /**
  * Properties for {@link RunStepsTestStepRunner}
  */
-export class RunStepsTestStepRunnerProperties extends TestStepWithStepsProperties
-{
-}
+export class RunStepsTestStepRunnerProperties extends TestStepWithStepsProperties {}
 
 /** Runner type aliases for {@link RunStepsTestStepRunner} */
 export const RunStepsTestStepRunnerTypeAliases = ['run', 'run-steps'] as const;
@@ -27,13 +28,14 @@ export const RunStepsTestStepRunnerTypeAliases = ['run', 'run-steps'] as const;
  * @runnerType {@link RunStepsTestStepRunnerTypeAliases}
  */
 @Register(
-  RunStepsTestStepRunnerProperties, ...RunStepsTestStepRunnerTypeAliases
+  RunStepsTestStepRunnerProperties,
+  ...RunStepsTestStepRunnerTypeAliases,
 )
 export class RunStepsTestStepRunner extends ITestStepRunner<RunStepsTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
     props: RunStepsTestStepRunnerProperties,
-    private readonly loggerFactory: ILoggerFactory,
+    loggerFactory: ILoggerFactory,
   ) {
     super(props);
     this.logger = loggerFactory.get<RunStepsTestStepRunner>(
@@ -50,19 +52,19 @@ export class RunStepsTestStepRunner extends ITestStepRunner<RunStepsTestStepRunn
       throw new InvalidOperationException(`Steps is not an array`);
     }
 
-    this.logger.info(
-      `Running ${this.props.steps.length} steps`,
+    this.logger.info(`Running ${this.props.steps.length} steps`);
+
+    const basicStepNumber = state.variables.get(
+      VariablesContainer.TASK_STEP_NUMBER,
     );
 
-    const basicStepNumber = state.variables.get(VariablesContainer.TASK_STEP_NUMBER);
-
-    await runTestSteps(
-      this.props.steps,
-      state,
-      this.logger,
-      this.loggerFactory,
-      (stepNumber) => `${basicStepNumber}.${stepNumber++}`,
-    );
+    await container
+      .resolve<IStepsRunner>(StepsRunnerInjectionToken)
+      .runTestSteps(
+        this.props.steps,
+        state,
+        (stepNumber) => `${basicStepNumber}.${stepNumber++}`,
+      );
 
     this.logger.info(`Successfully run all steps for all items`);
   }

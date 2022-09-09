@@ -4,7 +4,7 @@ variables:
   productId: sauce-labs-backpack
   password: secret_sauce
   elementWaitTimeout: 3
-pages: !!inc/dir ['pages', {extensions: ['.page.yaml']}]
+pages: !!inc/dir ['pages', { extensions: ['.page.yaml'] }]
 steps:
   - name: Open Browser
     type: open-browser
@@ -14,23 +14,24 @@ steps:
   - name: Sign in
     type: run
     values:
-      steps: $(pages.signin.actions.signin)
+      $steps: pages.signin.actions.signin
   - name: Wait for shop page to load
     type: run
     values:
-      steps: $(pages.shop.actions.waitForItemsToLoad)
+      $steps: pages.shop.actions.waitForItemsToLoad
   - name: Check add/remove to cart works
     type: run
     values:
-      steps: $(pages.shop.actions.checkAddRemoveCart)
+      $steps: pages.shop.actions.checkAddRemoveCart
   - name: Check that sorting works
     type: run
+    condition: EXPECTED_ITEMS && EXPECTED_ITEMS.length > 0
     values:
-      steps: $(pages.shop.actions.checkSort)
+      $steps: pages.shop.actions.checkSort
   - name: Log out
     type: run
     values:
-      steps: $(pages.shop.actions.logout)  
+      $steps: pages.shop.actions.logout
   - name: Make screenshot
     type: screenshot
     runOnFailure: true

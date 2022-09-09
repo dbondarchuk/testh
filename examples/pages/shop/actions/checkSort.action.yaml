@@ -26,16 +26,16 @@
         type: set-variable
         values:
           variable: price
-          value: $((await ELEMENT.getText()).trim().substr(1))
+          $value: (await ELEMENT.getText()).trim().substr(1)
       - name: Add price to array
         type: add-to-array-variable
         values:
-          value: $(parseFloat(price))
+          $value: parseFloat(price)
           variable: prices
 - name: Check prices are sorted from low to high
   type: for-each-item
   values:
-    array: $(prices)
+    $array: prices
     steps:
       - name: Compare to previous
         type: compare-numbers
@@ -43,5 +43,5 @@
         values:
           compare:
             type: '<='
-            value: $(prices[INDEX-1])
-          to: $(ITEM)
+            $value: prices[INDEX-1]
+          $to: ITEM

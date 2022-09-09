@@ -5,7 +5,10 @@ import { ITestStepRunnerProperties } from './ITestStepRunnerProperties';
 /**
  * Base class for the test step runners
  */
-export abstract class ITestStepRunner<Props extends ITestStepRunnerProperties, T = void> {
+export abstract class ITestStepRunner<
+  Props extends ITestStepRunnerProperties,
+  T = void,
+> {
   /**
    * @param props Properties
    */

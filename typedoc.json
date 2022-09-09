@@ -1,18 +1,18 @@
 {
-    "$schema": "https://typedoc.org/schema.json",
-    "cleanOutputDir": true,    
-    "exclude": [
-        "src/runners/runners.ts",
-        "src/**/index.ts",
-        "**/src/test/*",
-        "**/*.test.ts",
-        "**/__tests__/*",
-        "**/__mocks__/*"
-    ],
-    "out": "docs",
-    "includeVersion": true,
-    "name": "Testh Runner",
-    "theme": "hierarchy",
-        "entryPoints": ["src/runners", "src/models", "src/helpers"],
-        "entryPointStrategy": "expand",
+  "$schema": "https://typedoc.org/schema.json",
+  "cleanOutputDir": true,
+  "exclude": [
+    "src/runners/runners.ts",
+    "src/**/index.ts",
+    "**/src/test/*",
+    "**/*.test.ts",
+    "**/__tests__/*",
+    "**/__mocks__/*"
+  ],
+  "out": "docs",
+  "includeVersion": true,
+  "name": "Testh Runner",
+  "theme": "hierarchy",
+  "entryPoints": ["src/runners", "src/models", "src/helpers"],
+  "entryPointStrategy": "expand"
 }

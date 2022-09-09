@@ -1,8 +1,6 @@
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Browser, Builder, logging, WebDriver } from 'selenium-webdriver';
@@ -65,14 +63,20 @@ export class OpenBrowserTestStepRunnerProperties
 /**
  * Runner type aliases
  */
-export const OpenBrowserTestStepRunnerTypeAliases = ['open', 'open-browser'] as const;
+export const OpenBrowserTestStepRunnerTypeAliases = [
+  'open',
+  'open-browser',
+] as const;
 
 /**
  * Opens a new browser and switches to its' driver
  * @properties {@link OpenBrowserTestStepRunnerProperties}
  * @runnerType {@link OpenBrowserTestStepRunnerTypeAliases}
  */
-@Register(OpenBrowserTestStepRunnerProperties, ...OpenBrowserTestStepRunnerTypeAliases)
+@Register(
+  OpenBrowserTestStepRunnerProperties,
+  ...OpenBrowserTestStepRunnerTypeAliases,
+)
 export class OpenBrowserTestStepRunner extends ITestStepRunner<OpenBrowserTestStepRunnerProperties> {
   private readonly logger: ILogger;
 

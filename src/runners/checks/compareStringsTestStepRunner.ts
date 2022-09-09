@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -24,14 +22,19 @@ export class CompareStringsTestStepRunnerProperties
 }
 
 /** Runner type aliases for {@link CompareStringsTestStepRunner} */
-export const CompareStringsTestStepRunnerTypeAliases = ['compare-strings'] as const;
+export const CompareStringsTestStepRunnerTypeAliases = [
+  'compare-strings',
+] as const;
 
 /**
  * Compares two strings
  * @properties {@link CompareStringsTestStepRunnerProperties}
  * @runnerType {@link CompareStringsTestStepRunnerTypeAliases}
  */
-@Register(CompareStringsTestStepRunnerProperties, ...CompareStringsTestStepRunnerTypeAliases)
+@Register(
+  CompareStringsTestStepRunnerProperties,
+  ...CompareStringsTestStepRunnerTypeAliases,
+)
 export class CompareStringsTestStepRunner extends ITestStepRunner<CompareStringsTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(

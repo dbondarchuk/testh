@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -29,7 +27,9 @@ export class WaitForElementToBeInteractableTestStepRunnerProperties
 }
 
 /** Runner type aliases for {@link WaitForElementToBeInteractableTestStepRunnerTypeAliases} */
-export const WaitForElementToBeInteractableTestStepRunnerTypeAliases = ['wait-to-be-interactable'] as const;
+export const WaitForElementToBeInteractableTestStepRunnerTypeAliases = [
+  'wait-to-be-interactable',
+] as const;
 
 /**
  * Waits for a web element to be interactable

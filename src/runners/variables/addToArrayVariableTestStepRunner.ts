@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -15,7 +13,7 @@ export class AddToArrayVariableTestStepRunnerProperties
   implements ITestStepRunnerProperties
 {
   /**
-   * Name of the array variable 
+   * Name of the array variable
    */
   variable: string;
 
@@ -28,14 +26,19 @@ export class AddToArrayVariableTestStepRunnerProperties
 /**
  * Runner type aliases for {@link AddToArrayVariableTestStepRunner}
  */
-export const AddToArrayVariableTestStepRunnerTypeAliases = ['add-to-array-variable'] as const;
+export const AddToArrayVariableTestStepRunnerTypeAliases = [
+  'add-to-array-variable',
+] as const;
 
 /**
  * Sets a value into a variable
  * @properties {@link AddToArrayVariableTestStepRunnerProperties}
  * @runnerType {@link AddToArrayVariableTestStepRunnerTypeAliases}
  */
-@Register(AddToArrayVariableTestStepRunnerProperties, ...AddToArrayVariableTestStepRunnerTypeAliases)
+@Register(
+  AddToArrayVariableTestStepRunnerProperties,
+  ...AddToArrayVariableTestStepRunnerTypeAliases,
+)
 export class AddToArrayVariableTestStepRunner extends ITestStepRunner<AddToArrayVariableTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(

@@ -1,10 +1,8 @@
 import { ElementNotFoundException } from '../../models/exceptions/elementNotFoundException';
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -32,7 +30,10 @@ export const ClickOnElementTestStepRunnerTypeAliases = ['click'] as const;
  * @properties {@link ClickOnElementTestStepRunnerProperties}
  * @runnerType {@link ClickOnElementTestStepRunnerTypeAliases}
  */
-@Register(ClickOnElementTestStepRunnerProperties, ...ClickOnElementTestStepRunnerTypeAliases)
+@Register(
+  ClickOnElementTestStepRunnerProperties,
+  ...ClickOnElementTestStepRunnerTypeAliases,
+)
 export class ClickOnElementTestStepRunner extends ITestStepRunner<ClickOnElementTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(

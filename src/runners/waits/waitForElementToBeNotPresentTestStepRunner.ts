@@ -1,9 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner,
-} from '../../models/runners/iTestStepRunner';
-import { ITestStepRunnerProperties } from "../../models/runners/ITestStepRunnerProperties";
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
+import { ITestStepRunnerProperties } from '../../models/runners/ITestStepRunnerProperties';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -30,7 +28,9 @@ export class WaitForElementToBeNotPresentTestStepRunnerProperties
 }
 
 /** Runner type aliases for {@link WaitForElementToBeNotPresentTestStepRunner}  */
-export const WaitForElementToBeNotPresentTestStepRunnerPropertiesTypeAliases = ['wait-to-be-not-present'] as const;
+export const WaitForElementToBeNotPresentTestStepRunnerPropertiesTypeAliases = [
+  'wait-to-be-not-present',
+] as const;
 
 /**
  * Waits for a web element to be not present

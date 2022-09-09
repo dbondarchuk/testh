@@ -1,9 +1,12 @@
 import { ITestStepRunner } from './iTestStepRunner';
-import { ITestStepRunnerProperties } from "./ITestStepRunnerProperties";
+import { ITestStepRunnerProperties } from './ITestStepRunnerProperties';
 
 export type Constructor<T> = new (...args: any[]) => T;
 
-const implementations: Record<string, TestStepRunnerImplementationType<any>> = {};
+const implementations: Record<
+  string,
+  TestStepRunnerImplementationType<any>
+> = {};
 
 export type TestStepRunnerImplementationType<T> = {
   ctor: Constructor<ITestStepRunner<ITestStepRunnerProperties, T>>;

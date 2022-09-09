@@ -1,18 +1,20 @@
+import { container } from 'tsyringe';
+
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { TestRunState } from '../../models/runners/testRunState';
-import {
-  ITestStepRunner
-} from '../../models/runners/iTestStepRunner';
+import { ITestStepRunner } from '../../models/runners/iTestStepRunner';
 import { Register } from '../../models/runners/testStepRunnerRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { VariablesContainer } from '../../models/variables/variablesContainer';
 import { InvalidOperationException } from '../../models/exceptions/invalidOperationException';
-import { runTestSteps } from '../../helpers/steps/stepsRunner';
 import { TestStepWithStepsProperties } from '../../models/runners/ITestStepRunnerProperties';
+import {
+  IStepsRunner,
+  StepsRunnerInjectionToken,
+} from '../../helpers/steps/iStepsRunner';
 
-export class ForEachArrayItemTestStepRunnerProperties extends TestStepWithStepsProperties
-{
+export class ForEachArrayItemTestStepRunnerProperties extends TestStepWithStepsProperties {
   array: any[];
 }
 
@@ -23,7 +25,10 @@ export const ITEM_VARIABLE = 'ITEM';
 export const INDEX_VARIABLE = 'INDEX';
 
 /** Runner type aliases for {@link ForEachArrayItemTestStepRunner} */
-export const ForEachArrayItemTestStepRunnerTypeAliases = ['for-each-item', 'for-each-array-item',] as const;
+export const ForEachArrayItemTestStepRunnerTypeAliases = [
+  'for-each-item',
+  'for-each-array-item',
+] as const;
 
 /**
  * Runs specified test step for each of the item in the array.
@@ -34,13 +39,13 @@ export const ForEachArrayItemTestStepRunnerTypeAliases = ['for-each-item', 'for-
  */
 @Register(
   ForEachArrayItemTestStepRunnerProperties,
-  ...ForEachArrayItemTestStepRunnerTypeAliases
+  ...ForEachArrayItemTestStepRunnerTypeAliases,
 )
 export class ForEachArrayItemTestStepRunner extends ITestStepRunner<ForEachArrayItemTestStepRunnerProperties> {
   private readonly logger: ILogger;
   constructor(
     props: ForEachArrayItemTestStepRunnerProperties,
-    private readonly loggerFactory: ILoggerFactory,
+    loggerFactory: ILoggerFactory,
   ) {
     super(props);
     this.logger = loggerFactory.get<ForEachArrayItemTestStepRunner>(
@@ -61,20 +66,22 @@ export class ForEachArrayItemTestStepRunner extends ITestStepRunner<ForEachArray
       `Running ${this.props.steps.length} steps for ${this.props.array.length} items`,
     );
 
-    const basicStepNumber = state.variables.get(VariablesContainer.TASK_STEP_NUMBER);
+    const basicStepNumber = state.variables.get(
+      VariablesContainer.TASK_STEP_NUMBER,
+    );
 
     let index = 0;
     for (const item of this.props.array) {
       state.variables.put(ITEM_VARIABLE, item);
       state.variables.put(INDEX_VARIABLE, index);
 
-      await runTestSteps(
-        this.props.steps,
-        state,
-        this.logger,
-        this.loggerFactory,
-        (stepNumber) => `${basicStepNumber}.${index}-${stepNumber++}`,
-      );
+      await container
+        .resolve<IStepsRunner>(StepsRunnerInjectionToken)
+        .runTestSteps(
+          this.props.steps,
+          state,
+          (stepNumber) => `${basicStepNumber}.${index}-${stepNumber++}`,
+        );
 
       index++;
     }
