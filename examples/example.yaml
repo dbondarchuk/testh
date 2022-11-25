@@ -10,7 +10,7 @@ steps:
     type: open-browser
     values:
       browser: chrome
-      headless: true
+      headless: false
   - name: Sign in
     type: run
     values:

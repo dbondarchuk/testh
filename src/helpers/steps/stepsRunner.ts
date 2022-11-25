@@ -6,8 +6,8 @@ import {
   ILoggerFactory,
   LoggerFactoryInjectionToken,
 } from '../../models/logger/iLoggerFactory';
-import { TestRunState } from '../../models/runners/testRunState';
-import { getImplementations } from '../../models/runners/testStepRunnerRegistry';
+import { State } from '../../models/actions/testRunState';
+import { getImplementations } from '../../models/actions/actionRegistry';
 import { TestSteps } from '../../models/tests/testSteps';
 import {
   getCurrentStepNumber,
@@ -40,7 +40,7 @@ export class StepsRunner {
    */
   public async runTestSteps(
     steps: TestSteps,
-    state: TestRunState,
+    state: State,
     stepNumberFn: StepsNumberFunction,
   ): Promise<any[]> {
     let isFailed = false;

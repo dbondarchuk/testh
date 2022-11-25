@@ -1,4 +1,4 @@
-import { TestRunState } from '../../models/runners/testRunState';
+import { State } from '../../models/actions/testRunState';
 import { TestSteps } from '../../models/tests/testSteps';
 
 /** Type for function which generates step number */
@@ -15,7 +15,7 @@ export abstract class IStepsRunner {
    */
   public abstract runTestSteps(
     steps: TestSteps,
-    state: TestRunState,
+    state: State,
     stepNumberFn: StepsNumberFunction,
   ): Promise<any[]>;
 }

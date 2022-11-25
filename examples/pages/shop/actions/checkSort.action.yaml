@@ -26,11 +26,17 @@
         type: set-variable
         values:
           variable: price
-          $value: (await ELEMENT.getText()).trim().substr(1)
+          #$value: (await ELEMENT.getText()).trim().substr(1)
+          ^value:
+            name: Get price text
+            type: get-text
+            values:
+              selector:
+                $element: ELEMENT            
       - name: Add price to array
         type: add-to-array-variable
         values:
-          $value: parseFloat(price)
+          $value: parseFloat(price.trim().substr(1))
           variable: prices
 - name: Check prices are sorted from low to high
   type: for-each-item

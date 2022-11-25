@@ -1,4 +1,4 @@
-import { Constructor } from '../runners/testStepRunnerRegistry';
+import { Constructor } from '../actions/actionRegistry';
 import { ILogger } from './iLogger';
 
 /**

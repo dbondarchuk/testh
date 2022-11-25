@@ -20,7 +20,7 @@ export class TestSteps extends Array<TestStep> {
  */
 export function stepsWrapper(
   steps: TestStep[],
-  variables: Variables,
+  variables?: Variables,
 ): TestSteps {
   const wrapper = new TestSteps(...steps);
   wrapper.variables = variables;

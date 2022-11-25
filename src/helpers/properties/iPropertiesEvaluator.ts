@@ -1,4 +1,4 @@
-import { TestRunState } from '../../models/runners/testRunState';
+import { State } from '../../models/actions/testRunState';
 
 export abstract class IPropertiesEvaluator {
   /**
@@ -20,7 +20,7 @@ export abstract class IPropertiesEvaluator {
    */
   public abstract replaceVariables(
     value: string,
-    state: TestRunState,
+    state: State,
     recursive?: boolean,
   ): Promise<string | any | undefined>;
 
@@ -33,7 +33,7 @@ export abstract class IPropertiesEvaluator {
    */
   public abstract evaluateProperties(
     obj: any,
-    state: TestRunState,
+    state: State,
     recursive?: boolean,
   ): Promise<any>;
 }

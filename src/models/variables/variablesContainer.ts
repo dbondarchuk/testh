@@ -9,59 +9,60 @@ import {
   IPropertiesEvaluator,
   PropertiesEvaluatorInjectionToken,
 } from '../../helpers/properties/iPropertiesEvaluator';
+import { IStepsRunner, StepsRunnerInjectionToken } from '../../helpers/steps/iStepsRunner';
+import { TestStep } from '../tests';
+import { stepsWrapper } from '../tests/testSteps';
+import { State } from '../actions/testRunState';
 
 /**
  * Contains variables for the current run
  */
 export class VariablesContainer {
-  public static readonly AGENT_PREFIX = 'Agent_';
-  public static readonly TASK_PREFIX = 'Task_';
-  public static readonly BROWSER_PREFIX = 'Browser_';
-  public static readonly API_PREFIX = 'Api_';
+  public static readonly AGENT_PREFIX = 'AGENT_';
+  public static readonly TASK_PREFIX = 'TASK_';
+  public static readonly BROWSER_PREFIX = 'BROWSER_';
+  public static readonly API_PREFIX = 'API_';
 
-  public static readonly TASK_TASK_ID =
-    VariablesContainer.TASK_PREFIX + 'TaskId';
-  public static readonly TASK_TEST_ID =
-    VariablesContainer.TASK_PREFIX + 'TestId';
   public static readonly TASK_TEST_NAME =
-    VariablesContainer.TASK_PREFIX + 'TestName';
-  public static readonly TASK_IS_MONITORING =
-    VariablesContainer.TASK_PREFIX + 'IsMonitoring';
+    VariablesContainer.TASK_PREFIX + 'TEST_NAME';
   public static readonly TASK_STEP_NUMBER =
-    VariablesContainer.TASK_PREFIX + 'StepNumber';
+    VariablesContainer.TASK_PREFIX + 'STEP_NUMBER';
   public static readonly TASK_STEPS_DONE =
-    VariablesContainer.TASK_PREFIX + 'StepsDone';
+    VariablesContainer.TASK_PREFIX + 'STEPS_DONE';
   public static readonly TASK_TOTAL_STEPS =
-    VariablesContainer.TASK_PREFIX + 'TotalSteps';
+    VariablesContainer.TASK_PREFIX + 'TOTAL_STEPS';
 
   public static readonly AGENT_IP_ADDRESS =
-    VariablesContainer.AGENT_PREFIX + 'IpAddress';
+    VariablesContainer.AGENT_PREFIX + 'IP_ADDRESS';
   public static readonly AGENT_HOST_NAME =
-    VariablesContainer.AGENT_PREFIX + 'HostName';
+    VariablesContainer.AGENT_PREFIX + 'HOSTNAME';
   public static readonly AGENT_OS_NAME =
-    VariablesContainer.AGENT_PREFIX + 'OsName';
+    VariablesContainer.AGENT_PREFIX + 'OS_NAME';
   public static readonly AGENT_OS_VERSION =
-    VariablesContainer.AGENT_PREFIX + 'OsVersion';
+    VariablesContainer.AGENT_PREFIX + 'OS_VERSION';
   public static readonly AGENT_ARCHITECTURE =
-    VariablesContainer.AGENT_PREFIX + 'Architecture';
+    VariablesContainer.AGENT_PREFIX + 'ARCHITECTURE';
   public static readonly AGENT_VERSION =
-    VariablesContainer.AGENT_PREFIX + 'Version';
+    VariablesContainer.AGENT_PREFIX + 'VERSION';
 
   public static readonly BROWSER_LAST_LOAD_TIME =
-    VariablesContainer.BROWSER_PREFIX + 'LastLoadTime';
+    VariablesContainer.BROWSER_PREFIX + 'LAST_LOAD_TIME';
   public static readonly BROWSER_LOAD_TIMES =
-    VariablesContainer.BROWSER_PREFIX + 'LoadTimes';
+    VariablesContainer.BROWSER_PREFIX + 'LOAD_TIMES';
 
   public static readonly API_LOAD_TIMES =
-    VariablesContainer.API_PREFIX + 'LoadTimes';
+    VariablesContainer.API_PREFIX + 'LOAD_TIMES';
+
+  public static readonly RUN = 'run';
 
   private _variables: Variables = {};
 
   /**
    * Creates new instance of Variables
+   * @param state Reference to the current run state
    * @param variables Initial variables
    */
-  public constructor(variables?: Variables) {
+  public constructor(private readonly state: State, variables?: Variables) {
     this.initVariables(variables);
   }
 
@@ -121,7 +122,7 @@ export class VariablesContainer {
    * @returns Merged variables
    */
   public _merge(baseVariables: Variables): VariablesContainer {
-    const merged = new VariablesContainer();
+    const merged = new VariablesContainer(this.state);
     merged._variables = { ...baseVariables, ...this.variables };
 
     return merged;
@@ -143,6 +144,7 @@ export class VariablesContainer {
     Object.keys(env).forEach((key) => this.put(key, env[key]));
 
     this.initAgentVariables();
+    this.initRunCommand();
 
     if (variables) {
       Object.keys(variables).forEach((key) => this.put(key, variables[key]));
@@ -159,6 +161,30 @@ export class VariablesContainer {
     this.put(VariablesContainer.AGENT_OS_VERSION, os.version());
     this.put(VariablesContainer.AGENT_ARCHITECTURE, os.arch());
     this.put(VariablesContainer.AGENT_VERSION, version);
+  }
+
+  private initRunCommand(): void {
+    const run = (stepType: string, properties: any) => {
+      return (async () => {
+        const runner = container.resolve<IStepsRunner>(StepsRunnerInjectionToken);
+        const step: TestStep = {
+          name: `Execute ${stepType}`,
+          type: stepType,
+          values: properties
+        };
+
+        const currentStep = getCurrentStepNumber(this).toString();
+
+        const results = await runner.runTestSteps(
+          stepsWrapper([step]),
+          this.state,
+          (stepNumber) => `${currentStep}-execute-${stepNumber}`);
+
+        return results[0];
+      })();
+    }
+
+    this.put(VariablesContainer.RUN, run)
   }
 
   private static getIpAddress(): string {

@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { WebElement } from 'selenium-webdriver';
 import { Selector } from './selector';
 
@@ -17,6 +17,10 @@ export class RelativeSelector {
   @Type(() => Selector)
   public to?: Selector;
 
-  /** Original element */
+  /** 
+   * Original element.
+   * We can't use {@link SelectorOrElement} here because it will cause a circular dependency
+   */
+  @Exclude()
   public element?: WebElement;
 }

@@ -1,0 +1,32 @@
+name: Test run
+variables:
+  url: https://www.saucedemo.com/
+  usernameInput:
+    type: id
+    value: user-name
+  passwordText:
+    type: class
+    value: login_password
+  username: standard_user
+steps:
+  - name: Open Browser
+    type: open-browser
+    values:
+      browser: chrome
+      headless: true
+  - name: Open Url
+    type: open-url
+    values:
+      url: $(url)   
+  - name: Type username
+    type: type
+    values:
+      text: $(username)
+      selector: $(usernameInput)
+  - name: Type password
+    type: type
+    values:
+      text: "$(run('get-text', {'selector': passwordText}))"
+      selector:
+        type: id
+        value: password

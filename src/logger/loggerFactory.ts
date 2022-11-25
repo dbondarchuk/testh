@@ -1,6 +1,6 @@
 import { ILogger } from '../models/logger/iLogger';
 import { ILoggerFactory } from '../models/logger/iLoggerFactory';
-import { Constructor } from '../models/runners/testStepRunnerRegistry';
+import { Constructor } from '../models/actions/actionRegistry';
 import { ConsoleLogger } from './consoleLogger';
 
 /** Default logger factory */

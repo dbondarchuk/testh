@@ -4,23 +4,19 @@ import './helpers/selenium/webDriverProxy';
 import { container } from 'tsyringe';
 
 import { Test } from './models/tests/test';
-import { TestRunner } from './runners/testRunner';
+import { TestRunner } from './actions/testRunner';
 
 import { YamlInclude } from 'yaml-js-include';
 import { LoggerFactoryInjectionToken } from './models/logger/iLoggerFactory';
 import { LoggerFactory } from './logger/loggerFactory';
-import { PropertiesEvaluatorInjectionToken } from './helpers/properties/iPropertiesEvaluator';
-import { PropertiesEvaluator } from './helpers/properties/propertiesEvaluator';
 import { StepsRunner } from './helpers/steps/stepsRunner';
 import { StepsRunnerInjectionToken } from './helpers/steps/iStepsRunner';
+import { registerEvaluatorsServices } from './helpers/properties/registerServices';
 
 function registerServices() {
   container.registerSingleton(LoggerFactoryInjectionToken, LoggerFactory);
-  container.registerSingleton(
-    PropertiesEvaluatorInjectionToken,
-    PropertiesEvaluator,
-  );
   container.registerSingleton(StepsRunnerInjectionToken, StepsRunner);
+  registerEvaluatorsServices()
 }
 
 async function main(pathToTest: string): Promise<number> {

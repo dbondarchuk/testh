@@ -39,7 +39,7 @@
   },
   "author": "Dmytro Bondarchuk <dbondarchuk@users.noreply.github.com>",
   "dependencies": {
-    "chromedriver": "^104.0.0",
+    "chromedriver": "^107.0.0",
     "class-transformer": "^0.5.1",
     "deasync": "^0.1.28",
     "js-yaml": "^4.1.0",
