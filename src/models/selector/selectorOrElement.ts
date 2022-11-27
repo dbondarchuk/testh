@@ -1,11 +1,11 @@
-import { Exclude } from "class-transformer";
 import { WebDriver, WebElement } from "selenium-webdriver";
+import { Ignore } from "../../helpers/types/ignore";
 import { Selector } from "./selector";
 
 /** Extends selector object to contain reference to an element */
 export class SelectorOrElement extends Selector {
     /** Element instance */
-    @Exclude()
+    @Ignore()
     public element?: WebElement;
 
     /**
@@ -21,7 +21,7 @@ export class SelectorOrElement extends Selector {
 /** Extends selector object to contain reference to an array of elements */
 export class SelectorOrElements extends Selector {
     /** Elements instances */
-    @Exclude()
+    @Ignore()
     public elements?: WebElement[];
 
     /**

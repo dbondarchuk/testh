@@ -8,13 +8,13 @@ import { Transform, TransformationType } from "class-transformer";
  export function Ignore() {
     return Transform((params) => {
       if (params.type === TransformationType.PLAIN_TO_CLASS) {
-        return params.value;
+        return params.obj[params.key];
       }
   
       if (params.type === TransformationType.CLASS_TO_PLAIN) {
-        return params.value;
+        return params.obj[params.key];
       }
   
-      return params.value;
+      return params.obj[params.key];
     });
   }
