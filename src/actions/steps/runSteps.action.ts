@@ -6,7 +6,7 @@ import { IAction } from '../../models/actions/iAction';
 import { Register } from '../../models/actions/actionRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
-import { VariablesContainer } from '../../models/variables/variablesContainer';
+import { getCurrentStepNumber } from '../../models/variables/variablesContainer';
 import { InvalidOperationException } from '../../models/exceptions/invalidOperationException';
 import { ActionWithStepsProperties } from '../../models/actions/iActionProperties';
 import {
@@ -54,9 +54,7 @@ export class RunStepsAction extends IAction<RunStepsActionProperties> {
 
     this.logger.info(`Running ${this.props.steps.length} steps`);
 
-    const basicStepNumber = state.variables.get(
-      VariablesContainer.TASK_STEP_NUMBER,
-    );
+    const basicStepNumber = getCurrentStepNumber(state.variables);
 
     await container
       .resolve<IStepsRunner>(StepsRunnerInjectionToken)

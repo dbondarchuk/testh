@@ -11,7 +11,7 @@ export type NumberComparisonType = '>' | '>=' | '==' | '!=' | '<' | '<=';
  */
 export class NumberComparison implements IComparison<number, number> {
   /** Comparison type */
-  type: string;
+  type: NumberComparisonType;
 
   /** Value to compare to */
   value: number;

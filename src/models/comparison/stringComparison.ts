@@ -16,7 +16,7 @@ export type StringComparisonType =
  */
 export class StringComparison implements IComparison<string, string> {
   /** Comparison type */
-  type: string;
+  type: StringComparisonType;
 
   /** Value to compare to */
   value: string;

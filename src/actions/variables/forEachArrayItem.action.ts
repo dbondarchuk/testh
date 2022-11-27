@@ -6,7 +6,7 @@ import { IAction } from '../../models/actions/iAction';
 import { Register } from '../../models/actions/actionRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
-import { VariablesContainer } from '../../models/variables/variablesContainer';
+import { getCurrentStepNumber } from '../../models/variables/variablesContainer';
 import { InvalidOperationException } from '../../models/exceptions/invalidOperationException';
 import { ActionWithStepsProperties } from '../../models/actions/iActionProperties';
 import {
@@ -66,9 +66,7 @@ export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProper
       `Running ${this.props.steps.length} steps for ${this.props.array.length} items`,
     );
 
-    const basicStepNumber = state.variables.get(
-      VariablesContainer.TASK_STEP_NUMBER,
-    );
+    const basicStepNumber = getCurrentStepNumber(state.variables);
 
     let index = 0;
     for (const item of this.props.array) {

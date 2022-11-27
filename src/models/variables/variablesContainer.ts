@@ -31,6 +31,10 @@ export class VariablesContainer {
     VariablesContainer.TASK_PREFIX + 'STEPS_DONE';
   public static readonly TASK_TOTAL_STEPS =
     VariablesContainer.TASK_PREFIX + 'TOTAL_STEPS';
+    public static readonly TASK_START_TIME =
+      VariablesContainer.TASK_PREFIX + 'START_TIME';
+      public static readonly TASK_EXECUTION_TIME =
+        VariablesContainer.TASK_PREFIX + 'EXECUTION_TIME';
 
   public static readonly AGENT_IP_ADDRESS =
     VariablesContainer.AGENT_PREFIX + 'IP_ADDRESS';
@@ -145,6 +149,10 @@ export class VariablesContainer {
 
     this.initAgentVariables();
     this.initRunCommand();
+
+    this.put(VariablesContainer.TASK_TEST_NAME, this.state.testName);
+    this.put(VariablesContainer.TASK_START_TIME, Date.now());
+    this.put(VariablesContainer.TASK_EXECUTION_TIME, () => Date.now() - this.get(VariablesContainer.TASK_START_TIME));
 
     if (variables) {
       Object.keys(variables).forEach((key) => this.put(key, variables[key]));

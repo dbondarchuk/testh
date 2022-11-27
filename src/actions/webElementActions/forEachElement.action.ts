@@ -6,7 +6,7 @@ import { Register } from '../../models/actions/actionRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Type } from 'class-transformer';
-import { VariablesContainer } from '../../models/variables/variablesContainer';
+import { getCurrentStepNumber } from '../../models/variables/variablesContainer';
 import { ActionWithStepsProperties } from '../../models/actions/iActionProperties';
 import {
   IStepsRunner,
@@ -70,9 +70,7 @@ export class ForEachElementAction extends IAction<ForEachElementActionProperties
     }
 
     const elements = await selector.getElements(state.currentDriver);
-    const basicStepNumber = state.variables.get(
-      VariablesContainer.TASK_STEP_NUMBER,
-    );
+    const basicStepNumber = getCurrentStepNumber(state.variables);
 
     this.logger.info(
       `Running ${this.props.steps.length} steps for ${elements.length} elements`,

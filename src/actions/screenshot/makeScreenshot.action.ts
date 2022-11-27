@@ -4,7 +4,7 @@ import { IAction } from '../../models/actions/iAction';
 import { IActionProperties } from '../../models/actions/iActionProperties';
 import { Register } from '../../models/actions/actionRegistry';
 import { mkdir, writeFile } from 'fs/promises';
-import { VariablesContainer } from '../../models/variables/variablesContainer';
+import { getCurrentStepNumber } from '../../models/variables/variablesContainer';
 import { dirname } from 'path';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
@@ -88,7 +88,7 @@ export class MakeScreenshotAction extends IAction<MakeScreenshotActionProperties
         this.logger.info('Making a screenshot of the visible page');
         const screenshotPath = `screenshots/${
           state.testName
-        }-${state.variables.get(VariablesContainer.TASK_STEP_NUMBER)}-${
+        }-${getCurrentStepNumber(state.variables)}-${
           step.name
         }.png`;
 
