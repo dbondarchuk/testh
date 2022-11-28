@@ -1,0 +1,52 @@
+name: Example
+variables:
+  item_text: Sauce Labs Backpack
+  productId: sauce-labs-backpack
+  elementWaitTimeout: 3
+pages: !!inc/dir ['pages', { extensions: ['.page.yaml'] }]
+steps:
+  - name: Open Browser
+    type: open-browser
+    values:
+      browser: chrome
+      headless: true
+  - name: Set random password
+    type: set-variable
+    values:
+      variable: password
+      ^value:
+        name: Generate random password
+        type: random-string
+        values:
+          minLength: 6
+          maxLength: 12
+          useSpecialCharacters: true
+  - name: Sign in
+    type: run
+    values:
+      $steps: pages.signin.actions.signin
+  - name: Check error
+    type: compare-strings
+    values:
+      compare:
+        type: 'equals'
+        value: 'Epic sadface: Username and password do not match any user in this service'
+      ^to:
+        name: Get error
+        type: get-text
+        values:
+          selector:
+            type: css
+            value: '[data-test="error"]'
+  - name: Make screenshot
+    type: screenshot
+    runOnFailure: true
+    values:
+      type: page
+  - name: Check execution time
+    type: compare-numbers
+    values:
+      to: 3000
+      compare:
+        type: <
+        $value: TASK_EXECUTION_TIME()

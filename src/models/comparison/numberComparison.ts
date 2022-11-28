@@ -1,3 +1,4 @@
+import { ToNumber } from '../../helpers/types/number';
 import { UnknownOptionException } from '../exceptions/unknownOptionException';
 import { IComparison as IComparison } from './iComparison';
 
@@ -14,6 +15,7 @@ export class NumberComparison implements IComparison<number, number> {
   type: NumberComparisonType;
 
   /** Value to compare to */
+  @ToNumber()
   value: number;
 
   /**
