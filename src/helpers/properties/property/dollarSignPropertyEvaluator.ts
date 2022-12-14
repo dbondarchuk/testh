@@ -4,6 +4,9 @@ import { State } from "../../../models/actions/testRunState";
 import { IPropertiesEvaluator, PropertiesEvaluatorInjectionToken } from "../iPropertiesEvaluator";
 import { IPropertyEvaluator, KeyValue } from "../iPropertyEvaluator";
 
+/**
+ * Treats all property as value to evaluate if it is a string and key starts with the dollar sign ($)
+ */
 @injectable()
 export class DollarSignPropertyEvaluator extends IPropertyEvaluator {
     public constructor(
@@ -22,7 +25,7 @@ export class DollarSignPropertyEvaluator extends IPropertyEvaluator {
             property.value = await this.propertiesEvaluator.evaluate(property.value, state.variables.variables);
 
             await super.first(property, state, recursive);
-        } else {        
+        } else {
             await super.next(property, state, recursive);
         }
     }

@@ -1,6 +1,6 @@
 import { IAction } from '../../models/actions/iAction';
 import { IActionProperties } from '../../models/actions/iActionProperties';
-import { Register } from '../../models/actions/actionRegistry';
+import { Action } from '../../models/actions/actionRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { ToNumber } from '../../helpers/types/number';
@@ -54,7 +54,7 @@ export const RandomStringActionTypeAliases = ['random-string'] as const;
  * @properties {@link RandomStringActionProperties}
  * @runnerType {@link SetVariableActionTypeAliases}
  */
-@Register(
+@Action(
   RandomStringActionProperties,
   ...RandomStringActionTypeAliases,
 )

@@ -1,7 +1,7 @@
 import { State } from '../../models/actions/testRunState';
 import { IAction } from '../../models/actions/iAction';
 import { IActionProperties } from '../../models/actions/iActionProperties';
-import { Register } from '../../models/actions/actionRegistry';
+import { Action } from '../../models/actions/actionRegistry';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { Browser, Builder, logging, WebDriver } from 'selenium-webdriver';
 import { ILogger } from '../../models/logger/iLogger';
@@ -79,7 +79,7 @@ export const OpenBrowserActionTypeAliases = [
  * @properties {@link OpenBrowserActionProperties}
  * @runnerType {@link OpenBrowserActionTypeAliases}
  */
-@Register(
+@Action(
   OpenBrowserActionProperties,
   ...OpenBrowserActionTypeAliases,
 )

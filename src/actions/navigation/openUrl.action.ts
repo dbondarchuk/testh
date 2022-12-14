@@ -1,7 +1,7 @@
 import { State } from '../../models/actions/testRunState';
 import { IAction } from '../../models/actions/iAction';
 import { IActionProperties } from '../../models/actions/iActionProperties';
-import { Register } from '../../models/actions/actionRegistry';
+import { Action } from '../../models/actions/actionRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 
@@ -25,7 +25,7 @@ export const OpenUrlActionTypeAliases = ['open-url'] as const;
  * @properties {@link OpenUrlActionProperties}
  * @runnerType {@link OpenUrlActionTypeAliases}
  */
-@Register(OpenUrlActionProperties, ...OpenUrlActionTypeAliases)
+@Action(OpenUrlActionProperties, ...OpenUrlActionTypeAliases)
 export class OpenUrlAction extends IAction<OpenUrlActionProperties> {
   private readonly logger: ILogger;
 

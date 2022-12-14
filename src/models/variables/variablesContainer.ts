@@ -10,7 +10,7 @@ import {
   PropertiesEvaluatorInjectionToken,
 } from '../../helpers/properties/iPropertiesEvaluator';
 import { IStepsRunner, StepsRunnerInjectionToken } from '../../helpers/steps/iStepsRunner';
-import { TestStep } from '../tests';
+import { TestStep } from '../tests/testStep';
 import { stepsWrapper } from '../tests/testSteps';
 import { State } from '../actions/testRunState';
 

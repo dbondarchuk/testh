@@ -4,6 +4,9 @@ import { State } from "../../../models/actions/testRunState";
 import { IPropertiesEvaluator, PropertiesEvaluatorInjectionToken } from "../iPropertiesEvaluator";
 import { IPropertyEvaluator, KeyValue } from "../iPropertyEvaluator";
 
+/**
+ * Doesn't evaluate a property if the key starts with tilda sign (~)
+ */
 @injectable()
 export class DoNotEvaluatePropertyEvaluator extends IPropertyEvaluator {
     public constructor(

@@ -1,5 +1,6 @@
 import { State } from '../../models/actions/testRunState';
 
+/** Describes the properties evaluator */
 export abstract class IPropertiesEvaluator {
   /**
    * Runs JS code with the context

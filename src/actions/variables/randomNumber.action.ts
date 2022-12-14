@@ -1,7 +1,7 @@
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { IAction } from '../../models/actions/iAction';
 import { IActionProperties } from '../../models/actions/iActionProperties';
-import { Register } from '../../models/actions/actionRegistry';
+import { Action } from '../../models/actions/actionRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { ToNumber } from '../../helpers/types/number';
@@ -40,7 +40,7 @@ export const RandomNumberActionTypeAliases = ['random-number'] as const;
  * @properties {@link RandomNumberActionProperties}
  * @runnerType {@link SetVariableActionTypeAliases}
  */
-@Register(
+@Action(
   RandomNumberActionProperties,
   ...RandomNumberActionTypeAliases,
 )

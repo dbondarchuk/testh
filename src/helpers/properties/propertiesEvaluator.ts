@@ -25,6 +25,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
         return str.replaceAll(regex, () => data.shift());
     }
 
+    /** @inheritdoc */
     public evaluate(
         code: string,
         context: Record<string, any> = {},
@@ -40,6 +41,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
         }.call(context);
     }
 
+    /** @inheritdoc */
     public async replaceVariables(
         value: string,
         state: State,
@@ -77,6 +79,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
         return wasReplaced ? replacedValue : replaced;
     }
 
+    /** @inheritdoc */
     public async evaluateProperties(
         obj: any,
         state: State,

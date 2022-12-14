@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsRequiredException';
 import { State } from '../../models/actions/testRunState';
 import { IAction } from '../../models/actions/iAction';
-import { Register } from '../../models/actions/actionRegistry';
+import { Action } from '../../models/actions/actionRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 import { getCurrentStepNumber } from '../../models/variables/variablesContainer';
@@ -27,7 +27,7 @@ export const RunStepsActionTypeAliases = ['run', 'run-steps'] as const;
  * @properties {@link RunStepsActionProperties}
  * @runnerType {@link RunStepsActionTypeAliases}
  */
-@Register(
+@Action(
   RunStepsActionProperties,
   ...RunStepsActionTypeAliases,
 )

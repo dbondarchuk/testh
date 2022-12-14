@@ -2,7 +2,7 @@ import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsR
 import { State } from '../../models/actions/testRunState';
 import { IAction } from '../../models/actions/iAction';
 import { IActionProperties } from '../../models/actions/iActionProperties';
-import { Register } from '../../models/actions/actionRegistry';
+import { Action } from '../../models/actions/actionRegistry';
 import { mkdir, writeFile } from 'fs/promises';
 import { getCurrentStepNumber } from '../../models/variables/variablesContainer';
 import { dirname } from 'path';
@@ -53,7 +53,7 @@ export const MakeScreenshotActionTypeAliases = ['screenshot'] as const;
  * @properties {@link MakeScreenshotActionProperties}
  * @runnerType {@link MakeScreenshotActionTypeAliases}
  */
-@Register(
+@Action(
   MakeScreenshotActionProperties,
   ...MakeScreenshotActionTypeAliases,
 )

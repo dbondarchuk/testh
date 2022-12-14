@@ -7,7 +7,7 @@ import {
   LoggerFactoryInjectionToken,
 } from '../../models/logger/iLoggerFactory';
 import { State } from '../../models/actions/testRunState';
-import { getImplementations } from '../../models/actions/actionRegistry';
+import { getActions } from '../../models/actions/actionRegistry';
 import { TestSteps } from '../../models/tests/testSteps';
 import {
   getCurrentStepNumber,
@@ -69,7 +69,7 @@ export class StepsRunner {
 
       this.logger.info(`Running a step #${currentStepNumber} '${step.name}'`);
 
-      const runners = getImplementations();
+      const runners = getActions();
 
       const runnerType = runners[step.type];
       if (!runnerType) {

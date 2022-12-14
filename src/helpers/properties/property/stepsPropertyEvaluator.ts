@@ -4,6 +4,9 @@ import { State } from "../../../models/actions/testRunState";
 import { IPropertiesEvaluator, PropertiesEvaluatorInjectionToken } from "../iPropertiesEvaluator";
 import { IPropertyEvaluator, KeyValue } from "../iPropertyEvaluator";
 
+/**
+ * Runs specified steps when property key is 'steps'
+ */
 @injectable()
 export class StepsPropertyEvaluator extends IPropertyEvaluator {
     public constructor(

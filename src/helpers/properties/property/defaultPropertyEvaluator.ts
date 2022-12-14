@@ -4,6 +4,9 @@ import { State } from "../../../models/actions/testRunState";
 import { IPropertiesEvaluator, PropertiesEvaluatorInjectionToken } from "../iPropertiesEvaluator";
 import { IPropertyEvaluator, KeyValue } from "../iPropertyEvaluator";
 
+/**
+ * Default implementation of the property evaluator. Runs evaluation of the object
+ */
 @injectable()
 export class DefaultPropertyEvaluator extends IPropertyEvaluator {
     public constructor(

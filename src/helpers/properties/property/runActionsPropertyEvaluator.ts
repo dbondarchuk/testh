@@ -2,11 +2,16 @@ import { injectable, inject } from 'tsyringe';
 
 import { State } from "../../../models/actions/testRunState";
 import { TestSteps } from '../../../models/tests/testSteps';
-import { getCurrentStepNumber } from "../../../models/variables";
+import { getCurrentStepNumber } from "../../../models/variables/variablesContainer";
 import { IStepsRunner, StepsRunnerInjectionToken } from "../../steps/iStepsRunner";
 import { IPropertiesEvaluator, PropertiesEvaluatorInjectionToken } from "../iPropertiesEvaluator";
 import { IPropertyEvaluator, KeyValue } from "../iPropertyEvaluator";
 
+/**
+ * Treats property value as steps to execute and get value.
+ * If key starts with `<` sign, then steps results will be returned as an array of results from all steps
+ * If key starts with '^' sign, then result of the last step will be used as a single result
+ */
 @injectable()
 export class RunActionsPropertyEvaluator extends IPropertyEvaluator{
     public constructor(
@@ -35,7 +40,7 @@ export class RunActionsPropertyEvaluator extends IPropertyEvaluator{
                 (stepNumber) => `${baseStepNumber}-execute-${stepNumber}`,
             );
 
-            property.value = Array.isArray(steps) || shouldBeArray ? results : results[0];
+            property.value = Array.isArray(steps) || shouldBeArray ? results : results[results.length - 1];
         
             await super.first(property, state, recursive);
         } else {        

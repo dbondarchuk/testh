@@ -2,7 +2,7 @@ import { PropertyIsRequiredException } from '../../models/exceptions/propertyIsR
 import { State } from '../../models/actions/testRunState';
 import { IAction } from '../../models/actions/iAction';
 import { IActionProperties } from '../../models/actions/iActionProperties';
-import { Register } from '../../models/actions/actionRegistry';
+import { Action } from '../../models/actions/actionRegistry';
 import { ILogger } from '../../models/logger/iLogger';
 import { ILoggerFactory } from '../../models/logger/iLoggerFactory';
 
@@ -35,7 +35,7 @@ export const AddToArrayVariableActionTypeAliases = [
  * @properties {@link AddToArrayVariableActionProperties}
  * @runnerType {@link AddToArrayVariableActionTypeAliases}
  */
-@Register(
+@Action(
   AddToArrayVariableActionProperties,
   ...AddToArrayVariableActionTypeAliases,
 )

@@ -8,6 +8,9 @@ const implementations: Record<
   ActionImplementationType<any>
 > = {};
 
+/**
+ * Type for the Action constructor
+ */
 export type ActionImplementationType<T> = {
   ctor: Constructor<IAction<IActionProperties, T>>;
   propertiesType: Constructor<IActionProperties>;
@@ -17,7 +20,7 @@ export type ActionImplementationType<T> = {
  * Gets all implementation of {@link IAction}
  * @returns All implementations of {@link IAction}
  */
-export function getImplementations(): Record<
+export function getActions(): Record<
   string,
   ActionImplementationType<any>
 > {
@@ -28,7 +31,7 @@ export function getImplementations(): Record<
  * Registers test step runner with a specified names
  * @param aliases Names to register test step runner
  */
-export function Register<
+export function Action<
   T extends Constructor<IAction<Props, any>>,
   Props extends IActionProperties,
 >(propertiesType: Constructor<Props>, ...aliases: string[]): (ctor: T) => any {

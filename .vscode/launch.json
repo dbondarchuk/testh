@@ -11,7 +11,7 @@
       "skipFiles": ["<node_internals>/**"],
       "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/build/src/main.js",
-      "args": ["${workspaceFolder}/examples/failSignIn.yaml"],
+      "args": ["${workspaceFolder}/examples/example.yaml"],
       "preLaunchTask": "tsc: build - tsconfig.json",
       "outFiles": ["${workspaceFolder}/build/**/*.js"]
     }
