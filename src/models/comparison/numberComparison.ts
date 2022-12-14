@@ -23,7 +23,7 @@ export class NumberComparison implements IComparison<number, number> {
    * @param to Another value
    * @returns True if two number satisfy condition
    */
-  public compare(to: number) {
+  public compare(to: number): boolean {
     if (!this.value) {
       return true;
     }

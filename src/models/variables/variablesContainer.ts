@@ -72,7 +72,7 @@ export class VariablesContainer {
 
   private static fixVariableName(name: string): string {
     return name.replaceAll(
-      '[\\(|\\)|\\s|\\\\|\\[|\\]|\\{|\\}|\\-|\\:|\\=|\\/]',
+      /[(|)|\s|\\|[|\]|{|}|\-|:|=|/]/g,
       '_',
     );
   }
@@ -172,8 +172,8 @@ export class VariablesContainer {
   }
 
   private initRunCommand(): void {
-    const run = (stepType: string, properties: any) => {
-      return (async () => {
+    const run = (stepType: string, properties: any): Promise<any[]> => {
+      return (async (): Promise<any[]> => {
         const runner = container.resolve<IStepsRunner>(StepsRunnerInjectionToken);
         const step: TestStep = {
           name: `Execute ${stepType}`,
@@ -188,7 +188,7 @@ export class VariablesContainer {
           this.state,
           (stepNumber) => `${currentStep}-execute-${stepNumber}`);
 
-        return results[0];
+        return results;
       })();
     }
 

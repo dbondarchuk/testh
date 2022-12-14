@@ -4,8 +4,8 @@ import { Transform, TransformationType } from "class-transformer";
  * Decorator to transform boolean item
  * @returns Transformed object
  */
- export function ToBoolean() {
-    return Transform((params) => {
+ export function ToBoolean(): PropertyDecorator {
+    return Transform((params): boolean | any => {
       if (params.type === TransformationType.PLAIN_TO_CLASS) {
         return params.value?.toLowerCase() === 'true';
       }

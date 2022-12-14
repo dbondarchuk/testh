@@ -17,7 +17,7 @@ export class ConsoleLogger implements ILogger {
     console.error(this.format(message));
   }
 
-  private format(message: string) {
+  private format(message: string): string {
     return `${moment().toISOString()} - ${this.typeName} - ${message}`;
   }
 }

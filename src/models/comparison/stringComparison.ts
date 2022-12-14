@@ -29,7 +29,7 @@ export class StringComparison implements IComparison<string, string> {
    * @param to Another value
    * @returns True if two strings are equal
    */
-  public compare(to: string) {
+  public compare(to: string): boolean {
     if (!this.value) {
       return true;
     }

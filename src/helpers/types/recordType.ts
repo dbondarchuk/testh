@@ -75,7 +75,7 @@ export function classToRecord<R extends Record<any, T>, T>(
   type: ClassConstructor<T>,
   value: R,
   options?: RecordTransformOptions<T, R>,
-) {
+): Record<string, any> {
   return instanceToPlain(
     value,
     getOptions(options, options?.recordType, type, value),
@@ -91,7 +91,7 @@ export function classToRecord<R extends Record<any, T>, T>(
 export function RecordType<T, R extends Record<any, T>>(
   itemType: ClassConstructor<T>,
   recordType?: ClassConstructor<R>,
-) {
+): PropertyDecorator {
   return Transform((params) => {
     if (params.type === TransformationType.PLAIN_TO_CLASS) {
       return recordToClass(itemType, params.value, {

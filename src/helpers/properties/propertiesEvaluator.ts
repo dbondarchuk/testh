@@ -5,7 +5,7 @@ import { WrapperWithVariables } from '../../models/variables/wrapperWithVariable
 import { IPropertiesEvaluator } from './iPropertiesEvaluator';
 import { IPropertyEvaluator, KeyValue, PropertyEvaluatorInjectionToken } from './iPropertyEvaluator';
 
-const isPlainObject = (value: any) => value?.constructor === Object;
+const isPlainObject = (value: any): boolean => value?.constructor === Object;
 
 /** Default properties evaluator */
 @singleton()
@@ -29,7 +29,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
         code: string,
         context: Record<string, any> = {},
     ): Promise<any> {
-        return function evaluateEval() {
+        return function evaluateEval(): any {
             const argsStr = Object.keys(context)
                 .map((key) => `${key} = this.${key}`)
                 .join(',');

@@ -11,7 +11,7 @@ import { ToNumber } from '../../helpers/types/number';
  * @param min Min value (inclusive)
  * @param max Max value (inclusive)
  * */
-export const randomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
+export const randomNumber = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1) + min);
 
 /**
  * Properties for {@link RandomNumberAction}

@@ -9,7 +9,7 @@ import { RunActionsPropertyEvaluator } from "./property/runActionsPropertyEvalua
 import { StepsPropertyEvaluator } from "./property/stepsPropertyEvaluator";
 
 /** Registers default implementations for property evaluators */
-export const registerEvaluatorsServices = () => {
+export const registerEvaluatorsServices = (): void => {
     container.registerSingleton(PropertyEvaluatorInjectionToken, DefaultPropertyEvaluator);
     container.registerSingleton(PropertyEvaluatorInjectionToken, DollarSignPropertyEvaluator);
     container.registerSingleton(PropertyEvaluatorInjectionToken, DoNotEvaluatePropertyEvaluator);

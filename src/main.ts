@@ -13,7 +13,7 @@ import { StepsRunner } from './helpers/steps/stepsRunner';
 import { StepsRunnerInjectionToken } from './helpers/steps/iStepsRunner';
 import { registerEvaluatorsServices } from './helpers/properties/registerServices';
 
-function registerServices() {
+function registerServices(): void {
   container.registerSingleton(LoggerFactoryInjectionToken, LoggerFactory);
   container.registerSingleton(StepsRunnerInjectionToken, StepsRunner);
   registerEvaluatorsServices()
@@ -23,9 +23,6 @@ async function main(pathToTest: string): Promise<number> {
   registerServices();
 
   let test: Test = null;
-  // if (pathToTest?.endsWith('.json')) {
-  //   test = JSON.parse(readFileSync(pathToTest).toString()) as Test;
-  // } else
   if (pathToTest?.endsWith('.yaml') || pathToTest?.endsWith('.yml')) {
     const yaml = new YamlInclude();
     test = await yaml.loadAsync<Test>(pathToTest);

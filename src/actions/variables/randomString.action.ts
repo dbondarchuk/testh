@@ -80,7 +80,7 @@ export class RandomStringAction extends IAction<RandomStringActionProperties, st
     }
 
     const excludedSymbols = this.props.excludedCharacters;
-    if (!!excludedSymbols) {
+    if (excludedSymbols) {
       if (excludedSymbols.includes(',,')) {
         symbols = symbols.replaceAll(',', '');
       }

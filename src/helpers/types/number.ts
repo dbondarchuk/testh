@@ -4,8 +4,8 @@ import { Transform, TransformationType } from "class-transformer";
  * Decorator to transform number item
  * @returns Transformed object
  */
- export function ToNumber() {
-    return Transform((params) => {
+ export function ToNumber(): PropertyDecorator {
+    return Transform((params): number | any => {
       if (params.type === TransformationType.PLAIN_TO_CLASS) {
         return params.value ? Number(params.value) : params.value;
       }
