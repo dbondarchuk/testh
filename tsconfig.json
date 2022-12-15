@@ -1,27 +1,20 @@
 {
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "target": "ES2022",
-    "module": "commonjs",
-    "lib": ["ES2022"],
-    "moduleResolution": "node",
-    "rootDir": ".",
-    "outDir": "build",
-    "allowSyntheticDefaultImports": true,
-    "importHelpers": true,
-    "alwaysStrict": true,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
-    "strictNullChecks": false,
-    "resolveJsonModule": true
-  },
-  "typedocOptions": {},
-  "include": ["src/**/*", "__tests__/**/*"]
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "target": "ES2022",
+    },
+    "exclude": [
+        "packages/**/tests/**",
+        "packages/**/dist/**",
+        "packages/**/build/**"
+    ],
+    "references": [
+        {
+            "path": "./packages/sdk"
+        },
+        {
+            "path": "./packages/testh"
+        }
+    ]
 }

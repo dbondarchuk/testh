@@ -1,0 +1,52 @@
+{
+  "name": "@testh/testh",
+  "version": "0.0.1",
+  "description": "Runner for the Testh project",
+  "type": "commonjs",
+  "devDependencies": {
+    "@microsoft/tsdoc-config": "^0.16.1",
+    "@types/deasync": "^0.1.2",
+    "@types/glob": "^7.2.0",
+    "@types/jest": "~27.5",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "~16",
+    "@types/selenium-webdriver": "^4.1.2",
+    "@typescript-eslint/eslint-plugin": "~5.46",
+    "@typescript-eslint/parser": "~5.46",
+    "eslint": "~8.16",
+    "eslint-config-prettier": "~8.5",
+    "eslint-plugin-jest": "~26.2",
+    "jest": "~28.1",
+    "prettier": "~2.6",
+    "rimraf": "~3.0",
+    "ts-jest": "~28.0",
+    "typedoc": "^0.23.13",
+    "typedoc-theme-hierarchy": "^3.0.0",
+    "typescript": "^4.9.4"
+  },
+  "scripts": {
+    "start": "node build/src/main.js",
+    "clean": "rimraf coverage build tmp",
+    "prebuild": "yarn run lint",
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -w -p tsconfig.json",
+    "build:release": "yarn run clean && tsc -p tsconfig.release.json",
+    "lint": "eslint . --ext .ts --ext .mts",
+    "test": "jest --coverage",
+    "prettier": "prettier --config .prettierrc --write .",
+    "test:watch": "jest --watch",
+    "docs": "typedoc --entryPointStrategy expand ./src"
+  },
+  "author": "Dmytro Bondarchuk <dbondarchuk@users.noreply.github.com>",
+  "dependencies": {
+    "@testh/sdk": "0.0.1",
+    "chromedriver": "^107.0.0",
+    "class-transformer": "^0.5.1",
+    "moment": "^2.29.4",
+    "reflect-metadata": "^0.1.13",
+    "selenium-webdriver": "^4.4.0",
+    "tslib": "~2.4",
+    "tsyringe": "^4.7.0",
+    "yaml-js-include": "^0.0.3"
+  }
+}
