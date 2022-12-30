@@ -1,6 +1,6 @@
 import { container } from 'tsyringe';
 
-import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, InvalidOperationException, IState, IStepsRunner, PropertyIsRequiredException, StepsRunnerInjectionToken } from '@testh/sdk';
+import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, InvalidOperationException, IState, IStepsRunner, PropertyIsRequiredException, StepsRunnerContainerToken } from '@testh/sdk';
 
 
 export class ForEachArrayItemActionProperties extends ActionWithStepsProperties {
@@ -63,7 +63,7 @@ export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProper
       state.variables.put(INDEX_VARIABLE, index);
 
       await container
-        .resolve<IStepsRunner>(StepsRunnerInjectionToken)
+        .resolve<IStepsRunner>(StepsRunnerContainerToken)
         .runTestSteps(
           this.props.steps,
           state,

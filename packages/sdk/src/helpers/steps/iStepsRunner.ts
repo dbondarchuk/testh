@@ -1,4 +1,4 @@
-import { IState } from '../../models/actions/iState';
+import { IState } from '../../models/tests/iState';
 import { TestSteps } from '../../models/tests/testSteps';
 
 /** Type for function which generates step number */
@@ -21,4 +21,4 @@ export abstract class IStepsRunner {
 }
 
 /** Token to use in order to get steps runner implementation from DI container */
-export const StepsRunnerInjectionToken = 'StepsRunner';
+export const StepsRunnerContainerToken = 'StepsRunner';

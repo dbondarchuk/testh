@@ -1,4 +1,4 @@
-import { IState } from './iState';
+import { IState } from '../tests/iState';
 import { TestStep } from '../tests/testStep';
 import { IActionProperties } from './iActionProperties';
 

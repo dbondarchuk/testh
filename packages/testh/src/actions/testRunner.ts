@@ -2,7 +2,7 @@ import { container } from 'tsyringe';
 
 import './runners';
 import { plainToClass } from 'class-transformer';
-import { ILoggerFactory, IState, IStepsRunner, LoggerFactoryInjectionToken, StepsRunnerInjectionToken, Test } from '@testh/sdk';
+import { ILoggerFactory, IState, IStepsRunner, LoggerFactoryContainerToken, StepsRunnerContainerToken, Test } from '@testh/sdk';
 import { State } from '../models/state';
 
 /**
@@ -22,7 +22,7 @@ export class TestRunner {
    * @returns If execution was successful
    */
   public async run(): Promise<boolean> {
-    const loggerFactory = container.resolve<ILoggerFactory>(LoggerFactoryInjectionToken);
+    const loggerFactory = container.resolve<ILoggerFactory>(LoggerFactoryContainerToken);
     const logger = loggerFactory.get<TestRunner>(TestRunner);
 
     if (this.test.pages) this.state.variables.put('pages', this.test.pages);
@@ -31,7 +31,7 @@ export class TestRunner {
 
     try {
       await container
-        .resolve<IStepsRunner>(StepsRunnerInjectionToken)
+        .resolve<IStepsRunner>(StepsRunnerContainerToken)
         .runTestSteps(this.test.steps, this.state, (stepNumber) => stepNumber);
 
       logger.info('Test execution has successfully completed.');

@@ -1,15 +1,15 @@
 import { injectable, inject } from 'tsyringe';
 import { plainToClass } from 'class-transformer';
-import { getActions, getCurrentStepNumber, ILogger, ILoggerFactory, IPropertiesEvaluator, IState, LoggerFactoryInjectionToken, PropertiesEvaluatorInjectionToken, StepsNumberFunction, TestSteps, UnknownOptionException, updateStepNumber } from '@testh/sdk';
+import { ActionContainerContainerToken, getCurrentStepNumber, IActionContainer, IContainer, ILogger, ILoggerFactory, IPropertiesEvaluator, IState, LoggerFactoryContainerToken, PropertiesEvaluatorContainerToken, StepsNumberFunction, TestSteps, UnknownOptionException, updateStepNumber } from '@testh/sdk';
 
 /** Default test step runner */
 @injectable()
 export class StepsRunner {
   private readonly logger: ILogger;
   constructor(
-    @inject(PropertiesEvaluatorInjectionToken)
+    @inject(PropertiesEvaluatorContainerToken)
     protected readonly propertiesEvaluator: IPropertiesEvaluator,
-    @inject(LoggerFactoryInjectionToken)
+    @inject(LoggerFactoryContainerToken)
     protected readonly loggerFactory: ILoggerFactory,
   ) {
     this.logger = loggerFactory.get<StepsRunner>(StepsRunner);
@@ -52,7 +52,7 @@ export class StepsRunner {
 
       this.logger.info(`Running a step #${currentStepNumber} '${step.name}'`);
 
-      const runners = getActions();
+      const runners = IContainer.instance.get<IActionContainer>(ActionContainerContainerToken).get();
 
       const runnerType = runners[step.type];
       if (!runnerType) {

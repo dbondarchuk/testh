@@ -1,19 +1,25 @@
 import 'reflect-metadata';
 import './helpers/selenium/webDriverProxy';
 
-import { container } from 'tsyringe';
-
 import { TestRunner } from './actions/testRunner';
 
 import { YamlInclude } from 'yaml-js-include';
 import { LoggerFactory } from './logger/loggerFactory';
 import { StepsRunner } from './helpers/steps/stepsRunner';
 import { registerEvaluatorsServices } from './helpers/properties/registerServices';
-import { LoggerFactoryInjectionToken, StepsRunnerInjectionToken, Test } from '@testh/sdk';
+import { ActionContainerContainerToken, ExtensionContainerContainerToken, IContainer, LoggerFactoryContainerToken, setContainer, StepsRunnerContainerToken, Test } from '@testh/sdk';
+import { DefaultContainer } from './containers/container';
+import { ActionContainer } from './containers/actionContainer';
+import { ExtensionContainer } from './containers/extensionContainer';
 
 function registerServices(): void {
-  container.registerSingleton(LoggerFactoryInjectionToken, LoggerFactory);
-  container.registerSingleton(StepsRunnerInjectionToken, StepsRunner);
+  setContainer(new DefaultContainer());
+
+  IContainer.instance.registerSingleton(ActionContainerContainerToken, ActionContainer);
+  IContainer.instance.registerSingleton(ExtensionContainerContainerToken, ExtensionContainer);
+
+  IContainer.instance.registerSingleton(LoggerFactoryContainerToken, LoggerFactory);
+  IContainer.instance.registerSingleton(StepsRunnerContainerToken, StepsRunner);
   registerEvaluatorsServices()
 }
 

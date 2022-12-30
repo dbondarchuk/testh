@@ -1,5 +1,5 @@
 import { container } from 'tsyringe';
-import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, IState, IStepsRunner, PropertyIsRequiredException, SelectorOrElements, StepsRunnerInjectionToken } from '@testh/sdk';
+import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, IState, IStepsRunner, PropertyIsRequiredException, SelectorOrElements, StepsRunnerContainerToken } from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /**
@@ -72,7 +72,7 @@ export class ForEachElementAction extends IAction<ForEachElementActionProperties
       console.log(tt);
 
       await container
-        .resolve<IStepsRunner>(StepsRunnerInjectionToken)
+        .resolve<IStepsRunner>(StepsRunnerContainerToken)
         .runTestSteps(
           this.props.steps,
           state,

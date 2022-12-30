@@ -1,4 +1,4 @@
-import { IState } from "../../models/actions/iState";
+import { IState } from "../../models/tests/iState";
 
 /** Describes the properties evaluator */
 export abstract class IPropertiesEvaluator {
@@ -40,4 +40,4 @@ export abstract class IPropertiesEvaluator {
 }
 
 /** Token to use in order to get properties evaluator implementation from DI container */
-export const PropertiesEvaluatorInjectionToken = 'PropertiesEvaluator';
+export const PropertiesEvaluatorContainerToken = 'PropertiesEvaluator';

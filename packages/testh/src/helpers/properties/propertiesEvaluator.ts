@@ -1,4 +1,4 @@
-import { IPropertiesEvaluator, IPropertyEvaluator, IState, KeyValue, PropertyEvaluatorInjectionToken, WrapperWithVariables } from '@testh/sdk';
+import { IPropertiesEvaluator, IPropertyEvaluator, IState, KeyValue, PropertyEvaluatorContainerToken, WrapperWithVariables } from '@testh/sdk';
 import { singleton, container } from 'tsyringe';
 
 
@@ -151,7 +151,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
         };
 
         const implementations = container
-            .resolveAll<IPropertyEvaluator>(PropertyEvaluatorInjectionToken)
+            .resolveAll<IPropertyEvaluator>(PropertyEvaluatorContainerToken)
             .sort((a, b) => b.priority - a.priority);
 
         const evaluator = implementations[0];

@@ -4,7 +4,7 @@ import * as os from 'os';
 import { container } from 'tsyringe';
 
 import { version } from '../../package.json';
-import { AGENT_ARCHITECTURE, AGENT_HOST_NAME, AGENT_IP_ADDRESS, AGENT_OS_NAME, AGENT_OS_VERSION, AGENT_VERSION, getCurrentStepNumber, IPropertiesEvaluator, IState, IStepsRunner, IVariablesContainer, PropertiesEvaluatorInjectionToken, RUN, StepsRunnerInjectionToken, stepsWrapper, TASK_EXECUTION_TIME, TASK_START_TIME, TASK_TEST_NAME, TestStep, Variables } from '@testh/sdk';
+import { AGENT_ARCHITECTURE, AGENT_HOST_NAME, AGENT_IP_ADDRESS, AGENT_OS_NAME, AGENT_OS_VERSION, AGENT_VERSION, getCurrentStepNumber, IPropertiesEvaluator, IState, IStepsRunner, IVariablesContainer, PropertiesEvaluatorContainerToken, RUN, StepsRunnerContainerToken, stepsWrapper, TASK_EXECUTION_TIME, TASK_START_TIME, TASK_TEST_NAME, TestStep, Variables } from '@testh/sdk';
 
 /**
  * Contains variables for the current run
@@ -54,7 +54,7 @@ export class VariablesContainer implements IVariablesContainer {
     }
 
     return container
-      .resolve<IPropertiesEvaluator>(PropertiesEvaluatorInjectionToken)
+      .resolve<IPropertiesEvaluator>(PropertiesEvaluatorContainerToken)
       .evaluate(key, this._variables);
   }
 
@@ -125,7 +125,7 @@ export class VariablesContainer implements IVariablesContainer {
   private initRunCommand(): void {
     const run = (stepType: string, properties: any): Promise<any[]> => {
       return (async (): Promise<any[]> => {
-        const runner = container.resolve<IStepsRunner>(StepsRunnerInjectionToken);
+        const runner = container.resolve<IStepsRunner>(StepsRunnerContainerToken);
         const step: TestStep = {
           name: `Execute ${stepType}`,
           type: stepType,

@@ -1,4 +1,4 @@
-import { Constructor } from '../actions/actionRegistry';
+import { Constructor } from '../types/constructor';
 import { ILogger } from './iLogger';
 
 /**
@@ -13,4 +13,4 @@ export interface ILoggerFactory {
 }
 
 /** Token to use in order to get logger factory implementation from DI container */
-export const LoggerFactoryInjectionToken = 'LoggerFactory';
+export const LoggerFactoryContainerToken = 'LoggerFactory';

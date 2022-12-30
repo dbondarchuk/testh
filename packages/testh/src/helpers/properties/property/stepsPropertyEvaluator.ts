@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { IPropertiesEvaluator, IPropertyEvaluator, IState, KeyValue, PropertiesEvaluatorInjectionToken } from '@testh/sdk';
+import { IPropertiesEvaluator, IPropertyEvaluator, IState, KeyValue, PropertiesEvaluatorContainerToken } from '@testh/sdk';
 
 
 /**
@@ -8,7 +8,7 @@ import { IPropertiesEvaluator, IPropertyEvaluator, IState, KeyValue, PropertiesE
 @injectable()
 export class StepsPropertyEvaluator extends IPropertyEvaluator {
     public constructor(
-        @inject(PropertiesEvaluatorInjectionToken) protected readonly propertiesEvaluator: IPropertiesEvaluator
+        @inject(PropertiesEvaluatorContainerToken) protected readonly propertiesEvaluator: IPropertiesEvaluator
     ) {
         super();
     }

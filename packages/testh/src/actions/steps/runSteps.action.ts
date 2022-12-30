@@ -1,5 +1,5 @@
 import { container } from 'tsyringe';
-import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, InvalidOperationException, IState, IStepsRunner, PropertyIsRequiredException, StepsRunnerInjectionToken } from '@testh/sdk';
+import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, InvalidOperationException, IState, IStepsRunner, PropertyIsRequiredException, StepsRunnerContainerToken } from '@testh/sdk';
 
 
 /**
@@ -45,7 +45,7 @@ export class RunStepsAction extends IAction<RunStepsActionProperties> {
     const basicStepNumber = getCurrentStepNumber(state.variables);
 
     await container
-      .resolve<IStepsRunner>(StepsRunnerInjectionToken)
+      .resolve<IStepsRunner>(StepsRunnerContainerToken)
       .runTestSteps(
         this.props.steps,
         state,

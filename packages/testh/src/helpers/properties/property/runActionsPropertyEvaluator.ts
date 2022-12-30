@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { getCurrentStepNumber, IPropertiesEvaluator, IPropertyEvaluator, IState, IStepsRunner, KeyValue, PropertiesEvaluatorInjectionToken, StepsRunnerInjectionToken, TestSteps } from '@testh/sdk';
+import { getCurrentStepNumber, IPropertiesEvaluator, IPropertyEvaluator, IState, IStepsRunner, KeyValue, PropertiesEvaluatorContainerToken, StepsRunnerContainerToken, TestSteps } from '@testh/sdk';
 
 /**
  * Treats property value as steps to execute and get value.
@@ -9,8 +9,8 @@ import { getCurrentStepNumber, IPropertiesEvaluator, IPropertyEvaluator, IState,
 @injectable()
 export class RunActionsPropertyEvaluator extends IPropertyEvaluator {
     public constructor(
-        @inject(PropertiesEvaluatorInjectionToken) protected readonly propertiesEvaluator: IPropertiesEvaluator,
-        @inject(StepsRunnerInjectionToken) protected readonly stepsRunner: IStepsRunner) {
+        @inject(PropertiesEvaluatorContainerToken) protected readonly propertiesEvaluator: IPropertiesEvaluator,
+        @inject(StepsRunnerContainerToken) protected readonly stepsRunner: IStepsRunner) {
         super();
     }
 
