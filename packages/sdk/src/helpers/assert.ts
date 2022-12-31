@@ -1,7 +1,13 @@
-import { NumberComparison, NumberComparisonType } from "../models/comparison/numberComparison";
-import { StringComparison, StringComparisonType } from "../models/comparison/stringComparison";
-import { AssertionException } from "../models/exceptions/assertionException";
-import { UnknownOptionException } from "../models/exceptions/unknownOptionException";
+import {
+  NumberComparison,
+  NumberComparisonType,
+} from '../models/comparison/numberComparison';
+import {
+  StringComparison,
+  StringComparisonType,
+} from '../models/comparison/stringComparison';
+import { AssertionException } from '../models/exceptions/assertionException';
+import { UnknownOptionException } from '../models/exceptions/unknownOptionException';
 
 export class Assert {
   public static readonly OPENING_CHARACTER = '[';

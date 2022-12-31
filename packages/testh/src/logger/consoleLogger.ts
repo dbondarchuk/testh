@@ -7,7 +7,7 @@ export class ConsoleLogger implements ILogger {
    * Creates a new Console Logger
    * @param typeName Name of the type where execution is happening
    */
-  constructor(private readonly typeName: string) { }
+  constructor(private readonly typeName: string) {}
 
   /** @inheritdoc */
   info(message: string): void {

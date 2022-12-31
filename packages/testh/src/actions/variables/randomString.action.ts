@@ -1,4 +1,12 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, ToBoolean, ToNumber } from '@testh/sdk';
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  ToBoolean,
+  ToNumber,
+} from '@testh/sdk';
 import { randomNumber } from './randomNumber.action';
 
 /** List of upper case characters */
@@ -13,8 +21,7 @@ export const specialCharacters = '!@#$%^&*()-_+=[]\\/,.<>;:\'"';
 /**
  * Properties for {@link RandomStringAction}
  */
-export class RandomStringActionProperties
-  implements IActionProperties {
+export class RandomStringActionProperties implements IActionProperties {
   /**
    * Min length.
    * @default 1
@@ -48,20 +55,18 @@ export const RandomStringActionTypeAliases = ['random-string'] as const;
  * @properties {@link RandomStringActionProperties}
  * @runnerType {@link SetVariableActionTypeAliases}
  */
-@Action(
+@Action(RandomStringActionProperties, ...RandomStringActionTypeAliases)
+export class RandomStringAction extends IAction<
   RandomStringActionProperties,
-  ...RandomStringActionTypeAliases,
-)
-export class RandomStringAction extends IAction<RandomStringActionProperties, string> {
+  string
+> {
   private readonly logger: ILogger;
   constructor(
     props: RandomStringActionProperties,
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<RandomStringAction>(
-      RandomStringAction,
-    );
+    this.logger = loggerFactory.get<RandomStringAction>(RandomStringAction);
   }
 
   public async run(): Promise<string> {

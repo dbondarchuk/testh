@@ -1,7 +1,18 @@
 import { container } from 'tsyringe';
 
-import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, InvalidOperationException, IState, IStepsRunner, PropertyIsRequiredException, StepsRunnerContainerToken } from '@testh/sdk';
-
+import {
+  Action,
+  ActionWithStepsProperties,
+  getCurrentStepNumber,
+  IAction,
+  ILogger,
+  ILoggerFactory,
+  InvalidOperationException,
+  IState,
+  IStepsRunner,
+  PropertyIsRequiredException,
+  StepsRunnerContainerToken,
+} from '@testh/sdk';
 
 export class ForEachArrayItemActionProperties extends ActionWithStepsProperties {
   array: any[];
@@ -26,10 +37,7 @@ export const ForEachArrayItemActionTypeAliases = [
  * @variable {@link ITEM_VARIABLE} Item
  * @variable {@link INDEX_VARIABLE} Item zero-based index
  */
-@Action(
-  ForEachArrayItemActionProperties,
-  ...ForEachArrayItemActionTypeAliases,
-)
+@Action(ForEachArrayItemActionProperties, ...ForEachArrayItemActionTypeAliases)
 export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProperties> {
   private readonly logger: ILogger;
   constructor(

@@ -1,11 +1,17 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException } from '@testh/sdk';
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+} from '@testh/sdk';
 
 /**
  * Properties for {@link AddToArrayVariableAction}
  */
-export class AddToArrayVariableActionProperties
-  implements IActionProperties
-{
+export class AddToArrayVariableActionProperties implements IActionProperties {
   /**
    * Name of the array variable
    */

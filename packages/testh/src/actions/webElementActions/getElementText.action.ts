@@ -1,12 +1,19 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException, SelectorOrElement } from '@testh/sdk';
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+  SelectorOrElement,
+} from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link GetElementTextAction}
  */
-export class GetElementTextActionProperties
-  implements IActionProperties
-{
+export class GetElementTextActionProperties implements IActionProperties {
   /**
    * Element selector
    */
@@ -26,10 +33,7 @@ export const GetElementTextActionTypeAliases = [
  * @runnerType {@link GetElementTextActionTypeAliases}
  * @returns {string} Element's text
  */
-@Action(
-  GetElementTextActionProperties,
-  ...GetElementTextActionTypeAliases,
-)
+@Action(GetElementTextActionProperties, ...GetElementTextActionTypeAliases)
 export class GetElementTextAction extends IAction<
   GetElementTextActionProperties,
   string
@@ -40,9 +44,7 @@ export class GetElementTextAction extends IAction<
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<GetElementTextAction>(
-      GetElementTextAction,
-    );
+    this.logger = loggerFactory.get<GetElementTextAction>(GetElementTextAction);
   }
 
   public async run(state: IState): Promise<string> {

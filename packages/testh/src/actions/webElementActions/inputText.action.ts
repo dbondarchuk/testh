@@ -1,12 +1,20 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException, SelectorOrElement, ToBoolean } from '@testh/sdk';
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+  SelectorOrElement,
+  ToBoolean,
+} from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link InputTextAction}
  */
-export class InputTextActionProperties
-  implements IActionProperties
-{
+export class InputTextActionProperties implements IActionProperties {
   /**
    * Element selector
    */
@@ -33,20 +41,12 @@ export const InputTextActionTypeAliases = ['input', 'type'] as const;
  * @properties {@link InputTextActionProperties}
  * @runnerType {@link InputTextActionTypeAliases}
  */
-@Action(
-  InputTextActionProperties,
-  ...InputTextActionTypeAliases,
-)
+@Action(InputTextActionProperties, ...InputTextActionTypeAliases)
 export class InputTextAction extends IAction<InputTextActionProperties> {
   private readonly logger: ILogger;
-  constructor(
-    props: InputTextActionProperties,
-    loggerFactory: ILoggerFactory,
-  ) {
+  constructor(props: InputTextActionProperties, loggerFactory: ILoggerFactory) {
     super(props);
-    this.logger = loggerFactory.get<InputTextAction>(
-      InputTextAction,
-    );
+    this.logger = loggerFactory.get<InputTextAction>(InputTextAction);
   }
 
   public async run(state: IState): Promise<void> {

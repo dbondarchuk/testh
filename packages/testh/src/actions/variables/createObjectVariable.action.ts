@@ -1,12 +1,16 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState } from '@testh/sdk';
-
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+} from '@testh/sdk';
 
 /**
  * Properties for {@link CreateObjectVariableAction}
  */
-export class CreateObjectVariableActionProperties
-  implements IActionProperties
-{
+export class CreateObjectVariableActionProperties implements IActionProperties {
   /**
    * Object properties
    */

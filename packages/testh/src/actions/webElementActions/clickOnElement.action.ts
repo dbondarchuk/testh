@@ -1,12 +1,20 @@
-import { Action, ElementNotFoundException, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException, SelectorOrElement } from '@testh/sdk';
+import {
+  Action,
+  ElementNotFoundException,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+  SelectorOrElement,
+} from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link ClickOnElementAction}
  */
-export class ClickOnElementActionProperties
-  implements IActionProperties
-{
+export class ClickOnElementActionProperties implements IActionProperties {
   /**
    * Element selector
    */
@@ -22,10 +30,7 @@ export const ClickOnElementActionTypeAliases = ['click'] as const;
  * @properties {@link ClickOnElementActionProperties}
  * @runnerType {@link ClickOnElementActionTypeAliases}
  */
-@Action(
-  ClickOnElementActionProperties,
-  ...ClickOnElementActionTypeAliases,
-)
+@Action(ClickOnElementActionProperties, ...ClickOnElementActionTypeAliases)
 export class ClickOnElementAction extends IAction<ClickOnElementActionProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -33,9 +38,7 @@ export class ClickOnElementAction extends IAction<ClickOnElementActionProperties
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<ClickOnElementAction>(
-      ClickOnElementAction,
-    );
+    this.logger = loggerFactory.get<ClickOnElementAction>(ClickOnElementAction);
   }
 
   public async run(state: IState): Promise<void> {

@@ -1,6 +1,17 @@
 import { container } from 'tsyringe';
-import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, InvalidOperationException, IState, IStepsRunner, PropertyIsRequiredException, StepsRunnerContainerToken } from '@testh/sdk';
-
+import {
+  Action,
+  ActionWithStepsProperties,
+  getCurrentStepNumber,
+  IAction,
+  ILogger,
+  ILoggerFactory,
+  InvalidOperationException,
+  IState,
+  IStepsRunner,
+  PropertyIsRequiredException,
+  StepsRunnerContainerToken,
+} from '@testh/sdk';
 
 /**
  * Properties for {@link RunStepsAction}
@@ -15,20 +26,12 @@ export const RunStepsActionTypeAliases = ['run', 'run-steps'] as const;
  * @properties {@link RunStepsActionProperties}
  * @runnerType {@link RunStepsActionTypeAliases}
  */
-@Action(
-  RunStepsActionProperties,
-  ...RunStepsActionTypeAliases,
-)
+@Action(RunStepsActionProperties, ...RunStepsActionTypeAliases)
 export class RunStepsAction extends IAction<RunStepsActionProperties> {
   private readonly logger: ILogger;
-  constructor(
-    props: RunStepsActionProperties,
-    loggerFactory: ILoggerFactory,
-  ) {
+  constructor(props: RunStepsActionProperties, loggerFactory: ILoggerFactory) {
     super(props);
-    this.logger = loggerFactory.get<RunStepsAction>(
-      RunStepsAction,
-    );
+    this.logger = loggerFactory.get<RunStepsAction>(RunStepsAction);
   }
 
   public async run(state: IState): Promise<void> {

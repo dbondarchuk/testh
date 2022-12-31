@@ -5,7 +5,7 @@ import { IVariablesContainer } from '../variables/variablesContainer';
  * Describes a current state of the run
  */
 export interface IState {
-  /** Gets current test name */  
+  /** Gets current test name */
   get testName(): string;
 
   /** Gets variables */
@@ -57,7 +57,7 @@ export interface IState {
   /**
    * Closes and removes all drivers
    */
- removeAllDrivers(): Promise<void>;
+  removeAllDrivers(): Promise<void>;
 
   /**
    * Removes the current driver

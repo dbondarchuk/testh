@@ -3,16 +3,16 @@
   "version": "0.0.1",
   "description": "SDK of Testh project",
   "type": "commonjs",
-  "main": "build/index.js",
+  "main": "build/src/index.js",
   "devDependencies": {
     "@microsoft/tsdoc-config": "^0.16.1",
     "@types/deasync": "^0.1.2",
     "@types/glob": "^7.2.0",
     "@types/jest": "~27.5",
     "@types/node": "~16",
-    "@types/selenium-webdriver": "^4.1.2",
     "@typescript-eslint/eslint-plugin": "~5.46",
     "@typescript-eslint/parser": "~5.46",
+    "create-ts-index": "^1.14.0",
     "eslint": "~8.16",
     "eslint-config-prettier": "~8.5",
     "eslint-plugin-jest": "~26.2",
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "clean": "rimraf coverage build tmp",
-    "prebuild": "yarn run lint && yarn run index",
+    "prebuild": "yarn run clean && yarn run lint && yarn run index && yarn run prettier",
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -w -p tsconfig.json",
     "build:release": "tsc -p tsconfig.release.json",
@@ -40,7 +40,7 @@
   "author": "Dmytro Bondarchuk <dbondarchuk@users.noreply.github.com>",
   "dependencies": {
     "class-transformer": "^0.5.1",
-    "selenium-webdriver": "^4.4.0",
+    "@types/selenium-webdriver": "^4.1.2",
     "tslib": "~2.4"
   }
 }

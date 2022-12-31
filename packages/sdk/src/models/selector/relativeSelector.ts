@@ -18,7 +18,7 @@ export class RelativeSelector {
   @Type(() => Selector)
   public to?: Selector;
 
-  /** 
+  /**
    * Original element.
    * We can't use {@link SelectorOrElement} here because it will cause a circular dependency
    */

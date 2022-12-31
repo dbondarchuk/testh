@@ -1,6 +1,16 @@
 import * as chrome from 'selenium-webdriver/chrome';
 import { Type } from 'class-transformer';
-import { Action, DriverException, IAction, IActionProperties, ILogger, ILoggerFactory, isHeadlessEnvironment, IState, ToBoolean } from '@testh/sdk';
+import {
+  Action,
+  DriverException,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  isHeadlessEnvironment,
+  IState,
+  ToBoolean,
+} from '@testh/sdk';
 import { Browser, Builder, logging, WebDriver } from 'selenium-webdriver';
 
 /** Mobile emulation using predefined device */
@@ -29,9 +39,7 @@ export type MobileEmulationOptions =
 /**
  * Properties for {@link OpenBrowserAction}
  */
-export class OpenBrowserActionProperties
-  implements IActionProperties
-{
+export class OpenBrowserActionProperties implements IActionProperties {
   /** Browser type */
   browser: 'chrome' | string;
 
@@ -61,20 +69,14 @@ export class OpenBrowserActionProperties
 /**
  * Runner type aliases
  */
-export const OpenBrowserActionTypeAliases = [
-  'open',
-  'open-browser',
-] as const;
+export const OpenBrowserActionTypeAliases = ['open', 'open-browser'] as const;
 
 /**
  * Opens a new browser and switches to its' driver
  * @properties {@link OpenBrowserActionProperties}
  * @runnerType {@link OpenBrowserActionTypeAliases}
  */
-@Action(
-  OpenBrowserActionProperties,
-  ...OpenBrowserActionTypeAliases,
-)
+@Action(OpenBrowserActionProperties, ...OpenBrowserActionTypeAliases)
 export class OpenBrowserAction extends IAction<OpenBrowserActionProperties> {
   private readonly logger: ILogger;
 
@@ -84,9 +86,7 @@ export class OpenBrowserAction extends IAction<OpenBrowserActionProperties> {
   ) {
     super(props);
 
-    this.logger = loggerFactory.get<OpenBrowserAction>(
-      OpenBrowserAction,
-    );
+    this.logger = loggerFactory.get<OpenBrowserAction>(OpenBrowserAction);
   }
 
   public async run(state: IState): Promise<void> {

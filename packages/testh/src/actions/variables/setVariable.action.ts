@@ -1,12 +1,17 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException } from '@testh/sdk';
-
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+} from '@testh/sdk';
 
 /**
  * Properties for {@link SetVariableAction}
  */
-export class SetVariableActionProperties
-  implements IActionProperties
-{
+export class SetVariableActionProperties implements IActionProperties {
   /**
    * Name of the variable where to store value
    */
@@ -26,10 +31,7 @@ export const SetVariableActionTypeAliases = ['set-variable'] as const;
  * @properties {@link SetVariableActionProperties}
  * @runnerType {@link SetVariableActionTypeAliases}
  */
-@Action(
-  SetVariableActionProperties,
-  ...SetVariableActionTypeAliases,
-)
+@Action(SetVariableActionProperties, ...SetVariableActionTypeAliases)
 export class SetVariableAction extends IAction<SetVariableActionProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -37,9 +39,7 @@ export class SetVariableAction extends IAction<SetVariableActionProperties> {
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<SetVariableAction>(
-      SetVariableAction,
-    );
+    this.logger = loggerFactory.get<SetVariableAction>(SetVariableAction);
   }
 
   public async run(state: IState): Promise<void> {

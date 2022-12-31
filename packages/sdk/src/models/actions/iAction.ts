@@ -5,10 +5,7 @@ import { IActionProperties } from './iActionProperties';
 /**
  * Base class for the test step runners
  */
-export abstract class IAction<
-  Props extends IActionProperties,
-  T = void,
-> {
+export abstract class IAction<Props extends IActionProperties, T = void> {
   /**
    * @param props Properties
    */

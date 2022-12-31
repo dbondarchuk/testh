@@ -1,11 +1,16 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState } from '@testh/sdk';
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+} from '@testh/sdk';
 
 /**
  * Properties for {@link OpenUrlAction}
  */
-export class OpenUrlActionProperties
-  implements IActionProperties
-{
+export class OpenUrlActionProperties implements IActionProperties {
   /**
    * Url to open
    */
@@ -24,14 +29,9 @@ export const OpenUrlActionTypeAliases = ['open-url'] as const;
 export class OpenUrlAction extends IAction<OpenUrlActionProperties> {
   private readonly logger: ILogger;
 
-  constructor(
-    props: OpenUrlActionProperties,
-    loggerFactory: ILoggerFactory,
-  ) {
+  constructor(props: OpenUrlActionProperties, loggerFactory: ILoggerFactory) {
     super(props);
-    this.logger = loggerFactory.get<OpenUrlAction>(
-      OpenUrlAction,
-    );
+    this.logger = loggerFactory.get<OpenUrlAction>(OpenUrlAction);
   }
 
   public async run(state: IState): Promise<void> {

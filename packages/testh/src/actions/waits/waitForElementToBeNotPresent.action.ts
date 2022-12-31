@@ -1,6 +1,15 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException, SelectorOrElement, Waits } from '@testh/sdk';
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+  SelectorOrElement,
+  Waits,
+} from '@testh/sdk';
 import { Type } from 'class-transformer';
-
 
 /**
  * Properties for {@link WaitForElementToBeNotPresentAction}

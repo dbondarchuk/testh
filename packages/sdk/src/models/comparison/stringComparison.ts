@@ -65,6 +65,7 @@ export class StringComparison implements IComparison<string, string> {
   }
 
   public toString(): string {
-    return `StringComparison;type=${this.type};ignoreCase:${!!this.ignoreCase};value=${this.value}`;
+    return `StringComparison;type=${this.type};ignoreCase:${!!this
+      .ignoreCase};value=${this.value}`;
   }
 }

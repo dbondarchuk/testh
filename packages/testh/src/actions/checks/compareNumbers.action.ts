@@ -1,10 +1,18 @@
-import { Action, Assert, IAction, IActionProperties, ILogger, ILoggerFactory, IState, NumberComparison, PropertyIsRequiredException } from '@testh/sdk';
+import {
+  Action,
+  Assert,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  NumberComparison,
+  PropertyIsRequiredException,
+} from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /** Properties for {@link CompareNumbersAction} */
-export class CompareNumbersActionProperties
-  implements IActionProperties
-{
+export class CompareNumbersActionProperties implements IActionProperties {
   /** Comparison value */
   @Type(() => NumberComparison)
   compare: NumberComparison;
@@ -15,19 +23,14 @@ export class CompareNumbersActionProperties
 }
 
 /** Runner type aliases for {@link CompareNumbersAction} */
-export const CompareNumbersActionTypeAliases = [
-  'compare-numbers',
-] as const;
+export const CompareNumbersActionTypeAliases = ['compare-numbers'] as const;
 
 /**
  * Compares two numbers
  * @properties {@link CompareNumbersActionProperties}
  * @runnerType {@link CompareNumbersActionTypeAliases}
  */
-@Action(
-  CompareNumbersActionProperties,
-  ...CompareNumbersActionTypeAliases,
-)
+@Action(CompareNumbersActionProperties, ...CompareNumbersActionTypeAliases)
 export class CompareNumbersAction extends IAction<CompareNumbersActionProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -35,9 +38,7 @@ export class CompareNumbersAction extends IAction<CompareNumbersActionProperties
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<CompareNumbersAction>(
-      CompareNumbersAction,
-    );
+    this.logger = loggerFactory.get<CompareNumbersAction>(CompareNumbersAction);
   }
 
   public async run(_: IState): Promise<void> {

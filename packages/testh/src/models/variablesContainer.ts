@@ -4,7 +4,28 @@ import * as os from 'os';
 import { container } from 'tsyringe';
 
 import { version } from '../../package.json';
-import { AGENT_ARCHITECTURE, AGENT_HOST_NAME, AGENT_IP_ADDRESS, AGENT_OS_NAME, AGENT_OS_VERSION, AGENT_VERSION, getCurrentStepNumber, IPropertiesEvaluator, IState, IStepsRunner, IVariablesContainer, PropertiesEvaluatorContainerToken, RUN, StepsRunnerContainerToken, stepsWrapper, TASK_EXECUTION_TIME, TASK_START_TIME, TASK_TEST_NAME, TestStep, Variables } from '@testh/sdk';
+import {
+  AGENT_ARCHITECTURE,
+  AGENT_HOST_NAME,
+  AGENT_IP_ADDRESS,
+  AGENT_OS_NAME,
+  AGENT_OS_VERSION,
+  AGENT_VERSION,
+  getCurrentStepNumber,
+  IPropertiesEvaluator,
+  IState,
+  IStepsRunner,
+  IVariablesContainer,
+  PropertiesEvaluatorContainerToken,
+  RUN,
+  StepsRunnerContainerToken,
+  stepsWrapper,
+  TASK_EXECUTION_TIME,
+  TASK_START_TIME,
+  TASK_TEST_NAME,
+  TestStep,
+  Variables,
+} from '@testh/sdk';
 
 /**
  * Contains variables for the current run
@@ -22,10 +43,7 @@ export class VariablesContainer implements IVariablesContainer {
   }
 
   private static fixVariableName(name: string): string {
-    return name.replaceAll(
-      /[(|)|\s|\\|[|\]|{|}|\-|:|=|/]/g,
-      '_',
-    );
+    return name.replaceAll(/[(|)|\s|\\|[|\]|{|}|\-|:|=|/]/g, '_');
   }
 
   /**
@@ -111,10 +129,7 @@ export class VariablesContainer implements IVariablesContainer {
   }
 
   private initAgentVariables(): void {
-    this.put(
-      AGENT_IP_ADDRESS,
-      VariablesContainer.getIpAddress(),
-    );
+    this.put(AGENT_IP_ADDRESS, VariablesContainer.getIpAddress());
     this.put(AGENT_HOST_NAME, os.hostname());
     this.put(AGENT_OS_NAME, os.platform());
     this.put(AGENT_OS_VERSION, os.version());
@@ -125,11 +140,13 @@ export class VariablesContainer implements IVariablesContainer {
   private initRunCommand(): void {
     const run = (stepType: string, properties: any): Promise<any[]> => {
       return (async (): Promise<any[]> => {
-        const runner = container.resolve<IStepsRunner>(StepsRunnerContainerToken);
+        const runner = container.resolve<IStepsRunner>(
+          StepsRunnerContainerToken,
+        );
         const step: TestStep = {
           name: `Execute ${stepType}`,
           type: stepType,
-          values: properties
+          values: properties,
         };
 
         const currentStep = getCurrentStepNumber(this).toString();
@@ -137,13 +154,14 @@ export class VariablesContainer implements IVariablesContainer {
         const results = await runner.runTestSteps(
           stepsWrapper([step]),
           this.state,
-          (stepNumber) => `${currentStep}-execute-${stepNumber}`);
+          (stepNumber) => `${currentStep}-execute-${stepNumber}`,
+        );
 
         return results;
       })();
-    }
+    };
 
-    this.put(RUN, run)
+    this.put(RUN, run);
   }
 
   private static getIpAddress(): string {

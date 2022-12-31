@@ -1,4 +1,4 @@
-import { IState } from "../../models/tests/iState";
+import { IState } from '../../models/tests/iState';
 
 /** Describes the properties evaluator */
 export abstract class IPropertiesEvaluator {

@@ -22,7 +22,7 @@ export function stepsWrapper(
   variables?: Variables,
 ): TestSteps {
   const wrapper = new TestSteps(...steps);
-  
+
   if (variables) wrapper.variables = variables;
 
   return wrapper;

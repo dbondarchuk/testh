@@ -1,9 +1,14 @@
-import { container } from 'tsyringe';
-
-import './runners';
 import { plainToClass } from 'class-transformer';
-import { ILoggerFactory, IState, IStepsRunner, LoggerFactoryContainerToken, StepsRunnerContainerToken, Test } from '@testh/sdk';
-import { State } from '../models/state';
+import {
+  IContainer,
+  ILoggerFactory,
+  IState,
+  IStepsRunner,
+  LoggerFactoryContainerToken,
+  StepsRunnerContainerToken,
+  Test,
+} from '@testh/sdk';
+import { State } from '../../models/state';
 
 /**
  * Default test runner
@@ -22,7 +27,9 @@ export class TestRunner {
    * @returns If execution was successful
    */
   public async run(): Promise<boolean> {
-    const loggerFactory = container.resolve<ILoggerFactory>(LoggerFactoryContainerToken);
+    const loggerFactory = IContainer.instance.get<ILoggerFactory>(
+      LoggerFactoryContainerToken,
+    );
     const logger = loggerFactory.get<TestRunner>(TestRunner);
 
     if (this.test.pages) this.state.variables.put('pages', this.test.pages);
@@ -30,8 +37,8 @@ export class TestRunner {
     logger.info(`Running a test '${this.test.name}'...`);
 
     try {
-      await container
-        .resolve<IStepsRunner>(StepsRunnerContainerToken)
+      await IContainer.instance
+        .get<IStepsRunner>(StepsRunnerContainerToken)
         .runTestSteps(this.test.steps, this.state, (stepNumber) => stepNumber);
 
       logger.info('Test execution has successfully completed.');

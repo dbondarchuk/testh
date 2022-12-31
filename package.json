@@ -10,7 +10,6 @@
     "start": "yarn build && yarn start:no-build"
   },
   "devDependencies": {
-    "create-ts-index": "^1.14.0",
     "typescript": "^4.9.4"
   }
 }

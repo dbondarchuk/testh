@@ -1,4 +1,13 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException, SelectorOrElement } from '@testh/sdk';
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+  SelectorOrElement,
+} from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /**
@@ -41,10 +50,9 @@ export class WaitForElementToBeInteractableAction extends IAction<WaitForElement
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger =
-      loggerFactory.get<WaitForElementToBeInteractableAction>(
-        WaitForElementToBeInteractableAction,
-      );
+    this.logger = loggerFactory.get<WaitForElementToBeInteractableAction>(
+      WaitForElementToBeInteractableAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {

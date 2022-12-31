@@ -1,10 +1,19 @@
-import { Action, Assert, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException, SelectorOrElement, StringComparison } from '@testh/sdk';
+import {
+  Action,
+  Assert,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+  SelectorOrElement,
+  StringComparison,
+} from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /** Properties for {@link CheckElementTextAction} */
-export class CheckElementTextActionProperties
-  implements IActionProperties
-{
+export class CheckElementTextActionProperties implements IActionProperties {
   /** Element selector */
   @Type(() => SelectorOrElement)
   selector: SelectorOrElement;
@@ -24,10 +33,7 @@ export const CheckElementTextActionTypeAliases = [
  * @properties {@link CheckElementTextActionProperties}
  * @runnerType {@link CheckElementTextActionTypeAliases}
  */
-@Action(
-  CheckElementTextActionProperties,
-  ...CheckElementTextActionTypeAliases,
-)
+@Action(CheckElementTextActionProperties, ...CheckElementTextActionTypeAliases)
 export class CheckElementTextAction extends IAction<CheckElementTextActionProperties> {
   private readonly logger: ILogger;
   constructor(

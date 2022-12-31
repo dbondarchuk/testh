@@ -1,5 +1,17 @@
 import { container } from 'tsyringe';
-import { Action, ActionWithStepsProperties, getCurrentStepNumber, IAction, ILogger, ILoggerFactory, IState, IStepsRunner, PropertyIsRequiredException, SelectorOrElements, StepsRunnerContainerToken } from '@testh/sdk';
+import {
+  Action,
+  ActionWithStepsProperties,
+  getCurrentStepNumber,
+  IAction,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  IStepsRunner,
+  PropertyIsRequiredException,
+  SelectorOrElements,
+  StepsRunnerContainerToken,
+} from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /**
@@ -20,9 +32,7 @@ export const ELEMENT_VARIABLE = 'ELEMENT';
 export const ELEMENT_INDEX_VARIABLE = 'ELEMENT_INDEX';
 
 /** Runner type aliases for {@link ForEachElementAction} */
-export const ForEachElementActionTypeAliases = [
-  'for-each-element',
-] as const;
+export const ForEachElementActionTypeAliases = ['for-each-element'] as const;
 
 /**
  * Runs specified test step for each of the elements of the selector.
@@ -31,10 +41,7 @@ export const ForEachElementActionTypeAliases = [
  * @variable {@link ELEMENT_VARIABLE} Where current element is stored
  * @variable {@link ELEMENT_INDEX_VARIABLE} Where the index of current element is stored
  */
-@Action(
-  ForEachElementActionProperties,
-  ...ForEachElementActionTypeAliases,
-)
+@Action(ForEachElementActionProperties, ...ForEachElementActionTypeAliases)
 export class ForEachElementAction extends IAction<ForEachElementActionProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -42,9 +49,7 @@ export class ForEachElementAction extends IAction<ForEachElementActionProperties
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<ForEachElementAction>(
-      ForEachElementAction,
-    );
+    this.logger = loggerFactory.get<ForEachElementAction>(ForEachElementAction);
   }
 
   public async run(state: IState): Promise<void> {

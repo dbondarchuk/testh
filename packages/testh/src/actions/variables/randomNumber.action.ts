@@ -1,19 +1,25 @@
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, PropertyIsRequiredException, ToNumber } from '@testh/sdk';
-
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  PropertyIsRequiredException,
+  ToNumber,
+} from '@testh/sdk';
 
 /**
- *  Generates random number 
+ *  Generates random number
  * @param min Min value (inclusive)
  * @param max Max value (inclusive)
  * */
-export const randomNumber = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1) + min);
+export const randomNumber = (min: number, max: number): number =>
+  Math.floor(Math.random() * (max - min + 1) + min);
 
 /**
  * Properties for {@link RandomNumberAction}
  */
-export class RandomNumberActionProperties
-  implements IActionProperties
-{
+export class RandomNumberActionProperties implements IActionProperties {
   /**
    * Min value (inclusive)
    */
@@ -35,20 +41,18 @@ export const RandomNumberActionTypeAliases = ['random-number'] as const;
  * @properties {@link RandomNumberActionProperties}
  * @runnerType {@link SetVariableActionTypeAliases}
  */
-@Action(
+@Action(RandomNumberActionProperties, ...RandomNumberActionTypeAliases)
+export class RandomNumberAction extends IAction<
   RandomNumberActionProperties,
-  ...RandomNumberActionTypeAliases,
-)
-export class RandomNumberAction extends IAction<RandomNumberActionProperties, number> {
+  number
+> {
   private readonly logger: ILogger;
   constructor(
     props: RandomNumberActionProperties,
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<RandomNumberAction>(
-      RandomNumberAction,
-    );
+    this.logger = loggerFactory.get<RandomNumberAction>(RandomNumberAction);
   }
 
   public async run(): Promise<number> {

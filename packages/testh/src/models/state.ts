@@ -1,6 +1,6 @@
-import { DriverException, IState, IVariablesContainer, Test } from "@testh/sdk";
-import { WebDriver } from "selenium-webdriver";
-import { VariablesContainer } from "./variablesContainer";
+import { DriverException, IState, IVariablesContainer, Test } from '@testh/sdk';
+import { WebDriver } from 'selenium-webdriver';
+import { VariablesContainer } from './variablesContainer';
 
 /**
  * Describes a current state of the run

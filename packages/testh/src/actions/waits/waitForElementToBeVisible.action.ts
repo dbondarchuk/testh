@@ -1,6 +1,15 @@
 import { until } from 'selenium-webdriver';
 import { Type } from 'class-transformer';
-import { Action, IAction, IActionProperties, ILogger, ILoggerFactory, IState, PropertyIsRequiredException, SelectorOrElement } from '@testh/sdk';
+import {
+  Action,
+  IAction,
+  IActionProperties,
+  ILogger,
+  ILoggerFactory,
+  IState,
+  PropertyIsRequiredException,
+  SelectorOrElement,
+} from '@testh/sdk';
 
 /**
  * Properties for {@link WaitForElementToBeVisibleAction}

@@ -11,9 +11,10 @@
       "skipFiles": ["<node_internals>/**"],
       "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/packages/testh/build/src/main.js",
+      "sourceMaps": true,
       "args": ["${workspaceFolder}/examples/example.yaml"],
       "preLaunchTask": "yarn: build",
-      "outFiles": ["${workspaceFolder}/build/**/*.js"]
+      "outFiles": ["${workspaceFolder}/packages/**/build/**/*.js"]
     }
   ]
 }

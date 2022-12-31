@@ -1,4 +1,10 @@
-import { IPropertiesEvaluator, IPropertyEvaluator, IState, KeyValue, PropertiesEvaluatorContainerToken } from '@testh/sdk';
+import {
+  IPropertiesEvaluator,
+  IPropertyEvaluator,
+  IState,
+  KeyValue,
+  PropertiesEvaluatorContainerToken,
+} from '@testh/sdk';
 import { injectable, inject } from 'tsyringe';
 
 /**
@@ -6,19 +12,28 @@ import { injectable, inject } from 'tsyringe';
  */
 @injectable()
 export class DefaultPropertyEvaluator extends IPropertyEvaluator {
-    public constructor(
-        @inject(PropertiesEvaluatorContainerToken) protected readonly propertiesEvaluator: IPropertiesEvaluator
-    ) {
-        super();
-    }
+  public constructor(
+    @inject(PropertiesEvaluatorContainerToken)
+    protected readonly propertiesEvaluator: IPropertiesEvaluator,
+  ) {
+    super();
+  }
 
-    public get priority(): number {
-        return 1;
-    }
+  public get priority(): number {
+    return 1;
+  }
 
-    public async evaluate(property: KeyValue, state: IState, recursive: boolean): Promise<void> {
-        property.value = await this.propertiesEvaluator.evaluateProperties(property.value, state, recursive);
-        
-        await super.next(property, state, recursive);
-    }
+  public async evaluate(
+    property: KeyValue,
+    state: IState,
+    recursive: boolean,
+  ): Promise<void> {
+    property.value = await this.propertiesEvaluator.evaluateProperties(
+      property.value,
+      state,
+      recursive,
+    );
+
+    await super.next(property, state, recursive);
+  }
 }

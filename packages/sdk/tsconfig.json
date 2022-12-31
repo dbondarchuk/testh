@@ -24,5 +24,11 @@
     "resolveJsonModule": true
   },
   "typedocOptions": {},
-  "include": ["src/**/*", "__tests__/**/*", "index.ts", "../testh/src/registries/extensionRegistry.ts", "../testh/src/registries/actionRegistry.ts"]
+  "include": [
+    "src/**/*",
+    "__tests__/**/*",
+    "index.ts",
+    "../testh/src/registries/extensionRegistry.ts",
+    "../testh/src/registries/actionRegistry.ts"
+  ]
 }
