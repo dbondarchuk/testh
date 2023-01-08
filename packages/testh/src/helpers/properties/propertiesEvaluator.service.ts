@@ -3,15 +3,17 @@ import {
   IPropertyEvaluator,
   IState,
   KeyValue,
-  PropertyEvaluatorContainerToken,
+  PropertiesEvaluatorInjectionToken,
+  PropertyEvaluatorInjectionToken,
+  Service,
   WrapperWithVariables,
 } from '@testh/sdk';
-import { singleton, container } from 'tsyringe';
+import { container } from 'tsyringe';
 
 const isPlainObject = (value: any): boolean => value?.constructor === Object;
 
 /** Default properties evaluator */
-@singleton()
+@Service(PropertiesEvaluatorInjectionToken)
 export class PropertiesEvaluator implements IPropertiesEvaluator {
   private static async replaceAllAsync(
     str: string,
@@ -157,7 +159,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
     };
 
     const implementations = container
-      .resolveAll<IPropertyEvaluator>(PropertyEvaluatorContainerToken)
+      .resolveAll<IPropertyEvaluator>(PropertyEvaluatorInjectionToken)
       .sort((a, b) => b.priority - a.priority);
 
     const evaluator = implementations[0];

@@ -13,4 +13,4 @@ export interface ILoggerFactory {
 }
 
 /** Token to use in order to get logger factory implementation from DI container */
-export const LoggerFactoryContainerToken = 'LoggerFactory';
+export const LoggerFactoryInjectionToken = 'LoggerFactory';

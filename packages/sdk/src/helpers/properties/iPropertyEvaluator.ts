@@ -79,4 +79,4 @@ export abstract class IPropertyEvaluator {
 }
 
 /** Token to use in order to get property evaluator implementation from DI container */
-export const PropertyEvaluatorContainerToken = 'PropertyEvaluator';
+export const PropertyEvaluatorInjectionToken = 'PropertyEvaluator';

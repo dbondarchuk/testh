@@ -27,3 +27,6 @@ export class Test {
    */
   steps: TestSteps;
 }
+
+/** Injection token for the instance of Test */
+export const TestInstanceInjectionToken = Test;

@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe';
+import { inject } from 'tsyringe';
 import {
   getCurrentStepNumber,
   IPropertiesEvaluator,
@@ -6,8 +6,10 @@ import {
   IState,
   IStepsRunner,
   KeyValue,
-  PropertiesEvaluatorContainerToken,
-  StepsRunnerContainerToken,
+  PropertiesEvaluatorInjectionToken,
+  PropertyEvaluatorInjectionToken,
+  Service,
+  StepsRunnerInjectionToken,
   TestSteps,
 } from '@testh/sdk';
 
@@ -16,12 +18,12 @@ import {
  * If key starts with `<` sign, then steps results will be returned as an array of results from all steps
  * If key starts with '^' sign, then result of the last step will be used as a single result
  */
-@injectable()
+@Service(PropertyEvaluatorInjectionToken)
 export class RunActionsPropertyEvaluator extends IPropertyEvaluator {
   public constructor(
-    @inject(PropertiesEvaluatorContainerToken)
+    @inject(PropertiesEvaluatorInjectionToken)
     protected readonly propertiesEvaluator: IPropertiesEvaluator,
-    @inject(StepsRunnerContainerToken)
+    @inject(StepsRunnerInjectionToken)
     protected readonly stepsRunner: IStepsRunner,
   ) {
     super();

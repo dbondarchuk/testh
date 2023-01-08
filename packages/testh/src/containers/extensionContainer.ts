@@ -14,6 +14,16 @@ export class ExtensionContainer extends IExtensionContainer {
   }
 
   /** @inheritdoc */
+  public getAll(): IExtension[] {
+    return (
+      Object.values(this.implementations)
+        .flat()
+        .slice(0)
+        .sort((a, b) => b.priority - a.priority) || []
+    );
+  }
+
+  /** @inheritdoc */
   public register<T extends IExtension>(extension: T): void {
     if (!this.implementations[extension.type])
       this.implementations[extension.type] = [];

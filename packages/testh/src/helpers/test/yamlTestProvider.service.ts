@@ -1,9 +1,14 @@
-import { Extension, ITestProviderExtension, Test } from '@testh/sdk';
+import {
+  ITestProvider,
+  Service,
+  Test,
+  TestProviderInjectionToken,
+} from '@testh/sdk';
 import { YamlInclude } from 'yaml-js-include';
 
 /** Generates a test from the yaml file */
-@Extension()
-export class YamlTestProviderExtension extends ITestProviderExtension {
+@Service(TestProviderInjectionToken)
+export class YamlTestProvider extends ITestProvider {
   async get(args: string[]): Promise<Test | undefined> {
     const pathToTest = args[0];
     if (pathToTest?.endsWith('.yaml') || pathToTest?.endsWith('.yml')) {
@@ -12,13 +17,5 @@ export class YamlTestProviderExtension extends ITestProviderExtension {
     }
 
     return undefined;
-  }
-
-  get name(): string {
-    return 'YAML Test Provider';
-  }
-
-  get priority(): number {
-    return 5;
   }
 }

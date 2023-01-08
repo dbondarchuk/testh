@@ -1,7 +1,7 @@
 import { Constructor } from '../models/types/constructor';
 import { IAction } from '../models/actions/iAction';
 import { IActionProperties } from '../models/actions/iActionProperties';
-import { IContainer } from './iContainer';
+import { container } from 'tsyringe';
 
 /**
  * Container for the Action's required types
@@ -47,12 +47,12 @@ export function Action<
   Props extends IActionProperties,
 >(propertiesType: Constructor<Props>, ...aliases: string[]): (ctor: T) => any {
   return (ctor: T) => {
-    IContainer.instance
-      .get<IActionContainer>(ActionContainerContainerToken)
+    container
+      .resolve<IActionContainer>(ActionContainerInjectionToken)
       .register(ctor, propertiesType, ...aliases);
     return ctor as T;
   };
 }
 
 /** Token to use in order to get action container implementation from DI container */
-export const ActionContainerContainerToken = 'ActionContainer';
+export const ActionContainerInjectionToken = 'ActionContainer';

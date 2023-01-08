@@ -10,7 +10,7 @@ import {
   IState,
   IStepsRunner,
   PropertyIsRequiredException,
-  StepsRunnerContainerToken,
+  StepsRunnerInjectionToken,
 } from '@testh/sdk';
 
 /**
@@ -48,7 +48,7 @@ export class RunStepsAction extends IAction<RunStepsActionProperties> {
     const basicStepNumber = getCurrentStepNumber(state.variables);
 
     await container
-      .resolve<IStepsRunner>(StepsRunnerContainerToken)
+      .resolve<IStepsRunner>(StepsRunnerInjectionToken)
       .runTestSteps(
         this.props.steps,
         state,

@@ -11,7 +11,7 @@ import {
   IState,
   IStepsRunner,
   PropertyIsRequiredException,
-  StepsRunnerContainerToken,
+  StepsRunnerInjectionToken,
 } from '@testh/sdk';
 
 export class ForEachArrayItemActionProperties extends ActionWithStepsProperties {
@@ -71,7 +71,7 @@ export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProper
       state.variables.put(INDEX_VARIABLE, index);
 
       await container
-        .resolve<IStepsRunner>(StepsRunnerContainerToken)
+        .resolve<IStepsRunner>(StepsRunnerInjectionToken)
         .runTestSteps(
           this.props.steps,
           state,

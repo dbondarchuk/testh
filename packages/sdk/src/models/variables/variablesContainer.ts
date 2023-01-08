@@ -78,3 +78,6 @@ export const updateStepNumber = (
 export const getCurrentStepNumber = (
   variables: IVariablesContainer,
 ): number | string => variables.get(TASK_STEP_NUMBER);
+
+/** Token for variables container */
+export const VariablesContainerInjectionToken = 'VariablesContainer';

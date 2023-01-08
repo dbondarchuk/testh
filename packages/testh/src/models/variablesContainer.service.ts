@@ -1,7 +1,7 @@
 import { env } from 'process';
 import * as os from 'os';
 
-import { container } from 'tsyringe';
+import { container, inject } from 'tsyringe';
 
 import { version } from '../../package.json';
 import {
@@ -16,20 +16,26 @@ import {
   IState,
   IStepsRunner,
   IVariablesContainer,
-  PropertiesEvaluatorContainerToken,
+  PropertiesEvaluatorInjectionToken,
   RUN,
-  StepsRunnerContainerToken,
+  Service,
+  StateInstanceInjectionToken,
+  StepsRunnerInjectionToken,
   stepsWrapper,
   TASK_EXECUTION_TIME,
   TASK_START_TIME,
   TASK_TEST_NAME,
+  Test,
+  TestInstanceInjectionToken,
   TestStep,
   Variables,
+  VariablesContainerInjectionToken,
 } from '@testh/sdk';
 
 /**
  * Contains variables for the current run
  */
+@Service(VariablesContainerInjectionToken)
 export class VariablesContainer implements IVariablesContainer {
   private _variables: Variables = {};
 
@@ -38,8 +44,11 @@ export class VariablesContainer implements IVariablesContainer {
    * @param state Reference to the current run state
    * @param variables Initial variables
    */
-  public constructor(private readonly state: IState, variables?: Variables) {
-    this.initVariables(variables);
+  public constructor(
+    @inject(StateInstanceInjectionToken) private readonly state: IState,
+    @inject(TestInstanceInjectionToken) test?: Test,
+  ) {
+    this.initVariables(test?.variables);
   }
 
   private static fixVariableName(name: string): string {
@@ -72,7 +81,7 @@ export class VariablesContainer implements IVariablesContainer {
     }
 
     return container
-      .resolve<IPropertiesEvaluator>(PropertiesEvaluatorContainerToken)
+      .resolve<IPropertiesEvaluator>(PropertiesEvaluatorInjectionToken)
       .evaluate(key, this._variables);
   }
 
@@ -141,7 +150,7 @@ export class VariablesContainer implements IVariablesContainer {
     const run = (stepType: string, properties: any): Promise<any[]> => {
       return (async (): Promise<any[]> => {
         const runner = container.resolve<IStepsRunner>(
-          StepsRunnerContainerToken,
+          StepsRunnerInjectionToken,
         );
         const step: TestStep = {
           name: `Execute ${stepType}`,

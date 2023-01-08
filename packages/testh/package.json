@@ -5,6 +5,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@microsoft/tsdoc-config": "^0.16.1",
+    "@types/command-line-args": "^5.2.0",
     "@types/deasync": "^0.1.2",
     "@types/glob": "^7.2.0",
     "@types/jest": "~27.5",
@@ -42,6 +43,7 @@
     "@testh/sdk": "0.0.1",
     "chromedriver": "^107.0.0",
     "class-transformer": "^0.5.1",
+    "command-line-args": "^5.2.1",
     "moment": "^2.29.4",
     "reflect-metadata": "^0.1.13",
     "selenium-webdriver": "^4.4.0",

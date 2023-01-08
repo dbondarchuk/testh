@@ -1,0 +1,6 @@
+logger:
+  level: Warning
+  Console:
+    level: Debug
+owofify:
+  level: uvu

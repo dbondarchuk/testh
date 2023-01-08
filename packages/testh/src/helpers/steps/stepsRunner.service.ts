@@ -1,32 +1,35 @@
-import { injectable, inject } from 'tsyringe';
+import { inject, container } from 'tsyringe';
 import { plainToClass } from 'class-transformer';
 import {
-  ActionContainerContainerToken,
+  ActionContainerInjectionToken,
   getCurrentStepNumber,
   IActionContainer,
-  IContainer,
   ILogger,
   ILoggerFactory,
   IPropertiesEvaluator,
   IState,
-  LoggerFactoryContainerToken,
-  PropertiesEvaluatorContainerToken,
+  IStepsRunner,
+  LoggerFactoryInjectionToken,
+  PropertiesEvaluatorInjectionToken,
+  Service,
   StepsNumberFunction,
+  StepsRunnerInjectionToken,
   TestSteps,
   UnknownOptionException,
   updateStepNumber,
 } from '@testh/sdk';
 
 /** Default test step runner */
-@injectable()
-export class StepsRunner {
+@Service(StepsRunnerInjectionToken)
+export class StepsRunner extends IStepsRunner {
   private readonly logger: ILogger;
   constructor(
-    @inject(PropertiesEvaluatorContainerToken)
+    @inject(PropertiesEvaluatorInjectionToken)
     protected readonly propertiesEvaluator: IPropertiesEvaluator,
-    @inject(LoggerFactoryContainerToken)
+    @inject(LoggerFactoryInjectionToken)
     protected readonly loggerFactory: ILoggerFactory,
   ) {
+    super();
     this.logger = loggerFactory.get<StepsRunner>(StepsRunner);
   }
 
@@ -67,8 +70,8 @@ export class StepsRunner {
 
       this.logger.info(`Running a step #${currentStepNumber} '${step.name}'`);
 
-      const runners = IContainer.instance
-        .get<IActionContainer>(ActionContainerContainerToken)
+      const runners = container
+        .resolve<IActionContainer>(ActionContainerInjectionToken)
         .get();
 
       const runnerType = runners[step.type];

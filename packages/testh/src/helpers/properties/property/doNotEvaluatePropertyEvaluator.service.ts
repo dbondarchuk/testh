@@ -1,19 +1,21 @@
-import { injectable, inject } from 'tsyringe';
+import { inject } from 'tsyringe';
 import {
   IPropertiesEvaluator,
   IPropertyEvaluator,
   IState,
   KeyValue,
-  PropertiesEvaluatorContainerToken,
+  PropertiesEvaluatorInjectionToken,
+  PropertyEvaluatorInjectionToken,
+  Service,
 } from '@testh/sdk';
 
 /**
  * Doesn't evaluate a property if the key starts with tilda sign (~)
  */
-@injectable()
+@Service(PropertyEvaluatorInjectionToken)
 export class DoNotEvaluatePropertyEvaluator extends IPropertyEvaluator {
   public constructor(
-    @inject(PropertiesEvaluatorContainerToken)
+    @inject(PropertiesEvaluatorInjectionToken)
     protected readonly propertiesEvaluator: IPropertiesEvaluator,
   ) {
     super();

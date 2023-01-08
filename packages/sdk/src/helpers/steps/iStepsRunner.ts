@@ -21,4 +21,4 @@ export abstract class IStepsRunner {
 }
 
 /** Token to use in order to get steps runner implementation from DI container */
-export const StepsRunnerContainerToken = 'StepsRunner';
+export const StepsRunnerInjectionToken = 'StepsRunner';

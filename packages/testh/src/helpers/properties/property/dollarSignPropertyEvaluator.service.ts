@@ -1,19 +1,21 @@
-import { injectable, inject } from 'tsyringe';
+import { inject } from 'tsyringe';
 import {
   IPropertiesEvaluator,
   IPropertyEvaluator,
   IState,
   KeyValue,
-  PropertiesEvaluatorContainerToken,
+  PropertiesEvaluatorInjectionToken,
+  PropertyEvaluatorInjectionToken,
+  Service,
 } from '@testh/sdk';
 
 /**
  * Treats all property as value to evaluate if it is a string and key starts with the dollar sign ($)
  */
-@injectable()
+@Service(PropertyEvaluatorInjectionToken)
 export class DollarSignPropertyEvaluator extends IPropertyEvaluator {
   public constructor(
-    @inject(PropertiesEvaluatorContainerToken)
+    @inject(PropertiesEvaluatorInjectionToken)
     protected readonly propertiesEvaluator: IPropertiesEvaluator,
   ) {
     super();

@@ -1,76 +1,108 @@
 import 'reflect-metadata';
 import './helpers/selenium/webDriverProxy';
 
-import { TestRunner } from './helpers/test/testRunner';
-
-import { LoggerFactory } from './logger/loggerFactory';
-import { StepsRunner } from './helpers/steps/stepsRunner';
-import { registerEvaluatorsServices } from './helpers/properties/registerServices';
 import {
-  ActionContainerContainerToken,
-  ExtensionContainerContainerToken,
-  ExtensionTypes,
-  IActionExtension,
-  IContainer,
+  ActionContainerInjectionToken,
+  ExtensionContainerInjectionToken,
   IExtensionContainer,
-  ITestProviderExtension,
+  ITestProvider,
+  ITestRunner,
   loadAsync,
-  LoggerFactoryContainerToken,
-  setContainer,
-  StepsRunnerContainerToken,
+  SettingsInjectionToken,
   Test,
+  TestProviderInjectionToken,
+  TestRunnerInjectionToken,
 } from '@testh/sdk';
-import { DefaultContainer } from './containers/container';
 import { ActionContainer } from './containers/actionContainer';
 import { ExtensionContainer } from './containers/extensionContainer';
+import { env } from 'process';
+import { readdir } from 'fs/promises';
+import { existsSync, lstatSync } from 'fs';
+import { join, resolve } from 'path';
+import { container } from 'tsyringe';
+import * as commandLineArgs from 'command-line-args';
+import { YamlInclude } from 'yaml-js-include';
 
-function registerServices(): void {
-  setContainer(new DefaultContainer());
+const consoleArgsDefinitions: commandLineArgs.OptionDefinition[] = [
+  {
+    name: 'settings',
+    alias: 's',
+    type: String,
+  },
+  {
+    name: 'test',
+    type: String,
+    multiple: true,
+    defaultOption: true,
+  },
+];
 
-  IContainer.instance.registerSingleton(
-    ActionContainerContainerToken,
-    ActionContainer,
-  );
-  IContainer.instance.registerSingleton(
-    ExtensionContainerContainerToken,
+function registerContainers(): void {
+  container.registerSingleton(ActionContainerInjectionToken, ActionContainer);
+
+  container.registerSingleton(
+    ExtensionContainerInjectionToken,
     ExtensionContainer,
   );
-
-  IContainer.instance.registerSingleton(
-    LoggerFactoryContainerToken,
-    LoggerFactory,
-  );
-  IContainer.instance.registerSingleton(StepsRunnerContainerToken, StepsRunner);
-  registerEvaluatorsServices();
 }
 
 async function loadBuiltInExtensions(): Promise<void> {
   await loadAsync('.extension.js', __dirname);
 }
 
-async function loadActions(): Promise<void> {
-  const extensions = IContainer.instance
-    .get<IExtensionContainer>(ExtensionContainerContainerToken)
-    .get<IActionExtension>(ExtensionTypes.Action);
+async function loadExtensions(): Promise<void> {
+  const extensionsFolder = env.TESTH_EXTENSION_FOLDER || 'extensions';
+  console.log(extensionsFolder);
+  if (!existsSync(extensionsFolder)) return;
 
-  const promises = extensions.map((extension) => extension.init());
+  const folders = await readdir(extensionsFolder);
+  const files = folders
+    .map((folder) => join(extensionsFolder, folder))
+    .filter((folder) => lstatSync(folder).isDirectory())
+    .map((folder) => join(folder, 'index.js'))
+    .filter((file) => existsSync(file))
+    .map((file) => resolve(file));
+
+  const promises = files.map((file) => import(file));
   await Promise.all(promises);
 }
 
-async function main(args: string[]): Promise<number> {
-  registerServices();
+async function initExtensions(): Promise<void> {
+  const extensions = container
+    .resolve<IExtensionContainer>(ExtensionContainerInjectionToken)
+    .getAll()
+    .sort((a, b) => a.priority - b.priority);
+
+  for (const extension of extensions) {
+    await extension.init();
+  }
+}
+
+async function resolveSettings(filePath: string): Promise<void> {
+  const settings = await new YamlInclude().loadAsync(filePath);
+
+  container.registerInstance(SettingsInjectionToken, settings);
+}
+
+async function main(): Promise<number> {
+  const args = commandLineArgs(consoleArgsDefinitions);
+  if (args.settings) {
+    await resolveSettings(args.settings);
+  }
+
+  registerContainers();
 
   await loadBuiltInExtensions();
-
-  await loadActions();
+  await loadExtensions();
+  await initExtensions();
 
   let test: Test = null;
-  const providers = IContainer.instance
-    .get<IExtensionContainer>(ExtensionContainerContainerToken)
-    .get<ITestProviderExtension>(ExtensionTypes.TestProvider);
+  const providers = container.resolveAll<ITestProvider>(
+    TestProviderInjectionToken,
+  );
 
   for (const provider of providers) {
-    const result = await provider.get(args);
+    const result = await provider.get(args.test);
     if (result) {
       test = result;
       break;
@@ -83,10 +115,10 @@ async function main(args: string[]): Promise<number> {
     return 1;
   }
 
-  const runner = new TestRunner(test);
-  const result = await runner.run();
+  const runner = container.resolve<ITestRunner>(TestRunnerInjectionToken);
+  const result = await runner.run(test);
 
   return result ? 0 : 2;
 }
 
-main(process.argv.slice(2));
+main();

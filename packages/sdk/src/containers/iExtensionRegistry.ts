@@ -1,6 +1,7 @@
-import { ExtensionType, IExtension } from '../models/extensions/iExtension';
+import { container } from 'tsyringe';
+import { ExtensionType } from '../models';
+import { IExtension } from '../models/extensions/iExtension';
 import { Constructor } from '../models/types/constructor';
-import { IContainer } from './iContainer';
 
 /** Describes a registry for the extensions */
 export abstract class IExtensionContainer {
@@ -9,6 +10,11 @@ export abstract class IExtensionContainer {
    * @param type Type of the extension
    */
   public abstract get<T extends IExtension>(type: ExtensionType): T[];
+
+  /**
+   * Gets all registered extensions, sorted by priority
+   */
+  public abstract getAll(): IExtension[];
 
   /**
    * Registers new extension
@@ -25,14 +31,13 @@ export function Extension<T extends Constructor<IExtension>>(): (
   ctor: T,
 ) => any {
   return (ctor: T) => {
-    const container = IContainer.instance;
     const extension = new ctor(container);
 
     container
-      .get<IExtensionContainer>(ExtensionContainerContainerToken)
+      .resolve<IExtensionContainer>(ExtensionContainerInjectionToken)
       .register(extension);
   };
 }
 
 /** Token to use in order to get extension container implementation from DI container */
-export const ExtensionContainerContainerToken = 'ExtensionContainer';
+export const ExtensionContainerInjectionToken = 'ExtensionContainer';

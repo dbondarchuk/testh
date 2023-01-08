@@ -1,4 +1,5 @@
-import { ExtensionType, ExtensionTypes, IExtension } from '../iExtension';
+import { ExtensionType, ExtensionTypes } from '../extensionTypes';
+import { IExtension } from '../iExtension';
 
 /** Describes an extension, which provides additional actions */
 export abstract class IActionExtension extends IExtension {
@@ -6,7 +7,4 @@ export abstract class IActionExtension extends IExtension {
   public get type(): ExtensionType {
     return ExtensionTypes.Action;
   }
-
-  /** Registers new actions, or imports files, where actions are registered via decorator */
-  public abstract init(): Promise<void>;
 }

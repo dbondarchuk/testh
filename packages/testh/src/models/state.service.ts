@@ -1,10 +1,21 @@
-import { DriverException, IState, IVariablesContainer, Test } from '@testh/sdk';
+import {
+  DriverException,
+  IState,
+  IVariablesContainer,
+  Service,
+  StateInjectionToken,
+  StateInstanceInjectionToken,
+  Test,
+  TestInstanceInjectionToken,
+  VariablesContainerInjectionToken,
+} from '@testh/sdk';
 import { WebDriver } from 'selenium-webdriver';
-import { VariablesContainer } from './variablesContainer';
+import { container, inject } from 'tsyringe';
 
 /**
  * Describes a current state of the run
  */
+@Service(StateInjectionToken)
 export class State implements IState {
   private readonly _drivers: WebDriver[] = [];
   private readonly _variables: IVariablesContainer;
@@ -13,12 +24,14 @@ export class State implements IState {
   private _currentDriverIndex = -1;
 
   /**
-   * Creates a new instance
-   * @param test Test which is been executed
+   * Creates a new instance of State
+   * @param test Test to use information
    */
-  public constructor(test: Test) {
+  constructor(@inject(TestInstanceInjectionToken) test: Test) {
     this._testName = test.name;
-    this._variables = new VariablesContainer(this, test.variables);
+
+    container.registerInstance(StateInstanceInjectionToken, this);
+    this._variables = container.resolve(VariablesContainerInjectionToken);
   }
 
   /**

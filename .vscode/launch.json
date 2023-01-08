@@ -12,7 +12,7 @@
       "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/packages/testh/build/src/main.js",
       "sourceMaps": true,
-      "args": ["${workspaceFolder}/examples/example.yaml"],
+      "args": ["-s", "${workspaceFolder}/examples/settings.yaml", "${workspaceFolder}/examples/example.yaml"],
       "preLaunchTask": "yarn: build",
       "outFiles": ["${workspaceFolder}/packages/**/build/**/*.js"]
     }

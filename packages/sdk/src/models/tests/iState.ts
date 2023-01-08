@@ -64,3 +64,9 @@ export interface IState {
    */
   removeCurrentDriver(): void;
 }
+
+/** Injection token for State */
+export const StateInjectionToken = 'State';
+
+/** Injection token for state instance */
+export const StateInstanceInjectionToken = 'StateInstance';

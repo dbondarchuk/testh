@@ -3,17 +3,19 @@ import {
   IPropertyEvaluator,
   IState,
   KeyValue,
-  PropertiesEvaluatorContainerToken,
+  PropertiesEvaluatorInjectionToken,
+  PropertyEvaluatorInjectionToken,
+  Service,
 } from '@testh/sdk';
-import { injectable, inject } from 'tsyringe';
+import { inject } from 'tsyringe';
 
 /**
  * Default implementation of the property evaluator. Runs evaluation of the object
  */
-@injectable()
+@Service(PropertyEvaluatorInjectionToken)
 export class DefaultPropertyEvaluator extends IPropertyEvaluator {
   public constructor(
-    @inject(PropertiesEvaluatorContainerToken)
+    @inject(PropertiesEvaluatorInjectionToken)
     protected readonly propertiesEvaluator: IPropertiesEvaluator,
   ) {
     super();

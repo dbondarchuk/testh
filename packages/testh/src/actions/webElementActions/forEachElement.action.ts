@@ -10,7 +10,7 @@ import {
   IStepsRunner,
   PropertyIsRequiredException,
   SelectorOrElements,
-  StepsRunnerContainerToken,
+  StepsRunnerInjectionToken,
 } from '@testh/sdk';
 import { Type } from 'class-transformer';
 
@@ -77,7 +77,7 @@ export class ForEachElementAction extends IAction<ForEachElementActionProperties
       console.log(tt);
 
       await container
-        .resolve<IStepsRunner>(StepsRunnerContainerToken)
+        .resolve<IStepsRunner>(StepsRunnerInjectionToken)
         .runTestSteps(
           this.props.steps,
           state,
