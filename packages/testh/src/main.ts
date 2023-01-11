@@ -8,6 +8,7 @@ import {
   ITestProvider,
   ITestRunner,
   loadAsync,
+  Settings,
   SettingsInjectionToken,
   Test,
   TestProviderInjectionToken,
@@ -68,10 +69,27 @@ async function loadExtensions(): Promise<void> {
 }
 
 async function initExtensions(): Promise<void> {
+  const settings = container.resolve<Settings>(SettingsInjectionToken);
+
   const extensions = container
     .resolve<IExtensionContainer>(ExtensionContainerInjectionToken)
     .getAll()
-    .sort((a, b) => a.priority - b.priority);
+    .filter(
+      (extension) => settings?.extensions?.[extension.name]?.enabled !== false,
+    )
+    .sort((a, b) => {
+      let aPriority = a.priority;
+      let bPriority = b.priority;
+      if (settings?.extensions?.[a.name]?.priority) {
+        aPriority = settings?.extensions?.[a.name]?.priority;
+      }
+
+      if (settings?.extensions?.[b.name]?.priority) {
+        bPriority = settings?.extensions?.[b.name]?.priority;
+      }
+
+      return aPriority - bPriority;
+    });
 
   for (const extension of extensions) {
     await extension.init();
@@ -88,6 +106,8 @@ async function main(): Promise<number> {
   const args = commandLineArgs(consoleArgsDefinitions);
   if (args.settings) {
     await resolveSettings(args.settings);
+  } else {
+    container.registerInstance(SettingsInjectionToken, {});
   }
 
   registerContainers();

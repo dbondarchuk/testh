@@ -41,7 +41,7 @@
   "author": "Dmytro Bondarchuk <dbondarchuk@users.noreply.github.com>",
   "dependencies": {
     "@testh/sdk": "0.0.1",
-    "chromedriver": "^107.0.0",
+    "chromedriver": "^108.0.0",
     "class-transformer": "^0.5.1",
     "command-line-args": "^5.2.1",
     "moment": "^2.29.4",
@@ -49,6 +49,6 @@
     "selenium-webdriver": "^4.4.0",
     "tslib": "~2.4",
     "tsyringe": "^4.7.0",
-    "yaml-js-include": "^0.0.3"
+    "yaml-js-include": "^0.0.5"
   }
 }

@@ -1,5 +1,5 @@
-import { IState } from '../../models/tests/iState';
-import { TestSteps } from '../../models/tests/testSteps';
+import { IState } from '../../../tests/iState';
+import { TestSteps } from '../../../tests/testSteps';
 
 /** Type for function which generates step number */
 export type StepsNumberFunction = (stepNumber: number) => string | number;

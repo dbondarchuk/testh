@@ -1,4 +1,4 @@
-import { Test } from './test';
+import { Test } from '../../../tests/test';
 
 /** Describes a service, which provides a test based on arguments */
 export abstract class ITestProvider {

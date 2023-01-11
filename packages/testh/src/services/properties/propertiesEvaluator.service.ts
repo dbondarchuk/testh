@@ -5,10 +5,10 @@ import {
   KeyValue,
   PropertiesEvaluatorInjectionToken,
   PropertyEvaluatorInjectionToken,
+  resolveAll,
   Service,
   WrapperWithVariables,
 } from '@testh/sdk';
-import { container } from 'tsyringe';
 
 const isPlainObject = (value: any): boolean => value?.constructor === Object;
 
@@ -158,9 +158,9 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
       value,
     };
 
-    const implementations = container
-      .resolveAll<IPropertyEvaluator>(PropertyEvaluatorInjectionToken)
-      .sort((a, b) => b.priority - a.priority);
+    const implementations = resolveAll<IPropertyEvaluator>(
+      PropertyEvaluatorInjectionToken,
+    ).sort((a, b) => b.priority - a.priority);
 
     const evaluator = implementations[0];
     let current = evaluator;

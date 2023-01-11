@@ -1,26 +1,13 @@
 import {
   BaseLogger,
-  LoggerClassTypeInjectionToken,
   LoggerInjectionToken,
   LogLevel,
   Service,
 } from '@testh/sdk';
-import * as moment from 'moment';
-import { inject } from 'tsyringe';
 
 /** Console logger */
 @Service(LoggerInjectionToken)
 export class ConsoleLogger extends BaseLogger {
-  /**
-   * Creates a new Console Logger
-   * @param typeName Name of the type where execution is happening
-   */
-  constructor(
-    @inject(LoggerClassTypeInjectionToken) private readonly typeName: string,
-  ) {
-    super();
-  }
-
   /** @inheritdoc */
   log(message: string, level: LogLevel): void {
     let method: (message: string) => void;
@@ -40,10 +27,6 @@ export class ConsoleLogger extends BaseLogger {
         break;
     }
 
-    method(this.format(message));
-  }
-
-  private format(message: string): string {
-    return `${moment().toISOString()} - ${this.typeName} - ${message}`;
+    method(message);
   }
 }

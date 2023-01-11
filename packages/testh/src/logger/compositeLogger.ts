@@ -1,22 +1,28 @@
-import { ILogger } from './iLogger';
-import { logLevel, LogLevel } from './logLevel';
+import {
+  ILogFormatter,
+  ILogger,
+  LogFormatterInjectionToken,
+  logLevel,
+  LogLevel,
+  resolveAll,
+} from '@testh/sdk';
 
-/** Aliases for composite logger */
-export type ICompositeLogger = ILogger;
-
-/** Default implementation of the composite logger */
-export abstract class CompositeLogger implements ICompositeLogger {
+export class CompositeLogger implements ILogger {
   /**
    * Creates a new instance of the CompositeLogger
    * @param loggers Loggers to use
+   * @param type Caller type
    */
-  constructor(protected readonly loggers: LoggerDescriptor[]) {}
+  constructor(
+    protected readonly loggers: LoggerDescriptor[],
+    protected readonly type: string,
+  ) {}
 
   /** @inheritdoc */
   log(message: string, level: LogLevel): void {
     for (const logger of this.loggers) {
       if (logLevel(logger.level) <= level) {
-        logger.logger.log(message, level);
+        logger.logger.log(this.format(message), level);
       }
     }
   }
@@ -25,7 +31,7 @@ export abstract class CompositeLogger implements ICompositeLogger {
   debug(message: string): void {
     for (const logger of this.loggers) {
       if (logLevel(logger.level) <= LogLevel.Debug) {
-        logger.logger.debug(message);
+        logger.logger.debug(this.format(message));
       }
     }
   }
@@ -34,7 +40,7 @@ export abstract class CompositeLogger implements ICompositeLogger {
   info(message: string): void {
     for (const logger of this.loggers) {
       if (logLevel(logger.level) <= LogLevel.Info) {
-        logger.logger.info(message);
+        logger.logger.info(this.format(message));
       }
     }
   }
@@ -43,7 +49,7 @@ export abstract class CompositeLogger implements ICompositeLogger {
   warning(message: string): void {
     for (const logger of this.loggers) {
       if (logLevel(logger.level) <= LogLevel.Warning) {
-        logger.logger.warning(message);
+        logger.logger.warning(this.format(message));
       }
     }
   }
@@ -52,9 +58,19 @@ export abstract class CompositeLogger implements ICompositeLogger {
   error(message: string): void {
     for (const logger of this.loggers) {
       if (logLevel(logger.level) <= LogLevel.Error) {
-        logger.logger.error(message);
+        logger.logger.error(this.format(message));
       }
     }
+  }
+
+  format(message: string): string {
+    const formatters = resolveAll<ILogFormatter>(LogFormatterInjectionToken);
+
+    for (const formatter of formatters) {
+      message = formatter.format(message, this.type);
+    }
+
+    return message;
   }
 }
 
@@ -66,16 +82,3 @@ export interface LoggerDescriptor {
   /** Logger */
   logger: ILogger;
 }
-
-/** Describes a service which creates a composite logger from the multiple other loggers */
-export interface ICompositeLoggerProvider {
-  /**
-   * Creates a composite logger
-   * @param loggers Loggers to use
-   * @returns Logger
-   */
-  createLogger(loggers: LoggerDescriptor[]): ICompositeLogger;
-}
-
-/** Injection token for the composite logger */
-export const CompositeLoggerProviderInjectionToken = 'CompositeLoggerProvider';

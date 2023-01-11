@@ -4,3 +4,9 @@ logger:
     level: Debug
 owofify:
   level: uvu
+extensions:
+  Owofify Logger:
+    enabled: true
+    priority: 15
+  Go Back action:
+    enabled: true

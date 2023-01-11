@@ -13,7 +13,8 @@ export class YamlTestProvider extends ITestProvider {
     const pathToTest = args[0];
     if (pathToTest?.endsWith('.yaml') || pathToTest?.endsWith('.yml')) {
       const yaml = new YamlInclude();
-      return await yaml.loadAsync<Test>(pathToTest);
+      const test = await yaml.loadAsync<Test>(pathToTest);
+      return test;
     }
 
     return undefined;

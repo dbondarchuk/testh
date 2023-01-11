@@ -38,6 +38,3 @@ export interface ILogger {
 
 /** Injection token for the logger */
 export const LoggerInjectionToken = 'Logger';
-
-/** Injection token for the type of the class where the logger is used */
-export const LoggerClassTypeInjectionToken = 'LoggerClassType';

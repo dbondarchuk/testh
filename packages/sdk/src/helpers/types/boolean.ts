@@ -7,6 +7,7 @@ import { Transform, TransformationType } from 'class-transformer';
 export function ToBoolean(): PropertyDecorator {
   return Transform((params): boolean | any => {
     if (params.type === TransformationType.PLAIN_TO_CLASS) {
+      if (typeof params.value === 'boolean') return params.value;
       return params.value?.toLowerCase() === 'true';
     }
 

@@ -1,4 +1,4 @@
-import { IState } from '../../models/tests/iState';
+import { IState } from '../../../tests/iState';
 
 /**
  * Describes generic key-value item

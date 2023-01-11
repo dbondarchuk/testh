@@ -1,12 +1,8 @@
 import {
-  CompositeLoggerProviderInjectionToken,
   Constructor,
   DefaultMinLogLevel,
-  ICompositeLoggerProvider,
   ILogger,
   ILoggerFactory,
-  LoggerClassTypeInjectionToken,
-  LoggerDescriptor,
   LoggerFactoryInjectionToken,
   LoggerInjectionToken,
   LoggerSettings,
@@ -19,6 +15,7 @@ import {
 import { ClassProvider, container, inject } from 'tsyringe';
 import { Registration } from 'tsyringe/dist/typings/dependency-container';
 import { constructor } from 'tsyringe/dist/typings/types';
+import { CompositeLogger, LoggerDescriptor } from './compositeLogger';
 
 /** Default logger factory */
 @Service(LoggerFactoryInjectionToken)
@@ -34,10 +31,6 @@ export class LoggerFactory implements ILoggerFactory {
     const loggersTypes: Registration<ILogger>[] =
       container['getAllRegistrations'](LoggerInjectionToken);
     const loggers: LoggerDescriptor[] = loggersTypes.map((loggerType) => {
-      const childContainer = container
-        .createChildContainer()
-        .registerInstance(LoggerClassTypeInjectionToken, type.name);
-
       const loggerFullTypeName = (
         (loggerType.provider as ClassProvider<ILogger>)
           .useClass as constructor<ILogger>
@@ -45,10 +38,7 @@ export class LoggerFactory implements ILoggerFactory {
       if (!loggerFullTypeName)
         return {
           level: minLevel,
-          logger: childContainer['resolveRegistration'](
-            loggerType,
-            {},
-          ) as ILogger,
+          logger: container['resolveRegistration'](loggerType, {}) as ILogger,
         };
 
       const loggerTypeName = loggerFullTypeName.endsWith('Logger')
@@ -63,7 +53,7 @@ export class LoggerFactory implements ILoggerFactory {
         settings.level = minLevel;
       }
 
-      const logger = childContainer
+      const logger = container
         .registerInstance(LoggerSettingsInjectionToken, settings)
         .createChildContainer()
         ['resolveRegistration'](loggerType, {});
@@ -74,9 +64,7 @@ export class LoggerFactory implements ILoggerFactory {
       };
     });
 
-    const logger = container
-      .resolve<ICompositeLoggerProvider>(CompositeLoggerProviderInjectionToken)
-      .createLogger(loggers);
+    const logger = new CompositeLogger(loggers, type.name);
 
     return logger;
   }
