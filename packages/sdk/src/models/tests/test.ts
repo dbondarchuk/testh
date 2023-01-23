@@ -1,4 +1,4 @@
-import { RecordType } from '../../helpers/types/recordType';
+import { RecordType } from '../../helpers/decorators/transform/recordType.decorator';
 import { Page } from './page';
 import { TestSteps } from './testSteps';
 

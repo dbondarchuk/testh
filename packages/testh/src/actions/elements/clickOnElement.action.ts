@@ -1,5 +1,6 @@
 import {
   Action,
+  BindingProperty,
   ElementNotFoundException,
   IAction,
   IActionProperties,
@@ -19,10 +20,11 @@ export class ClickOnElementActionProperties implements IActionProperties {
    * Element selector
    */
   @Type(() => SelectorOrElement)
+  @BindingProperty()
   selector: SelectorOrElement;
 }
 
-/** Runner type aliases for {@link ClickOnElementAction} */
+/** Action type aliases for {@link ClickOnElementAction} */
 export const ClickOnElementActionTypeAliases = ['click'] as const;
 
 /**
@@ -30,7 +32,11 @@ export const ClickOnElementActionTypeAliases = ['click'] as const;
  * @properties {@link ClickOnElementActionProperties}
  * @runnerType {@link ClickOnElementActionTypeAliases}
  */
-@Action(ClickOnElementActionProperties, ...ClickOnElementActionTypeAliases)
+@Action(
+  ClickOnElementActionProperties,
+  'Click on element',
+  ...ClickOnElementActionTypeAliases,
+)
 export class ClickOnElementAction extends IAction<ClickOnElementActionProperties> {
   private readonly logger: ILogger;
   constructor(

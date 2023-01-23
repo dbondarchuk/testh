@@ -1,5 +1,6 @@
 import { inject } from 'tsyringe';
 import {
+  Constructor,
   getCurrentStepNumber,
   IPropertiesEvaluator,
   IPropertyEvaluator,
@@ -15,8 +16,9 @@ import {
 
 /**
  * Treats property value as steps to execute and get value.
- * If key starts with `<` sign, then steps results will be returned as an array of results from all steps
- * If key starts with '^' sign, then result of the last step will be used as a single result
+ * Property key should be wrapped in parenthesis, i.e. `(property)`
+ * If value is an array then result will be an array.
+ * If value is single step, result will be a single item.
  */
 @Service(PropertyEvaluatorInjectionToken)
 export class RunActionsPropertyEvaluator extends IPropertyEvaluator {
@@ -33,20 +35,28 @@ export class RunActionsPropertyEvaluator extends IPropertyEvaluator {
     return 3;
   }
 
+  /** @inheritdoc */
+  public parseKey(key: string): string {
+    return key.startsWith('(') && key.endsWith(')')
+      ? key.substring(1, key.length - 1)
+      : super.nextParseKey(key);
+  }
+
   public async evaluate(
     property: KeyValue,
     state: IState,
     recursive: boolean,
+    type?: Constructor<any>,
   ): Promise<void> {
-    if (property.key.startsWith('^') || property.key.startsWith('<')) {
-      const shouldBeArray = property.key[0] === '<';
-      property.key = property.key.substring(1);
+    if (property.key.startsWith('(') && property.key.endsWith(')')) {
+      property.key = property.key.substring(1, property.key.length - 1);
 
       const steps =
         typeof property.value === 'string'
           ? await this.propertiesEvaluator.evaluateProperties(
               property.value,
               state,
+              undefined,
               false,
             )
           : property.value;
@@ -57,14 +67,13 @@ export class RunActionsPropertyEvaluator extends IPropertyEvaluator {
         (stepNumber) => `${baseStepNumber}-execute-${stepNumber}`,
       );
 
-      property.value =
-        Array.isArray(steps) || shouldBeArray
-          ? results
-          : results[results.length - 1];
+      property.value = Array.isArray(steps)
+        ? results
+        : results[results.length - 1];
 
-      await super.first(property, state, recursive);
+      await super.first(property, state, recursive, type);
     } else {
-      await super.next(property, state, recursive);
+      await super.next(property, state, recursive, type);
     }
   }
 }

@@ -7,7 +7,7 @@ import {
 } from '@testh/sdk';
 import { join } from 'path';
 
-/** Provides default services implementations. Should be executed first */
+/** Provides default services implementations. Should be initialized first */
 @Extension()
 export class DefaultServicesProviderExtension extends IExtension {
   get type(): string {

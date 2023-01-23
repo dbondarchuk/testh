@@ -1,7 +1,4 @@
-- name: Click on add item
-  type: click
-  values:
-    $selector: addToCartBtn
+- $click: addToCartBtn
 - name: Check number of items in cart
   type: compare-element-text
   values:
@@ -13,28 +10,13 @@
   type: set-variable
   values:
     variable: EXPECTED_ITEMS
-    <value: !!inc/file ../snippets/getItem.snippet.yaml
-- name: Open cart
-  type: run
-  values:
-    $steps: pages.cart.actions.open
-- name: Check cart
-  type: run
-  values:
-    $steps: pages.cart.actions.checkItems
-- name: Continue shopping
-  type: run
-  values:
-    $steps: pages.cart.actions.continueShopping
-- name: Wait for items to load
-  type: run
-  values:
-    steps: !!inc/file waitForItemsToLoad.action.yaml
-- name: Click on remove item
-  type: click
-  values:
-    $selector: removeFromCartBtn
-- name: Check that there is no items in a cart
-  type: wait-to-be-not-present
-  values:
-    $selector: cartBadge
+    (value):
+      - !!inc/file ../snippets/getItem.snippet.yaml
+- $run: pages.cart.actions.open
+- $run: pages.cart.actions.checkItems
+- $run: pages.cart.actions.continueShopping
+- run: !!inc/file waitForItemsToLoad.action.yaml
+- $click: removeFromCartBtn
+- wait:
+    not:
+      $is-present: cartBadge

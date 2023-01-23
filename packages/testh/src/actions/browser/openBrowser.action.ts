@@ -1,7 +1,7 @@
 import * as chrome from 'selenium-webdriver/chrome';
-import { Type } from 'class-transformer';
 import {
   Action,
+  BindingProperty,
   DriverException,
   IAction,
   IActionProperties,
@@ -10,6 +10,7 @@ import {
   isHeadlessEnvironment,
   IState,
   ToBoolean,
+  ToNumber,
 } from '@testh/sdk';
 import { Browser, Builder, logging, WebDriver } from 'selenium-webdriver';
 
@@ -41,6 +42,7 @@ export type MobileEmulationOptions =
  */
 export class OpenBrowserActionProperties implements IActionProperties {
   /** Browser type */
+  @BindingProperty()
   browser: 'chrome' | string;
 
   /** Determines whether to ignore SSL errors */
@@ -50,7 +52,10 @@ export class OpenBrowserActionProperties implements IActionProperties {
   /** If set, browser mobile emulation will be used */
   mobileEmulation?: MobileEmulationOptions;
 
-  /** Determines whether to run browser in headless mode */
+  /**
+   * Determines whether to run browser in headless mode
+   * @default true
+   */
   @ToBoolean()
   headless?: boolean;
 
@@ -58,7 +63,7 @@ export class OpenBrowserActionProperties implements IActionProperties {
   locale?: string;
 
   /** Browser window width */
-  @Type(() => Number)
+  @ToNumber()
   width?: number;
 
   /** Browser window height */
@@ -67,7 +72,7 @@ export class OpenBrowserActionProperties implements IActionProperties {
 }
 
 /**
- * Runner type aliases
+ * Action type aliases
  */
 export const OpenBrowserActionTypeAliases = ['open', 'open-browser'] as const;
 
@@ -76,7 +81,11 @@ export const OpenBrowserActionTypeAliases = ['open', 'open-browser'] as const;
  * @properties {@link OpenBrowserActionProperties}
  * @runnerType {@link OpenBrowserActionTypeAliases}
  */
-@Action(OpenBrowserActionProperties, ...OpenBrowserActionTypeAliases)
+@Action(
+  OpenBrowserActionProperties,
+  'Open browser',
+  ...OpenBrowserActionTypeAliases,
+)
 export class OpenBrowserAction extends IAction<OpenBrowserActionProperties> {
   private readonly logger: ILogger;
 
@@ -115,7 +124,7 @@ export class OpenBrowserAction extends IAction<OpenBrowserActionProperties> {
   private async createWebDriverInstance(): Promise<WebDriver> {
     const builder: Builder = new Builder();
 
-    let isHeadless = this.props.headless;
+    let isHeadless = this.props.headless !== false;
 
     let locale = this.props.locale;
     if (!locale) {

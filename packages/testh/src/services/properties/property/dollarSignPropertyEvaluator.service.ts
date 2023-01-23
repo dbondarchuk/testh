@@ -1,5 +1,6 @@
 import { inject } from 'tsyringe';
 import {
+  Constructor,
   IPropertiesEvaluator,
   IPropertyEvaluator,
   IState,
@@ -25,10 +26,18 @@ export class DollarSignPropertyEvaluator extends IPropertyEvaluator {
     return 9;
   }
 
+  /** @inheritdoc */
+  public parseKey(key: string): string {
+    return key.startsWith('$')
+      ? super.firstParseKey(key.substring(1))
+      : super.nextParseKey(key);
+  }
+
   public async evaluate(
     property: KeyValue,
     state: IState,
     recursive: boolean,
+    type?: Constructor<any>,
   ): Promise<void> {
     if (property.key.startsWith('$') && typeof property.value === 'string') {
       property.key = property.key.substring(1);
@@ -37,9 +46,9 @@ export class DollarSignPropertyEvaluator extends IPropertyEvaluator {
         state.variables.variables,
       );
 
-      await super.first(property, state, recursive);
+      await super.first(property, state, recursive, type);
     } else {
-      await super.next(property, state, recursive);
+      await super.next(property, state, recursive, type);
     }
   }
 }

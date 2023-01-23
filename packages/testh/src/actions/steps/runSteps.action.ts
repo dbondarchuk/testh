@@ -1,24 +1,27 @@
-import { container } from 'tsyringe';
 import {
   Action,
-  ActionWithStepsProperties,
-  getCurrentStepNumber,
+  BindingProperty,
   IAction,
+  IActionProperties,
   ILogger,
   ILoggerFactory,
-  InvalidOperationException,
   IState,
-  IStepsRunner,
   PropertyIsRequiredException,
-  StepsRunnerInjectionToken,
+  TestStepsAction,
+  ToTestStepsAction,
 } from '@testh/sdk';
 
 /**
  * Properties for {@link RunStepsAction}
  */
-export class RunStepsActionProperties extends ActionWithStepsProperties {}
+export class RunStepsActionProperties implements IActionProperties {
+  /** Steps to run */
+  @ToTestStepsAction()
+  @BindingProperty()
+  steps: TestStepsAction;
+}
 
-/** Runner type aliases for {@link RunStepsAction} */
+/** Action type aliases for {@link RunStepsAction} */
 export const RunStepsActionTypeAliases = ['run', 'run-steps'] as const;
 
 /**
@@ -26,7 +29,7 @@ export const RunStepsActionTypeAliases = ['run', 'run-steps'] as const;
  * @properties {@link RunStepsActionProperties}
  * @runnerType {@link RunStepsActionTypeAliases}
  */
-@Action(RunStepsActionProperties, ...RunStepsActionTypeAliases)
+@Action(RunStepsActionProperties, 'Run steps', ...RunStepsActionTypeAliases)
 export class RunStepsAction extends IAction<RunStepsActionProperties> {
   private readonly logger: ILogger;
   constructor(props: RunStepsActionProperties, loggerFactory: ILoggerFactory) {
@@ -39,21 +42,9 @@ export class RunStepsAction extends IAction<RunStepsActionProperties> {
       throw new PropertyIsRequiredException('steps');
     }
 
-    if (!Array.isArray(this.props.steps)) {
-      throw new InvalidOperationException(`Steps is not an array`);
-    }
-
     this.logger.info(`Running ${this.props.steps.length} steps`);
 
-    const basicStepNumber = getCurrentStepNumber(state.variables);
-
-    await container
-      .resolve<IStepsRunner>(StepsRunnerInjectionToken)
-      .runTestSteps(
-        this.props.steps,
-        state,
-        (stepNumber) => `${basicStepNumber}.${stepNumber++}`,
-      );
+    await this.props.steps.execute(state);
 
     this.logger.info(`Successfully run all steps for all items`);
   }

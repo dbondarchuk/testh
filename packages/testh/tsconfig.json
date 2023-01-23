@@ -24,5 +24,10 @@
     "resolveJsonModule": true
   },
   "typedocOptions": {},
-  "include": ["src/**/*", "__tests__/**/*", "package.json"]
+  "include": [
+    "src/**/*",
+    "__tests__/**/*",
+    "package.json",
+    "../sdk/src/models/selector/selectorTypeProviders.service.ts"
+  ]
 }

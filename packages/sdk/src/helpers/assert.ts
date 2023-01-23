@@ -134,22 +134,6 @@ export class Assert {
           message += 'is not smaller or equal';
           break;
 
-        // case "notequal":
-        //     message += "equals";
-        //     break;
-
-        // case "notstartwith":
-        //     message += "starts with";
-        //     break;
-
-        // case "notendwith":
-        //     message += "ends with";
-        //     break;
-
-        // case "notcontain":
-        //     message += "contains";
-        //     break;
-
         default:
           throw new UnknownOptionException(
             `Unknown compare type - ${comparison.type}`,

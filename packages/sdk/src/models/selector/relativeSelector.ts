@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { WebElement } from 'selenium-webdriver';
-import { Ignore } from '../../helpers/types/ignore';
+import { Ignore } from '../../helpers/decorators/transform/ignore.decorator';
 import { Selector } from './selector';
 
 /**

@@ -1,12 +1,12 @@
 import { Test } from '../../../tests/test';
 
 /** Describes a service, which runs a test */
-export abstract class ITestRunner {
+export interface ITestRunner {
   /**
    * Runs a test
    * @returns Whether the execution was successful
    */
-  public abstract run(test: Test): Promise<boolean>;
+  run(test: Test): Promise<boolean>;
 }
 
 /** Injection token for test provider */

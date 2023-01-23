@@ -15,6 +15,17 @@
       "args": ["-s", "${workspaceFolder}/examples/settings.yaml", "${workspaceFolder}/examples/example.yaml"],
       "preLaunchTask": "yarn: build",
       "outFiles": ["${workspaceFolder}/packages/**/build/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program - No Build",
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/packages/testh/build/src/main.js",
+      "sourceMaps": true,
+      "args": ["-s", "${workspaceFolder}/examples/settings.yaml", "${workspaceFolder}/examples/example.yaml"],
+      "outFiles": ["${workspaceFolder}/packages/**/build/**/*.js"]
     }
   ]
 }

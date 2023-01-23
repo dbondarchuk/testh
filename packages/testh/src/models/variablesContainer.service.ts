@@ -16,26 +16,23 @@ import {
   IState,
   IStepsRunner,
   IVariablesContainer,
+  IVariablesContainerFactory,
   PropertiesEvaluatorInjectionToken,
   RUN,
   Service,
-  StateInstanceInjectionToken,
   StepsRunnerInjectionToken,
   stepsWrapper,
   TASK_EXECUTION_TIME,
   TASK_START_TIME,
   TASK_TEST_NAME,
-  Test,
-  TestInstanceInjectionToken,
   TestStep,
   Variables,
-  VariablesContainerInjectionToken,
+  VariablesContainerFactoryInjectionToken,
 } from '@testh/sdk';
 
 /**
  * Contains variables for the current run
  */
-@Service(VariablesContainerInjectionToken)
 export class VariablesContainer implements IVariablesContainer {
   private _variables: Variables = {};
 
@@ -45,10 +42,11 @@ export class VariablesContainer implements IVariablesContainer {
    * @param variables Initial variables
    */
   public constructor(
-    @inject(StateInstanceInjectionToken) private readonly state: IState,
-    @inject(TestInstanceInjectionToken) test?: Test,
+    private readonly state: IState,
+    private readonly stepRunner: IStepsRunner,
+    variables?: Variables,
   ) {
-    this.initVariables(test?.variables);
+    this.initVariables(variables);
   }
 
   private static fixVariableName(name: string): string {
@@ -104,7 +102,7 @@ export class VariablesContainer implements IVariablesContainer {
    * @returns Merged variables
    */
   public _merge(baseVariables: Variables): VariablesContainer {
-    const merged = new VariablesContainer(this.state);
+    const merged = new VariablesContainer(this.state, this.stepRunner);
     merged._variables = { ...baseVariables, ...this.variables };
 
     return merged;
@@ -128,7 +126,7 @@ export class VariablesContainer implements IVariablesContainer {
     this.initAgentVariables();
     this.initRunCommand();
 
-    this.put(TASK_TEST_NAME, this.state.testName);
+    this.put(TASK_TEST_NAME, this.state.test.name);
     this.put(TASK_START_TIME, Date.now());
     this.put(TASK_EXECUTION_TIME, () => Date.now() - this.get(TASK_START_TIME));
 
@@ -149,9 +147,6 @@ export class VariablesContainer implements IVariablesContainer {
   private initRunCommand(): void {
     const run = (stepType: string, properties: any): Promise<any[]> => {
       return (async (): Promise<any[]> => {
-        const runner = container.resolve<IStepsRunner>(
-          StepsRunnerInjectionToken,
-        );
         const step: TestStep = {
           name: `Execute ${stepType}`,
           type: stepType,
@@ -160,7 +155,7 @@ export class VariablesContainer implements IVariablesContainer {
 
         const currentStep = getCurrentStepNumber(this).toString();
 
-        const results = await runner.runTestSteps(
+        const results = await this.stepRunner.runTestSteps(
           stepsWrapper([step]),
           this.state,
           (stepNumber) => `${currentStep}-execute-${stepNumber}`,
@@ -185,5 +180,22 @@ export class VariablesContainer implements IVariablesContainer {
     }
 
     return undefined;
+  }
+}
+
+/** Default factory for the variables container */
+@Service(VariablesContainerFactoryInjectionToken)
+export class VariablesContainerFactory implements IVariablesContainerFactory {
+  constructor(
+    @inject(StepsRunnerInjectionToken)
+    private readonly stepsRunner: IStepsRunner,
+  ) {}
+
+  /** @inheritdoc */
+  createVariabesContainer(
+    state: IState,
+    variables?: Variables,
+  ): IVariablesContainer {
+    return new VariablesContainer(state, this.stepsRunner, variables);
   }
 }

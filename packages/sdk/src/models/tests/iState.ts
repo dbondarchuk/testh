@@ -1,12 +1,13 @@
 import { WebDriver } from 'selenium-webdriver';
 import { IVariablesContainer } from '../variables/variablesContainer';
+import { Test } from './test';
 
 /**
  * Describes a current state of the run
  */
 export interface IState {
-  /** Gets current test name */
-  get testName(): string;
+  /** Gets current test */
+  get test(): Test;
 
   /** Gets variables */
   get variables(): IVariablesContainer;
@@ -65,8 +66,18 @@ export interface IState {
   removeCurrentDriver(): void;
 }
 
-/** Injection token for State */
-export const StateInjectionToken = 'State';
+/** Describes a factory which creates a new state */
+export interface IStateFactory {
+  /**
+   * Creates a new state
+   * @param test Test for which this state will be used
+   * @returns New state
+   */
+  createState(test: Test): IState;
+}
+
+/** Injection token for State factory */
+export const StateFactoryInjectionToken = 'StateFactory';
 
 /** Injection token for state instance */
 export const StateInstanceInjectionToken = 'StateInstance';

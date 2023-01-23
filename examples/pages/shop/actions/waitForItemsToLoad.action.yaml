@@ -1,7 +1,18 @@
-- name: Wait for items to load
-  type: wait
-  values:
-    selector:
-      type: class
-      value: inventory_list
-    timeout: $(elementWaitTimeout)
+- wait:
+    all:
+      - is-present:
+          type: class
+          value: inventory_list
+      - compare-strings:
+          compare:
+            type: equals
+            value: Swag Labs
+          (to):
+            page-title:
+      - compare-strings:
+          compare:
+            type: endswith
+            value: /inventory.html
+          (to):
+            page-url:
+

@@ -23,7 +23,7 @@ export class CheckElementTextActionProperties implements IActionProperties {
   compare: StringComparison;
 }
 
-/** Runner type aliases for {@link CheckElementTextAction} */
+/** Action type aliases for {@link CheckElementTextAction} */
 export const CheckElementTextActionTypeAliases = [
   'compare-element-text',
 ] as const;
@@ -33,7 +33,11 @@ export const CheckElementTextActionTypeAliases = [
  * @properties {@link CheckElementTextActionProperties}
  * @runnerType {@link CheckElementTextActionTypeAliases}
  */
-@Action(CheckElementTextActionProperties, ...CheckElementTextActionTypeAliases)
+@Action(
+  CheckElementTextActionProperties,
+  'Check element text',
+  ...CheckElementTextActionTypeAliases,
+)
 export class CheckElementTextAction extends IAction<CheckElementTextActionProperties> {
   private readonly logger: ILogger;
   constructor(

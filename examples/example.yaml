@@ -6,43 +6,28 @@ variables:
   elementWaitTimeout: 3
 pages: !!inc/dir ['pages', { extensions: ['.page.yaml'] }]
 steps:
-  - name: Open Browser
-    type: open-browser
-    values:
-      browser: chrome
-      headless: true
-  - name: Sign in
-    type: run
-    values:
-      $steps: pages.signin.actions.signin
-  - name: Wait for shop page to load
-    type: run
-    values:
-      $steps: pages.shop.actions.waitForItemsToLoad
-  - name: Check add/remove to cart works
-    type: run
-    values:
-      $steps: pages.shop.actions.checkAddRemoveCart
+  - open: chrome
+  - $run: pages.signin.actions.signin
+  - $run: pages.shop.actions.waitForItemsToLoad
+  - $run: pages.shop.actions.checkAddRemoveCart
   - name: Check that sorting works
     type: run
     condition: EXPECTED_ITEMS && EXPECTED_ITEMS.length > 0
     values:
       $steps: pages.shop.actions.checkSort
-  - name: Log out
-    type: run
-    values:
-      $steps: pages.shop.actions.logout
+  - $run: pages.shop.actions.logout
+  - open-url: https://stackoverflow.com/
   - name: Make screenshot
     type: screenshot
     runOnFailure: true
     values:
-      type: page
-  - name: Check execution time
-    type: compare-numbers
-    values:
-      to: 5000
-      compare:
-        type: <
-        $value: TASK_EXECUTION_TIME()
-  - name: Go back
-    type: go-back
+      type: all-page
+  - check:
+      name: Check execution time
+      type: compare-numbers
+      values:
+        to: 7000
+        compare:
+          type: <
+          $value: TASK_EXECUTION_TIME()
+  - go-back:

@@ -1,5 +1,5 @@
 import { WebDriver, WebElement } from 'selenium-webdriver';
-import { Ignore } from '../../helpers/types/ignore';
+import { Ignore } from '../../helpers/decorators/transform/ignore.decorator';
 import { Selector } from './selector';
 
 /** Extends selector object to contain reference to an element */

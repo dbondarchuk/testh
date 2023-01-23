@@ -1,19 +1,10 @@
-- name: Click burger menu
-  type: click
-  values:
-    selector:
-      type: id
-      value: react-burger-menu-btn
+- click:
+    type: id
+    value: react-burger-menu-btn
 - name: Wait for sidebar to show
   type: wait-to-be-interactable
   values:
     selector: $(logoutLink)
     timeout: $(elementWaitTimeout)
-- name: Click logout link
-  type: click
-  values:
-    selector: $(logoutLink)
-- name: Wait for login page to load
-  type: run
-  values:
-    steps: $(pages.signin.actions.waitToLoad)
+- $click: logoutLink
+- $run: pages.signin.actions.waitToLoad

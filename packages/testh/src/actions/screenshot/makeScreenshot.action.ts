@@ -1,19 +1,22 @@
 import {
   Action,
-  getCurrentStepNumber,
+  BindingProperty,
   IAction,
   IActionProperties,
   ILogger,
   ILoggerFactory,
+  IScreenshotSaver,
   IState,
   PropertyIsRequiredException,
-  Selector,
+  resolve,
+  ScreenshotSaverInjectionToken,
+  SelectorOrElement,
   TestStep,
   UnknownOptionException,
 } from '@testh/sdk';
 import { Type } from 'class-transformer';
-import { mkdir, writeFile } from 'fs/promises';
-import { dirname } from 'path';
+import joinImages from 'join-images';
+import { WebDriver } from 'selenium-webdriver';
 
 /** Screenshot type */
 export type ScreenshotType =
@@ -35,17 +38,19 @@ export type ScreenshotType =
 export class MakeScreenshotActionProperties implements IActionProperties {
   /**
    * Screenshot type
+   * @default visible-page
    */
-  type: ScreenshotType;
+  @BindingProperty()
+  type?: ScreenshotType;
 
   /**
    * Element select if type is 'element'
    */
-  @Type(() => Selector)
-  selector?: Selector;
+  @Type(() => SelectorOrElement)
+  selector?: SelectorOrElement;
 }
 
-/** Runner type aliases for {@link MakeScreenshotAction} */
+/** Action type aliases for {@link MakeScreenshotAction} */
 export const MakeScreenshotActionTypeAliases = ['screenshot'] as const;
 
 /**
@@ -53,7 +58,11 @@ export const MakeScreenshotActionTypeAliases = ['screenshot'] as const;
  * @properties {@link MakeScreenshotActionProperties}
  * @runnerType {@link MakeScreenshotActionTypeAliases}
  */
-@Action(MakeScreenshotActionProperties, ...MakeScreenshotActionTypeAliases)
+@Action(
+  MakeScreenshotActionProperties,
+  'Make Screenshot',
+  ...MakeScreenshotActionTypeAliases,
+)
 export class MakeScreenshotAction extends IAction<MakeScreenshotActionProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -66,48 +75,82 @@ export class MakeScreenshotAction extends IAction<MakeScreenshotActionProperties
 
   public async run(state: IState, step: TestStep): Promise<void> {
     const driver = state.currentDriver;
+    const type = this.props.type || 'page';
 
-    switch (this.props.type) {
-      case 'element':
+    let screenshot: string;
+
+    switch (type) {
+      case 'element': {
         if (!this.props.selector) {
           throw new PropertyIsRequiredException('selector');
         }
 
-        throw new UnknownOptionException('Unsupported type');
+        this.logger.info(
+          `Making a screenshot of the element ${this.props.selector}`,
+        );
 
-      case 'all-page':
-        throw new UnknownOptionException('Unsupported type');
+        const element = await this.props.selector.getElement(
+          state.currentDriver,
+        );
+        screenshot = await element.takeScreenshot();
+
+        break;
+      }
+
+      case 'all-page': {
+        this.logger.info('Making a screenshot of all page');
+
+        screenshot = await this.makeAllPageScreenshot(state.currentDriver);
+        break;
+      }
 
       case 'page':
       case 'visible-page': {
         this.logger.info('Making a screenshot of the visible page');
-        const screenshotPath = `screenshots/${
-          state.testName
-        }-${getCurrentStepNumber(state.variables)}-${step.name}.png`;
 
-        const data = await driver.takeScreenshot();
-        await this.writeScreenshot(data, screenshotPath);
-
-        this.logger.info(
-          `Successfully made a screenshot of the visible page and saved it to '${screenshotPath}'`,
-        );
+        screenshot = await driver.takeScreenshot();
         break;
       }
 
       default:
         throw new UnknownOptionException(`Unknown type - ${this.props.type}`);
     }
+
+    const saver = resolve<IScreenshotSaver>(ScreenshotSaverInjectionToken);
+    await saver.save(screenshot, step, state);
+
+    this.logger.info(`Successfully made a screenshot and saved it.`);
   }
 
-  private async writeScreenshot(
-    data: string,
-    pathToFile: string,
-  ): Promise<void> {
-    await mkdir(dirname(pathToFile), { recursive: true });
-    await writeFile(
-      pathToFile,
-      data.replace(/^data:image\/png;base64,/, ''),
-      'base64',
+  private async makeAllPageScreenshot(driver: WebDriver): Promise<string> {
+    const currentScroll: number = await driver.executeScript(
+      'return document.documentElement.scrollTop',
     );
+
+    const totalHeight: number = await driver.executeScript(
+      'return document.body.offsetHeight',
+    );
+    const windowHeight: number = await driver.executeScript(
+      'return window.outerHeight',
+    );
+
+    await driver.executeScript(`window.scrollTo(0, 0)`);
+
+    const screenshots: Buffer[] = [];
+
+    for (let i = 0; i < Math.ceil(totalHeight / windowHeight); i++) {
+      await driver.executeScript(`window.scrollTo(0, window.outerHeight*${i})`);
+
+      const screenshot = await driver.takeScreenshot();
+      const buffer = Buffer.from(screenshot, 'base64');
+      screenshots.push(buffer);
+    }
+
+    const joined = await joinImages(screenshots, { direction: 'vertical' });
+    const buffer = await joined.png().toBuffer();
+
+    await driver.executeScript(`window.scrollTo(0, ${currentScroll})`);
+
+    return buffer.toString('base64');
   }
 }

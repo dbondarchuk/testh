@@ -6,6 +6,7 @@ import {
   IActionContainer,
   ILogger,
   ILoggerFactory,
+  InvalidOperationException,
   IPostStepExecutionCallback,
   IPreStepExecutionCallback,
   IPropertiesEvaluator,
@@ -26,7 +27,7 @@ import {
 
 /** Default test step runner */
 @Service(StepsRunnerInjectionToken)
-export class StepsRunner extends IStepsRunner {
+export class StepsRunner implements IStepsRunner {
   private readonly logger: ILogger;
   constructor(
     @inject(PropertiesEvaluatorInjectionToken)
@@ -34,7 +35,6 @@ export class StepsRunner extends IStepsRunner {
     @inject(LoggerFactoryInjectionToken)
     protected readonly loggerFactory: ILoggerFactory,
   ) {
-    super();
     this.logger = loggerFactory.get<StepsRunner>(StepsRunner);
   }
 
@@ -54,6 +54,8 @@ export class StepsRunner extends IStepsRunner {
 
     const results = [];
     const errors: Error[] = [];
+
+    this.logger.debug(`Running ${steps.length} steps`);
 
     for (let step of steps) {
       updateStepNumber(state.variables, stepNumberFn(stepNumber++));
@@ -75,6 +77,12 @@ export class StepsRunner extends IStepsRunner {
       try {
         if (!step.runOnFailure && isFailed) continue;
 
+        if (!step.type) {
+          throw new InvalidOperationException(
+            'Test step is not formed properly',
+          );
+        }
+
         if (steps.variables) {
           const baseVariables = steps.variables;
           state.variables.merge(baseVariables);
@@ -87,42 +95,57 @@ export class StepsRunner extends IStepsRunner {
           continue;
         }
 
-        this.logger.info(`Running a step #${currentStepNumber} '${step.name}'`);
+        this.logger.debug(`Looking for the action of type ${step.type}`);
 
         const runners = container
           .resolve<IActionContainer>(ActionContainerInjectionToken)
           .get();
 
-        const runnerType = runners[step.type];
-        if (!runnerType) {
+        const actionType = runners[step.type];
+        if (!actionType) {
           throw new UnknownOptionException(
             `Can't find a runner of type '${step.type}'.`,
           );
         }
 
+        this.logger.debug(
+          `Resolved action ${actionType.ctor.name} for the type '${step.type}'`,
+        );
+
         if (step.condition) {
+          this.logger.debug(`Verifying condition '${step.condition}'`);
           const conditionResult = await this.propertiesEvaluator.evaluate(
             step.condition,
             state.variables.variables,
           );
+
           if (!conditionResult) {
             this.logger.info(
               `Step condition wasn't successful. Skipping step.`,
             );
             continue;
           }
+
+          this.logger.info('Step condition was successful');
         }
 
         const propsPlain = await this.propertiesEvaluator.evaluateProperties(
           step.values,
           state,
+          actionType.propertiesType,
         );
 
-        const props = plainToClass(runnerType.propertiesType, propsPlain);
+        this.logger.info(`Running a step #${currentStepNumber} '${step.name}'`);
 
-        const runner = new runnerType.ctor(props, this.loggerFactory);
+        const props = plainToClass(actionType.propertiesType, propsPlain);
+
+        this.logger.debug(`Running action ${actionType.ctor.name}`);
+
+        const runner = new actionType.ctor(props, this.loggerFactory);
         const result = await runner.run(state, step);
         results.push(result);
+
+        this.logger.debug(`Step has completed successfully`);
       } catch (e) {
         isFailed = !isFailed && !step.ignoreError;
         errors.push(e);

@@ -2,11 +2,12 @@ import {
   ActionImplementationType,
   Constructor,
   IAction,
+  IActionContainer,
   IActionProperties,
 } from '@testh/sdk';
 
 /** Default implementaion of the action registry */
-export class ActionContainer {
+export class ActionContainer implements IActionContainer {
   private implementations: Record<string, ActionImplementationType<any>> = {};
 
   /** @inheritdoc */
@@ -18,13 +19,22 @@ export class ActionContainer {
   public register<
     T extends Constructor<IAction<Props, any>>,
     Props extends IActionProperties,
-  >(ctor: T, propertiesType: Constructor<Props>, ...aliases: string[]): void {
+  >(
+    ctor: T,
+    propertiesType: Constructor<Props>,
+    defaultStepName: string,
+    aliases: string[],
+  ): void {
     if (!aliases) {
       throw new TypeError('Test step names are required');
     }
 
-    aliases.forEach(
-      (alias) => (this.implementations[alias] = { propertiesType, ctor }),
-    );
+    const implementation: ActionImplementationType<T> = {
+      propertiesType,
+      defaultStepName,
+      ctor,
+    };
+
+    aliases.forEach((alias) => (this.implementations[alias] = implementation));
   }
 }

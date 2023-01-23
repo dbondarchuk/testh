@@ -1,7 +1,7 @@
 import { ExtensionType, IExtension, IExtensionContainer } from '@testh/sdk';
 
 /** Default implementation of the extension registry */
-export class ExtensionContainer extends IExtensionContainer {
+export class ExtensionContainer implements IExtensionContainer {
   private implementations: Record<string, IExtension[]> = {};
 
   /** @inheritdoc */

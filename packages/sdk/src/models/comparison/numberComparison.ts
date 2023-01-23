@@ -1,4 +1,4 @@
-import { ToNumber } from '../../helpers/types/number';
+import { ToNumber } from '../../helpers/decorators/transform/toNumber.decorator';
 import { UnknownOptionException } from '../exceptions/unknownOptionException';
 import { IComparison as IComparison } from './iComparison';
 

@@ -1,11 +1,12 @@
 import {
+  Constructor,
+  getPropertyEvaluators,
+  hasNonRecursiveMetadata,
+  hasSkipEvaluateMetadata,
   IPropertiesEvaluator,
-  IPropertyEvaluator,
   IState,
   KeyValue,
   PropertiesEvaluatorInjectionToken,
-  PropertyEvaluatorInjectionToken,
-  resolveAll,
   Service,
   WrapperWithVariables,
 } from '@testh/sdk';
@@ -88,6 +89,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
   public async evaluateProperties(
     obj: any,
     state: IState,
+    type?: Constructor<any>,
     recursive = true,
   ): Promise<any> {
     if (!state.variables) return obj;
@@ -115,20 +117,30 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
 
           for (const item of obj as any[]) {
             newValue.push(
-              await this.evaluateProperties(item, state, recursive),
+              await this.evaluateProperties(item, state, type, recursive),
             );
           }
         } else {
           if (isPlainObject(obj)) {
             newValue = {};
             for (const key in obj) {
-              const evaluated = await this.evaluateProperty(
-                obj[key],
-                key,
-                state,
-                recursive,
-              );
-              newValue[evaluated.key] = evaluated.value;
+              const hasSkipMetadata =
+                type && hasSkipEvaluateMetadata(key, type);
+              if (hasSkipMetadata) {
+                newValue[key] = obj[key];
+              } else {
+                const isRecursive =
+                  recursive && (!type || !hasNonRecursiveMetadata(key, type));
+                const evaluated = await this.evaluateProperty(
+                  obj[key],
+                  key,
+                  state,
+                  isRecursive,
+                  type,
+                );
+
+                newValue[evaluated.key] = evaluated.value;
+              }
             }
           } else {
             newValue = obj;
@@ -152,26 +164,16 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
     key: string,
     state: IState,
     recursive: boolean,
+    type?: Constructor<any>,
   ): Promise<KeyValue> {
     const result: KeyValue = {
       key,
       value,
     };
 
-    const implementations = resolveAll<IPropertyEvaluator>(
-      PropertyEvaluatorInjectionToken,
-    ).sort((a, b) => b.priority - a.priority);
+    const evaluator = getPropertyEvaluators();
 
-    const evaluator = implementations[0];
-    let current = evaluator;
-    current.setFirst(evaluator);
-    for (let i = 1; i < implementations.length; i++) {
-      current.setNext(implementations[i]);
-      current.setFirst(evaluator);
-      current = implementations[i];
-    }
-
-    await evaluator.evaluate(result, state, recursive);
+    await evaluator.evaluate(result, state, recursive, type);
 
     return result;
   }

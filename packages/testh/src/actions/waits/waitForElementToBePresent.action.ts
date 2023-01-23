@@ -2,6 +2,7 @@ import { until } from 'selenium-webdriver';
 import { Type } from 'class-transformer';
 import {
   Action,
+  BindingProperty,
   IAction,
   IActionProperties,
   ILogger,
@@ -9,6 +10,7 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToNumber,
 } from '@testh/sdk';
 
 /**
@@ -20,19 +22,20 @@ export class WaitForElementToBePresentActionProperties
   /**
    * Element selector
    */
+  @BindingProperty()
   @Type(() => SelectorOrElement)
   selector: SelectorOrElement;
 
   /**
    * Wait timeout in seconds
+   * @default 5
    */
-  @Type(() => Number)
+  @ToNumber()
   timeout: number;
 }
 
-/** Runner type aliases for {@link WaitForElementToBePresentAction} */
+/** Action type aliases for {@link WaitForElementToBePresentAction} */
 export const WaitForElementToBePresentActionTypeAliases = [
-  'wait',
   'wait-to-be-present',
 ] as const;
 
@@ -43,6 +46,7 @@ export const WaitForElementToBePresentActionTypeAliases = [
  */
 @Action(
   WaitForElementToBePresentActionProperties,
+  'Wait for the element to be present',
   ...WaitForElementToBePresentActionTypeAliases,
 )
 export class WaitForElementToBePresentAction extends IAction<WaitForElementToBePresentActionProperties> {

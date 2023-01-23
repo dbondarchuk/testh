@@ -23,7 +23,7 @@ export class SetVariableActionProperties implements IActionProperties {
   value: any;
 }
 
-/** Runner type aliases for {@link SetVariableAction} */
+/** Action type aliases for {@link SetVariableAction} */
 export const SetVariableActionTypeAliases = ['set-variable'] as const;
 
 /**
@@ -31,7 +31,11 @@ export const SetVariableActionTypeAliases = ['set-variable'] as const;
  * @properties {@link SetVariableActionProperties}
  * @runnerType {@link SetVariableActionTypeAliases}
  */
-@Action(SetVariableActionProperties, ...SetVariableActionTypeAliases)
+@Action(
+  SetVariableActionProperties,
+  'Set value to the variable',
+  ...SetVariableActionTypeAliases,
+)
 export class SetVariableAction extends IAction<SetVariableActionProperties> {
   private readonly logger: ILogger;
   constructor(

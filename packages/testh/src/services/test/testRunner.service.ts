@@ -5,6 +5,7 @@ import {
   IPostTestExecutionCallback,
   IPreTestExecutionCallback,
   IState,
+  IStateFactory,
   IStepsRunner,
   ITestRunner,
   LoggerFactoryInjectionToken,
@@ -13,7 +14,8 @@ import {
   resolve,
   resolveAll,
   Service,
-  StateInjectionToken,
+  StateFactoryInjectionToken,
+  StateInstanceInjectionToken,
   StepsRunnerInjectionToken,
   Test,
   TestInstanceInjectionToken,
@@ -25,14 +27,14 @@ import { container, inject } from 'tsyringe';
  * Default test runner
  */
 @Service(TestRunnerInjectionToken)
-export class TestRunner extends ITestRunner {
+export class TestRunner implements ITestRunner {
   private readonly logger: ILogger;
 
   public constructor(
     @inject(LoggerFactoryInjectionToken) loggerFactory: ILoggerFactory,
+    @inject(StateFactoryInjectionToken)
+    private readonly stateFactory: IStateFactory,
   ) {
-    super();
-
     this.logger = loggerFactory.get<TestRunner>(TestRunner);
   }
 
@@ -42,7 +44,9 @@ export class TestRunner extends ITestRunner {
 
     container.registerInstance(TestInstanceInjectionToken, test);
 
-    const state = container.resolve<IState>(StateInjectionToken);
+    const state = this.stateFactory.createState(test);
+
+    container.registerInstance(StateInstanceInjectionToken, state);
 
     if (test.pages) state.variables.put('pages', test.pages);
 

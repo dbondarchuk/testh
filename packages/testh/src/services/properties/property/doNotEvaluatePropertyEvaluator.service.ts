@@ -1,5 +1,6 @@
 import { inject } from 'tsyringe';
 import {
+  Constructor,
   IPropertiesEvaluator,
   IPropertyEvaluator,
   IState,
@@ -25,13 +26,19 @@ export class DoNotEvaluatePropertyEvaluator extends IPropertyEvaluator {
     return 2;
   }
 
+  /** @inheritdoc */
+  public parseKey(key: string): string {
+    return key.startsWith('~') ? key.substring(1) : super.nextParseKey(key);
+  }
+
   public async evaluate(
     property: KeyValue,
     state: IState,
     recursive: boolean,
+    type?: Constructor<any>,
   ): Promise<void> {
     if (!property.key.startsWith('~')) {
-      await super.next(property, state, recursive);
+      await super.next(property, state, recursive, type);
     }
   }
 }

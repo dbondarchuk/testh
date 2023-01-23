@@ -47,15 +47,20 @@ export class RandomStringActionProperties implements IActionProperties {
   excludedCharacters: string;
 }
 
-/** Runner type aliases for {@link RandomStringAction} */
+/** Action type aliases for {@link RandomStringAction} */
 export const RandomStringActionTypeAliases = ['random-string'] as const;
 
 /**
- * Sets a value into a variable
+ * Generates a random string of length between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
  * @properties {@link RandomStringActionProperties}
  * @runnerType {@link SetVariableActionTypeAliases}
+ * @returns {string} Random string of length between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
  */
-@Action(RandomStringActionProperties, ...RandomStringActionTypeAliases)
+@Action(
+  RandomStringActionProperties,
+  'Generate random string',
+  ...RandomStringActionTypeAliases,
+)
 export class RandomStringAction extends IAction<
   RandomStringActionProperties,
   string

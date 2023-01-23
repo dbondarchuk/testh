@@ -1,5 +1,6 @@
 import {
   Action,
+  BindingProperty,
   IAction,
   IActionProperties,
   ILogger,
@@ -18,13 +19,15 @@ export class GetElementTextActionProperties implements IActionProperties {
    * Element selector
    */
   @Type(() => SelectorOrElement)
+  @BindingProperty()
   selector: SelectorOrElement;
 }
 
-/** Runner type aliases for {@link GetElementTextAction} */
+/** Action type aliases for {@link GetElementTextAction} */
 export const GetElementTextActionTypeAliases = [
   'get-text',
   'get-element-text',
+  'element-text',
 ] as const;
 
 /**
@@ -33,7 +36,11 @@ export const GetElementTextActionTypeAliases = [
  * @runnerType {@link GetElementTextActionTypeAliases}
  * @returns {string} Element's text
  */
-@Action(GetElementTextActionProperties, ...GetElementTextActionTypeAliases)
+@Action(
+  GetElementTextActionProperties,
+  'Get element text',
+  ...GetElementTextActionTypeAliases,
+)
 export class GetElementTextAction extends IAction<
   GetElementTextActionProperties,
   string

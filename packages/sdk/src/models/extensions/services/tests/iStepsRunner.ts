@@ -5,7 +5,7 @@ import { TestSteps } from '../../../tests/testSteps';
 export type StepsNumberFunction = (stepNumber: number) => string | number;
 
 /** Describes steps runner */
-export abstract class IStepsRunner {
+export interface IStepsRunner {
   /**
    * Executes test steps
    * @param steps Test steps to run
@@ -13,7 +13,7 @@ export abstract class IStepsRunner {
    * @param stepNumberFn Function to generate step number
    * @returns Steps execution results
    */
-  public abstract runTestSteps(
+  runTestSteps(
     steps: TestSteps,
     state: IState,
     stepNumberFn: StepsNumberFunction,

@@ -1,4 +1,7 @@
 import {
+  Constructor,
+  hasNonRecursiveMetadata,
+  hasSkipEvaluateMetadata,
   IPropertiesEvaluator,
   IPropertyEvaluator,
   IState,
@@ -25,17 +28,30 @@ export class DefaultPropertyEvaluator extends IPropertyEvaluator {
     return 1;
   }
 
+  /** @inheritdoc */
+  public parseKey(key: string): string {
+    return super.nextParseKey(key);
+  }
+
   public async evaluate(
     property: KeyValue,
     state: IState,
     recursive: boolean,
+    type?: Constructor<any>,
   ): Promise<void> {
-    property.value = await this.propertiesEvaluator.evaluateProperties(
-      property.value,
-      state,
-      recursive,
-    );
+    const hasSkipMetadata = type && hasSkipEvaluateMetadata(property.key, type);
+    if (!hasSkipMetadata) {
+      const isRecursive =
+        recursive && (!type || !hasNonRecursiveMetadata(property.key, type));
 
-    await super.next(property, state, recursive);
+      property.value = await this.propertiesEvaluator.evaluateProperties(
+        property.value,
+        state,
+        property.value?.constructor,
+        isRecursive,
+      );
+    }
+
+    await super.next(property, state, recursive, type);
   }
 }

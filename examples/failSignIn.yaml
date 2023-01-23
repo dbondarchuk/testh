@@ -5,33 +5,26 @@ variables:
   elementWaitTimeout: 3
 pages: !!inc/dir ['pages', { extensions: ['.page.yaml'] }]
 steps:
-  - name: Open Browser
-    type: open-browser
-    values:
-      browser: chrome
-      headless: true
+  - open-browser: chrome
   - name: Set random password
     type: set-variable
     values:
       variable: password
-      ^value:
+      (value):
         name: Generate random password
         type: random-string
         values:
           minLength: 6
           maxLength: 12
           useSpecialCharacters: true
-  - name: Sign in
-    type: run
-    values:
-      $steps: pages.signin.actions.signin
+  - $run: pages.signin.actions.signin
   - name: Check error
     type: compare-strings
     values:
       compare:
         type: 'equals'
         value: 'Epic sadface: Username and password do not match any user in this service'
-      ^to:
+      (to):
         name: Get error
         type: get-text
         values:

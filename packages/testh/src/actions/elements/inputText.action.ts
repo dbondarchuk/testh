@@ -33,7 +33,7 @@ export class InputTextActionProperties implements IActionProperties {
   clear?: boolean;
 }
 
-/** Runner type aliases for {@link InputTextAction} */
+/** Action type aliases for {@link InputTextAction} */
 export const InputTextActionTypeAliases = ['input', 'type'] as const;
 
 /**
@@ -41,7 +41,11 @@ export const InputTextActionTypeAliases = ['input', 'type'] as const;
  * @properties {@link InputTextActionProperties}
  * @runnerType {@link InputTextActionTypeAliases}
  */
-@Action(InputTextActionProperties, ...InputTextActionTypeAliases)
+@Action(
+  InputTextActionProperties,
+  'Input text into element',
+  ...InputTextActionTypeAliases,
+)
 export class InputTextAction extends IAction<InputTextActionProperties> {
   private readonly logger: ILogger;
   constructor(props: InputTextActionProperties, loggerFactory: ILoggerFactory) {

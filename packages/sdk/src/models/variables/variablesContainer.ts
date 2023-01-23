@@ -1,3 +1,4 @@
+import { IState } from '../tests';
 import { Variables } from './variables';
 
 export const AGENT_PREFIX = 'AGENT_';
@@ -79,5 +80,20 @@ export const getCurrentStepNumber = (
   variables: IVariablesContainer,
 ): number | string => variables.get(TASK_STEP_NUMBER);
 
+/** Describes a factory to create the variables container */
+export interface IVariablesContainerFactory {
+  /**
+   * Creates a new variables container
+   * @param state Current state
+   * @param variables Additional variables
+   * @returns Variables container
+   */
+  createVariabesContainer(
+    state: IState,
+    variables?: Variables,
+  ): IVariablesContainer;
+}
+
 /** Token for variables container */
-export const VariablesContainerInjectionToken = 'VariablesContainer';
+export const VariablesContainerFactoryInjectionToken =
+  'VariablesContainerFactory';

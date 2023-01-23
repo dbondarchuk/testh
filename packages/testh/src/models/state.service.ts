@@ -1,25 +1,23 @@
 import {
   DriverException,
   IState,
+  IStateFactory,
   IVariablesContainer,
+  IVariablesContainerFactory,
   Service,
-  StateInjectionToken,
-  StateInstanceInjectionToken,
+  StateFactoryInjectionToken,
   Test,
-  TestInstanceInjectionToken,
-  VariablesContainerInjectionToken,
+  VariablesContainerFactoryInjectionToken,
 } from '@testh/sdk';
 import { WebDriver } from 'selenium-webdriver';
-import { container, inject } from 'tsyringe';
+import { inject } from 'tsyringe';
 
 /**
  * Describes a current state of the run
  */
-@Service(StateInjectionToken)
 export class State implements IState {
   private readonly _drivers: WebDriver[] = [];
   private readonly _variables: IVariablesContainer;
-  private readonly _testName: string;
 
   private _currentDriverIndex = -1;
 
@@ -27,18 +25,21 @@ export class State implements IState {
    * Creates a new instance of State
    * @param test Test to use information
    */
-  constructor(@inject(TestInstanceInjectionToken) test: Test) {
-    this._testName = test.name;
-
-    container.registerInstance(StateInstanceInjectionToken, this);
-    this._variables = container.resolve(VariablesContainerInjectionToken);
+  constructor(
+    private readonly _test: Test,
+    variablesContainerFactory: IVariablesContainerFactory,
+  ) {
+    this._variables = variablesContainerFactory.createVariabesContainer(
+      this,
+      this._test?.variables,
+    );
   }
 
   /**
    * Gets test name
    */
-  public get testName(): string {
-    return this._testName;
+  public get test(): Test {
+    return this._test;
   }
 
   /**
@@ -144,5 +145,19 @@ export class State implements IState {
    */
   public removeCurrentDriver(): void {
     this.removeDriver(this.currentDriverIndex);
+  }
+}
+
+/** Default state factory */
+@Service(StateFactoryInjectionToken)
+export class StateFactory implements IStateFactory {
+  constructor(
+    @inject(VariablesContainerFactoryInjectionToken)
+    private readonly variablesContainerFactory: IVariablesContainerFactory,
+  ) {}
+
+  /** @inheritdoc */
+  createState(test: Test): IState {
+    return new State(test, this.variablesContainerFactory);
   }
 }

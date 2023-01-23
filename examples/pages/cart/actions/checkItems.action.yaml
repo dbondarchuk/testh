@@ -3,24 +3,27 @@
   values:
     $selector: cart_item
     steps:
-      - name: Check name
-        type: compare-strings
-        values:
-          compare:
-            type: equals
-            $value: EXPECTED_ITEMS[ELEMENT_INDEX].name
-          to: '$(await ELEMENT.findElement({type:"class", value: item_name_class}).getText())'
-      - name: Check desc
-        type: compare-strings
-        values:
-          compare:
-            type: equals
-            $value: EXPECTED_ITEMS[ELEMENT_INDEX].desc
-          to: '$(await ELEMENT.findElement({type:"class", value: item_desc_class}).getText())'
-      - name: Check price
-        type: compare-strings
-        values:
-          compare:
-            type: equals
-            $value: EXPECTED_ITEMS[ELEMENT_INDEX].price
-          to: '$(await ELEMENT.findElement({type:"class", value: item_price_class}).getText())'
+      - check:
+          name: Check name
+          type: compare-strings
+          values:
+            compare:
+              type: equals
+              $value: EXPECTED_ITEMS[ELEMENT_INDEX].name
+            to: '$(await ELEMENT.findElement({type:"class", value: item_name_class}).getText())'
+      - check:
+          name: Check desc
+          type: compare-strings
+          values:
+            compare:
+              type: equals
+              $value: EXPECTED_ITEMS[ELEMENT_INDEX].desc
+            to: '$(await ELEMENT.findElement({type:"class", value: item_desc_class}).getText())'
+      - check:
+          name: Check price
+          type: compare-strings
+          values:
+            compare:
+              type: equals
+              $value: EXPECTED_ITEMS[ELEMENT_INDEX].price
+            to: '$(await ELEMENT.findElement({type:"class", value: item_price_class}).getText())'

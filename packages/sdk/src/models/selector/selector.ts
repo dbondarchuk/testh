@@ -1,6 +1,13 @@
 import { Type } from 'class-transformer';
 import { By, locateWith, RelativeBy } from 'selenium-webdriver';
+import { container } from 'tsyringe';
+import { resolveAll } from '../../containers/container';
 import { InvalidSelectorTypeException } from '../exceptions/invalidSelectorTypeException';
+import {
+  ISelectorTypeProvider,
+  SelectorTypeProviderInjectionToken,
+} from '../extensions/services/selenium/iSelectorTypeProvider';
+import { ILoggerFactory, LoggerFactoryInjectionToken } from '../logger';
 import { RelativeSelector } from './relativeSelector';
 
 /**
@@ -24,40 +31,37 @@ export class Selector {
    * Gets selenium By object
    */
   public get by(): By | RelativeBy {
-    let by: By;
-    switch (this.type) {
-      case 'xpath':
-        by = By.xpath(this.value);
-        break;
+    let by: By = null;
 
-      case 'css':
-        by = By.css(this.value);
-        break;
+    const logger = container
+      .resolve<ILoggerFactory>(LoggerFactoryInjectionToken)
+      .get<Selector>(Selector);
+    const providers = resolveAll<ISelectorTypeProvider>(
+      SelectorTypeProviderInjectionToken,
+    );
 
-      case 'id':
-        by = By.id(this.value);
-        break;
+    logger.debug(`Resolving *by* for selector ${this}`);
 
-      case 'class':
-        by = By.className(this.value);
-        break;
+    for (const provider of providers) {
+      if (provider.type === this.type) {
+        by = provider.by(this.value);
 
-      case 'name':
-        by = By.name(this.value);
+        logger.debug(
+          `Resolved selector type '${this.type}' using '${provider.constructor.name}'`,
+        );
         break;
+      }
+    }
 
-      /*  Only xpath allows text based search */
-      case 'text':
-        by = By.xpath(`//*[contains(text(), '${this.value}')]`);
-        break;
-
-      default:
-        throw new InvalidSelectorTypeException(this.type);
+    if (!by) {
+      throw new InvalidSelectorTypeException(this.type);
     }
 
     if (!this.relative || this.relative.length == 0) {
       return by;
     }
+
+    logger.debug(`Selector ${this} is relative. Building a relation..`);
 
     const relative = this.relative.reduce((relativeBy, item) => {
       switch (item.type) {
@@ -77,6 +81,8 @@ export class Selector {
           );
       }
     }, locateWith(by));
+
+    logger.debug(`Successfully built relation for selector ${this}`);
 
     return relative;
   }

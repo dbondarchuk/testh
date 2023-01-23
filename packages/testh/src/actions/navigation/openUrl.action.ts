@@ -1,5 +1,6 @@
 import {
   Action,
+  BindingProperty,
   IAction,
   IActionProperties,
   ILogger,
@@ -14,10 +15,11 @@ export class OpenUrlActionProperties implements IActionProperties {
   /**
    * Url to open
    */
+  @BindingProperty()
   url: string;
 }
 
-/** Runner types for {@link OpenUrlAction} */
+/** Action types for {@link OpenUrlAction} */
 export const OpenUrlActionTypeAliases = ['open-url'] as const;
 
 /**
@@ -25,7 +27,7 @@ export const OpenUrlActionTypeAliases = ['open-url'] as const;
  * @properties {@link OpenUrlActionProperties}
  * @runnerType {@link OpenUrlActionTypeAliases}
  */
-@Action(OpenUrlActionProperties, ...OpenUrlActionTypeAliases)
+@Action(OpenUrlActionProperties, 'Open URL', ...OpenUrlActionTypeAliases)
 export class OpenUrlAction extends IAction<OpenUrlActionProperties> {
   private readonly logger: ILogger;
 

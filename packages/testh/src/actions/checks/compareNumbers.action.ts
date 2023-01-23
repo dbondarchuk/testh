@@ -1,6 +1,5 @@
 import {
   Action,
-  Assert,
   IAction,
   IActionProperties,
   ILogger,
@@ -8,6 +7,7 @@ import {
   IState,
   NumberComparison,
   PropertyIsRequiredException,
+  ToNumber,
 } from '@testh/sdk';
 import { Type } from 'class-transformer';
 
@@ -18,20 +18,28 @@ export class CompareNumbersActionProperties implements IActionProperties {
   compare: NumberComparison;
 
   /** Value to compare */
-  @Type(() => Number)
+  @ToNumber()
   to: number;
 }
 
-/** Runner type aliases for {@link CompareNumbersAction} */
+/** Action type aliases for {@link CompareNumbersAction} */
 export const CompareNumbersActionTypeAliases = ['compare-numbers'] as const;
 
 /**
  * Compares two numbers
  * @properties {@link CompareNumbersActionProperties}
  * @runnerType {@link CompareNumbersActionTypeAliases}
+ * @returns {boolean} Whether {@link CompareNumbersActionProperties.to} satisfies the comparison {@link CompareNumbersActionProperties.compare}
  */
-@Action(CompareNumbersActionProperties, ...CompareNumbersActionTypeAliases)
-export class CompareNumbersAction extends IAction<CompareNumbersActionProperties> {
+@Action(
+  CompareNumbersActionProperties,
+  'Compare numbers',
+  ...CompareNumbersActionTypeAliases,
+)
+export class CompareNumbersAction extends IAction<
+  CompareNumbersActionProperties,
+  boolean
+> {
   private readonly logger: ILogger;
   constructor(
     props: CompareNumbersActionProperties,
@@ -41,7 +49,7 @@ export class CompareNumbersAction extends IAction<CompareNumbersActionProperties
     this.logger = loggerFactory.get<CompareNumbersAction>(CompareNumbersAction);
   }
 
-  public async run(_: IState): Promise<void> {
+  public async run(_: IState): Promise<boolean> {
     const compare = this.props.compare;
     if (!compare) {
       throw new PropertyIsRequiredException('compare');
@@ -49,10 +57,14 @@ export class CompareNumbersAction extends IAction<CompareNumbersActionProperties
 
     this.logger.info(`Comparing number ${compare} to '${this.props.to}'`);
 
-    Assert.assertNumberComparison(this.props.compare, this.props.to);
+    const result = this.props.compare.compare(this.props.to);
 
     this.logger.info(
-      `Value ${this.props.to} successfully matched ${this.props.compare}`,
+      `Value '${compare}' was${!result ? ' not' : ''} successfully matched ${
+        this.props.compare
+      }`,
     );
+
+    return result;
   }
 }

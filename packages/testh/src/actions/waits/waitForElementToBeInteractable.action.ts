@@ -1,5 +1,6 @@
 import {
   Action,
+  BindingProperty,
   IAction,
   IActionProperties,
   ILogger,
@@ -7,6 +8,7 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToNumber,
 } from '@testh/sdk';
 import { Type } from 'class-transformer';
 
@@ -19,17 +21,19 @@ export class WaitForElementToBeInteractableActionProperties
   /**
    * Element selector
    */
+  @BindingProperty()
   @Type(() => SelectorOrElement)
   selector: SelectorOrElement;
 
   /**
    * Wait timeout in seconds
+   * @default 5
    */
-  @Type(() => Number)
-  timeout: number;
+  @ToNumber()
+  timeout?: number;
 }
 
-/** Runner type aliases for {@link WaitForElementToBeInteractableActionTypeAliases} */
+/** Action type aliases for {@link WaitForElementToBeInteractableActionTypeAliases} */
 export const WaitForElementToBeInteractableActionTypeAliases = [
   'wait-to-be-interactable',
 ] as const;
@@ -41,6 +45,7 @@ export const WaitForElementToBeInteractableActionTypeAliases = [
  */
 @Action(
   WaitForElementToBeInteractableActionProperties,
+  'Wait for the element to be interactable',
   ...WaitForElementToBeInteractableActionTypeAliases,
 )
 export class WaitForElementToBeInteractableAction extends IAction<WaitForElementToBeInteractableActionProperties> {

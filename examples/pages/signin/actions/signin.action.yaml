@@ -1,24 +1,11 @@
-- name: Open Url
-  type: open-url
-  values:
-    url: $(url)
-- name: Wait for login page to load
-  type: run
-  values:
-    steps: !!inc/file waitToLoad.action.yaml
-- name: Type username
-  type: type
-  values:
-    text: $(username)
-    selector: $(usernameInput)
-- name: Type password
-  type: type
-  values:
-    text: $(password)
+- $open-url: url
+- run: !!inc/file waitToLoad.action.yaml # Wait for login page to load
+- input:
+    $text: username
+    $selector: usernameInput
+- input:
+    $text: password
     selector:
       type: id
       value: password
-- name: Click on sign in button
-  type: click
-  values:
-    selector: $(signInBtn)
+- $click: signInBtn

@@ -4,23 +4,23 @@ import { IExtension } from '../models/extensions/iExtension';
 import { Constructor } from '../models/types/constructor';
 
 /** Describes a registry for the extensions */
-export abstract class IExtensionContainer {
+export interface IExtensionContainer {
   /**
    * Gets all registered extensions for the specific type, sorted by priority
    * @param type Type of the extension
    */
-  public abstract get<T extends IExtension>(type: ExtensionType): T[];
+  get<T extends IExtension>(type: ExtensionType): T[];
 
   /**
    * Gets all registered extensions, sorted by priority
    */
-  public abstract getAll(): IExtension[];
+  getAll(): IExtension[];
 
   /**
    * Registers new extension
    * @param extension Extension to register
    */
-  public abstract register<T extends IExtension>(extension: T): void;
+  register<T extends IExtension>(extension: T): void;
 }
 
 /**

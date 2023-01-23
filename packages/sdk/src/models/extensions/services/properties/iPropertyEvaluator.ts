@@ -1,4 +1,6 @@
+import { resolveAll } from '../../../../containers/container';
 import { IState } from '../../../tests/iState';
+import { Constructor } from '../../../types/constructor';
 
 /**
  * Describes generic key-value item
@@ -18,6 +20,13 @@ export abstract class IPropertyEvaluator {
 
   /** Gets evaluator priority. Higher values will be executed first */
   public abstract get priority(): number;
+
+  /**
+   * Indicates how the property key is parsed.
+   * @param key Property key
+   * @returns Parsed key.
+   */
+  public abstract parseKey(key: string): string;
 
   /**
    * Sets next evaluator in the chain
@@ -40,11 +49,13 @@ export abstract class IPropertyEvaluator {
    * @param property Property to evaluate
    * @param state Current state
    * @param recursive Determines whether the evaluation should be recursive
+   * @param type Object's type
    */
   public abstract evaluate(
     property: KeyValue,
     state: IState,
     recursive: boolean,
+    type?: Constructor<any>,
   ): Promise<void>;
 
   /**
@@ -52,15 +63,25 @@ export abstract class IPropertyEvaluator {
    * @param property Property to evaluate
    * @param state Current state
    * @param recursive Determines whether the evaluation should be recursive
+   * @param type Object's type
    */
-  public async next(
+  protected async next(
     property: KeyValue,
     state: IState,
     recursive: boolean,
+    type: Constructor<any> | undefined,
   ): Promise<void> {
     if (this._next) {
-      await this._next.evaluate(property, state, recursive);
+      await this._next.evaluate(property, state, recursive, type);
     }
+  }
+
+  protected nextParseKey(key: string): string {
+    if (this._next) {
+      return this._next.parseKey(key);
+    }
+
+    return key;
   }
 
   /**
@@ -68,14 +89,41 @@ export abstract class IPropertyEvaluator {
    * @param property Property to evaluate
    * @param state Current state
    * @param recursive Determines whether the evaluation should be recursive
+   * @param type Object's type
    */
-  public async first(
+  protected async first(
     property: KeyValue,
     state: IState,
     recursive: boolean,
+    type?: Constructor<any>,
   ): Promise<void> {
-    await this._first.evaluate(property, state, recursive);
+    await this._first.evaluate(property, state, recursive, type);
   }
+
+  protected firstParseKey(key: string): string {
+    return this._first.parseKey(key);
+  }
+}
+
+/**
+ * Returns all property evaluators, sorted by priority
+ * @returns All priority evaluators
+ */
+export function getPropertyEvaluators(): IPropertyEvaluator {
+  const evaluators = resolveAll<IPropertyEvaluator>(
+    PropertyEvaluatorInjectionToken,
+  ).sort((a, b) => b.priority - a.priority);
+
+  const evaluator = evaluators[0];
+  let current = evaluator;
+  current.setFirst(evaluator);
+  for (let i = 1; i < evaluators.length; i++) {
+    current.setNext(evaluators[i]);
+    current.setFirst(evaluator);
+    current = evaluators[i];
+  }
+
+  return evaluator;
 }
 
 /** Token to use in order to get property evaluator implementation from DI container */

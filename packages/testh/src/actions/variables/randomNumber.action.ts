@@ -33,15 +33,20 @@ export class RandomNumberActionProperties implements IActionProperties {
   max: number;
 }
 
-/** Runner type aliases for {@link RandomNumberAction} */
+/** Action type aliases for {@link RandomNumberAction} */
 export const RandomNumberActionTypeAliases = ['random-number'] as const;
 
 /**
- * Sets a value into a variable
+ * Generates a random integer number between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
  * @properties {@link RandomNumberActionProperties}
  * @runnerType {@link SetVariableActionTypeAliases}
+ * @returns {number} Random integer number between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
  */
-@Action(RandomNumberActionProperties, ...RandomNumberActionTypeAliases)
+@Action(
+  RandomNumberActionProperties,
+  'Generate random number',
+  ...RandomNumberActionTypeAliases,
+)
 export class RandomNumberAction extends IAction<
   RandomNumberActionProperties,
   number

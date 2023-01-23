@@ -2,6 +2,7 @@ import { until } from 'selenium-webdriver';
 import { Type } from 'class-transformer';
 import {
   Action,
+  BindingProperty,
   IAction,
   IActionProperties,
   ILogger,
@@ -9,6 +10,7 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToNumber,
 } from '@testh/sdk';
 
 /**
@@ -20,13 +22,15 @@ export class WaitForElementToBeVisibleActionProperties
   /**
    * Element selector
    */
+  @BindingProperty()
   @Type(() => SelectorOrElement)
   selector: SelectorOrElement;
 
   /**
    * Wait timeout in seconds
+   * @default 5
    */
-  @Type(() => Number)
+  @ToNumber()
   timeout: number;
 }
 
@@ -41,6 +45,7 @@ export const WaitForElementToBeVisibleActionTypeAliases = [
  */
 @Action(
   WaitForElementToBeVisibleActionProperties,
+  'Wait for the element to be visible',
   ...WaitForElementToBeVisibleActionTypeAliases,
 )
 export class WaitForElementToBeVisibleAction extends IAction<WaitForElementToBeVisibleActionProperties> {

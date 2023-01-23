@@ -8,6 +8,7 @@ import {
   ITestProvider,
   ITestRunner,
   loadAsync,
+  resolveAll,
   Settings,
   SettingsInjectionToken,
   Test,
@@ -117,9 +118,7 @@ async function main(): Promise<number> {
   await initExtensions();
 
   let test: Test = null;
-  const providers = container.resolveAll<ITestProvider>(
-    TestProviderInjectionToken,
-  );
+  const providers = resolveAll<ITestProvider>(TestProviderInjectionToken);
 
   for (const provider of providers) {
     const result = await provider.get(args.test);

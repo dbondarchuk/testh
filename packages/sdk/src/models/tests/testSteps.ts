@@ -1,3 +1,4 @@
+import { IState } from '.';
 import { Variables } from '../variables/variables';
 import { TestStep } from './testStep';
 
@@ -8,7 +9,7 @@ export class TestSteps extends Array<TestStep> {
   /**
    * Additional base variables for the steps
    */
-  variables: Variables;
+  variables?: Variables;
 }
 
 /**
@@ -26,4 +27,9 @@ export function stepsWrapper(
   if (variables) wrapper.variables = variables;
 
   return wrapper;
+}
+
+export interface TestStepsAction {
+  length: number;
+  execute: (state: IState) => Promise<any[]>;
 }

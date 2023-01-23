@@ -1,43 +1,50 @@
-import { container } from 'tsyringe';
-
 import {
   Action,
-  ActionWithStepsProperties,
   getCurrentStepNumber,
   IAction,
+  IActionProperties,
   ILogger,
   ILoggerFactory,
-  InvalidOperationException,
   IState,
-  IStepsRunner,
   PropertyIsRequiredException,
-  StepsRunnerInjectionToken,
+  TestStepsAction,
+  ToTestStepsAction,
+  updateStepNumber,
 } from '@testh/sdk';
 
-export class ForEachArrayItemActionProperties extends ActionWithStepsProperties {
+export class ForEachArrayItemActionProperties implements IActionProperties {
+  /** Array to iterate over */
   array: any[];
+
+  /** Steps to run */
+  @ToTestStepsAction()
+  steps: TestStepsAction;
 }
 
-/** Name of the variable where each item of {@link ForEachArrayItemActionProperties.array} */
+/** Name of the variable where each item of {@link ForEachArrayItemActionProperties.array} is stored */
 export const ITEM_VARIABLE = 'ITEM';
 
-/** Name of the variable where indexes for the items of {@link ForEachArrayItemActionProperties.array} */
+/** Name of the variable where indexes for the items of {@link ForEachArrayItemActionProperties.array} is stored */
 export const INDEX_VARIABLE = 'INDEX';
 
-/** Runner type aliases for {@link ForEachArrayItemAction} */
+/** Action type aliases for {@link ForEachArrayItemAction} */
 export const ForEachArrayItemActionTypeAliases = [
   'for-each-item',
   'for-each-array-item',
 ] as const;
 
 /**
- * Runs specified test step for each of the item in the array.
+ * Runs specified test steps for each of the item in the array.
  * @properties {@link ForEachArrayItemActionProperties}
  * @runnerType {@link ForEachArrayItemActionTypeAliases}
  * @variable {@link ITEM_VARIABLE} Item
  * @variable {@link INDEX_VARIABLE} Item zero-based index
  */
-@Action(ForEachArrayItemActionProperties, ...ForEachArrayItemActionTypeAliases)
+@Action(
+  ForEachArrayItemActionProperties,
+  'Do for each array item',
+  ...ForEachArrayItemActionTypeAliases,
+)
 export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProperties> {
   private readonly logger: ILogger;
   constructor(
@@ -55,10 +62,6 @@ export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProper
       throw new PropertyIsRequiredException('steps');
     }
 
-    if (!Array.isArray(this.props.array)) {
-      throw new InvalidOperationException(`Property is not an array`);
-    }
-
     this.logger.info(
       `Running ${this.props.steps.length} steps for ${this.props.array.length} items`,
     );
@@ -70,13 +73,9 @@ export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProper
       state.variables.put(ITEM_VARIABLE, item);
       state.variables.put(INDEX_VARIABLE, index);
 
-      await container
-        .resolve<IStepsRunner>(StepsRunnerInjectionToken)
-        .runTestSteps(
-          this.props.steps,
-          state,
-          (stepNumber) => `${basicStepNumber}.${index}-${stepNumber++}`,
-        );
+      updateStepNumber(state.variables, `${basicStepNumber}.${index}`);
+
+      await this.props.steps.execute(state);
 
       index++;
     }

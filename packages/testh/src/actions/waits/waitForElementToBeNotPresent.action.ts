@@ -7,6 +7,7 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToNumber,
   Waits,
 } from '@testh/sdk';
 import { Type } from 'class-transformer';
@@ -25,12 +26,13 @@ export class WaitForElementToBeNotPresentActionProperties
 
   /**
    * Wait timeout in seconds
+   * @default 5
    */
-  @Type(() => Number)
-  timeout: number;
+  @ToNumber()
+  timeout?: number;
 }
 
-/** Runner type aliases for {@link WaitForElementToBeNotPresentAction}  */
+/** Action type aliases for {@link WaitForElementToBeNotPresentAction}  */
 export const WaitForElementToBeNotPresentActionPropertiesTypeAliases = [
   'wait-to-be-not-present',
 ] as const;
@@ -42,6 +44,7 @@ export const WaitForElementToBeNotPresentActionPropertiesTypeAliases = [
  */
 @Action(
   WaitForElementToBeNotPresentActionProperties,
+  'Wait for the element to be not present',
   ...WaitForElementToBeNotPresentActionPropertiesTypeAliases,
 )
 export class WaitForElementToBeNotPresentAction extends IAction<WaitForElementToBeNotPresentActionProperties> {

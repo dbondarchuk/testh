@@ -15,7 +15,7 @@ export abstract class IAction<Props extends IActionProperties, T = void> {
    * Test step entry point
    * @param state Current state
    * @param step Test step
-   * @returns
+   * @returns Action result
    */
   public abstract run(state: IState, step: TestStep): Promise<T>;
 }

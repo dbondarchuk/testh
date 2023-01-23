@@ -27,27 +27,35 @@
         values:
           variable: price
           #$value: (await ELEMENT.getText()).trim().substr(1)
-          ^value:
+          (value):
             name: Get price text
             type: get-text
             values:
               selector:
                 $element: ELEMENT            
-      - name: Add price to array
-        type: add-to-array-variable
+      - name: Create price array
+        type: set-variable
         values:
-          $value: parseFloat(price.trim().substr(1))
           variable: prices
+          (value):
+            name: Add price to array
+            type: add-to-array
+            values:
+              $values: "[parseFloat(price.trim().substr(1))]"
+              $array: prices
 - name: Check prices are sorted from low to high
   type: for-each-item
   values:
     $array: prices
     steps:
-      - name: Compare to previous
-        type: compare-numbers
-        condition: INDEX > 0
-        values:
-          compare:
-            type: '<='
-            $value: prices[INDEX-1]
-          $to: ITEM
+      - if:
+          $condition: INDEX > 0
+          then:
+            - check:
+                name: Compare to previous
+                type: compare-numbers
+                values:
+                  compare:
+                    type: '<='
+                    $value: prices[INDEX-1]
+                  $to: ITEM
