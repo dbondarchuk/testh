@@ -41,6 +41,19 @@ export interface IState {
   get driversCount(): number;
 
   /**
+   * Gets all opened drivers
+   */
+  get drivers(): WebDriver[];
+
+  /**
+   * Gets web driver by index
+   * @param index Index of the driver
+   * @returns {WebDriver} Web driver
+   * @returns {undefined} If index is wrong
+   */
+  getDriver(index: number): WebDriver | undefined;
+
+  /**
    * Switches to the driver on specified index
    * @param index New driver's index
    * @throws {DriverException} If index is not correct

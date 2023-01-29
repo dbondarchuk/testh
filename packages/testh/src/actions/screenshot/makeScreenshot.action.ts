@@ -38,7 +38,7 @@ export type ScreenshotType =
 export class MakeScreenshotActionProperties implements IActionProperties {
   /**
    * Screenshot type
-   * @default visible-page
+   * @defaultValue visible-page
    */
   @BindingProperty()
   type?: ScreenshotType;
@@ -100,7 +100,9 @@ export class MakeScreenshotAction extends IAction<MakeScreenshotActionProperties
       case 'all-page': {
         this.logger.info('Making a screenshot of all page');
 
-        screenshot = await this.makeAllPageScreenshot(state.currentDriver);
+        screenshot = await MakeScreenshotAction.makeAllPageScreenshot(
+          state.currentDriver,
+        );
         break;
       }
 
@@ -117,12 +119,19 @@ export class MakeScreenshotAction extends IAction<MakeScreenshotActionProperties
     }
 
     const saver = resolve<IScreenshotSaver>(ScreenshotSaverInjectionToken);
-    await saver.save(screenshot, step, state);
+    await saver.save(
+      screenshot,
+      step,
+      state,
+      `Screenshot for the step '${step.name}' of the test '${state.test.name}'`,
+    );
 
     this.logger.info(`Successfully made a screenshot and saved it.`);
   }
 
-  private async makeAllPageScreenshot(driver: WebDriver): Promise<string> {
+  public static async makeAllPageScreenshot(
+    driver: WebDriver,
+  ): Promise<string> {
     const currentScroll: number = await driver.executeScript(
       'return document.documentElement.scrollTop',
     );

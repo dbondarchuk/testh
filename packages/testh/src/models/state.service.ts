@@ -96,6 +96,23 @@ export class State implements IState {
   }
 
   /**
+   * Gets all opened drivers
+   */
+  public get drivers(): WebDriver[] {
+    return this._drivers;
+  }
+  
+  /**
+   * Gets web driver by index
+   * @param index Index of the driver
+   * @returns {WebDriver} Web driver
+   * @returns {undefined} If index is wrong
+   */
+  public getDriver(index: number): WebDriver | undefined {
+    return this._drivers[index];
+  }
+
+  /**
    * Switches to the driver on specified index
    * @param index New driver's index
    * @throws {DriverException} If index is not correct

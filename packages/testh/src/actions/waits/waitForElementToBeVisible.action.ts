@@ -28,7 +28,7 @@ export class WaitForElementToBeVisibleActionProperties
 
   /**
    * Wait timeout in seconds
-   * @default 5
+   * @defaultValue `5`
    */
   @ToNumber()
   timeout: number;

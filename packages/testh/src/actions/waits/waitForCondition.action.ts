@@ -28,14 +28,14 @@ export class WaitForConditionActionProperties implements IActionProperties {
 
   /**
    * Wait timeout in seconds
-   * @default 5
+   * @defaultValue `5`
    */
   @ToNumber()
   timeout?: number;
 
   /**
    * Check interval in milliseconds
-   * @default 100
+   * @defaultValue `100`
    */
   @ToNumber()
   interval?: number;

@@ -4,7 +4,7 @@ import * as p from 'path';
 /**
  * Recursively gets files from path
  * @param path Path to read
- * @param recursive Determines whether to get files recursively. @default true
+ * @param recursive Determines whether to get files recursively. @defaultValue `true`
  * @returns List of files
  */
 export async function recursiveReaddirAsync(
@@ -28,7 +28,7 @@ export async function recursiveReaddirAsync(
  * Dynamically imports files from the directory based on file extension
  * @param fileExtensions File extensions to look for
  * @param directory Path to the directory where to look for the files
- * @param recursive Determines whether to get files recursively. @default true
+ * @param recursive Determines whether to get files recursively. @defaultValue `true`
  */
 export async function loadAsync(
   fileExtensions: string | string[],

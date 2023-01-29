@@ -24,14 +24,14 @@ export const specialCharacters = '!@#$%^&*()-_+=[]\\/,.<>;:\'"';
 export class RandomStringActionProperties implements IActionProperties {
   /**
    * Min length.
-   * @default 1
+   * @defaultValue `1`
    */
   @ToNumber()
   minLength: number;
 
   /**
    * Max length (inclusive)
-   * @default 10
+   * @defaultValue `10`
    */
   @ToNumber()
   maxLength: number;

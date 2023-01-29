@@ -17,11 +17,13 @@ steps:
       $steps: pages.shop.actions.checkSort
   - $run: pages.shop.actions.logout
   - open-url: https://stackoverflow.com/
-  - name: Make screenshot
-    type: screenshot
+  - name: Make And Compare screenshot
+    type: compare-screenshot
     runOnFailure: true
     values:
-      type: all-page
+      type: page
+      reference: screenshots/Example-7-Make screenshot.png
+      tolerance: 1
   - check:
       name: Check execution time
       type: compare-numbers

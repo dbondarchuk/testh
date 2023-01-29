@@ -16,7 +16,7 @@ import {
 export class AcceptOrDismissAlertActionProperties implements IActionProperties {
   /**
    * Should be alert accepted or dismissed
-   * @default false Alert will be dismmissed
+   * @defaultValue `false` Alert will be dismmissed
    */
   @ToBoolean()
   @BindingProperty()

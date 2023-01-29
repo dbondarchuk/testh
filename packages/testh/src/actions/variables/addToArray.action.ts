@@ -14,7 +14,7 @@ import {
 export class AddToArrayActionProperties implements IActionProperties {
   /**
    * Existing array
-   * @default {[]} Empty array
+   * @defaultValue `[]` Empty array
    */
   array?: any[];
 

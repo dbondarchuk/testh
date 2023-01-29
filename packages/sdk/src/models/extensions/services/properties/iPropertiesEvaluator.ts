@@ -28,7 +28,7 @@ export interface IPropertiesEvaluator {
    * @param obj Object to evaluate
    * @param state Current state
    * @param type Optional type of the object
-   * @param recursive Should it go through the properties recursively. @default true
+   * @param recursive Should it go through the properties recursively. @defaultValue  true
    * @param type Object's type
    * @returns Evaluated object
    */

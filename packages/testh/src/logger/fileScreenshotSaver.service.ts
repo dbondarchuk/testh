@@ -28,13 +28,21 @@ export class FileScreenshotSaver implements IScreenshotSaver {
     this.logger = loggerFactory.get<FileScreenshotSaver>(FileScreenshotSaver);
   }
 
-  async save(data: string, step: TestStep, state: IState): Promise<void> {
+  async save(
+    data: string,
+    step: TestStep,
+    state: IState,
+    _: string,
+    fileNameSuffix?: string,
+  ): Promise<void> {
     const screenshotDirectory =
       this.settings?.screenshots?.file?.directory || 'screenshots';
 
     const screenshotPath = `${screenshotDirectory}/${
       state.test.name
-    }-${getCurrentStepNumber(state.variables)}-${step.name}.png`;
+    }-${getCurrentStepNumber(state.variables)}-${step.name}${
+      fileNameSuffix ? '-' + fileNameSuffix : ''
+    }.png`;
 
     await mkdir(dirname(screenshotPath), { recursive: true });
     await writeFile(

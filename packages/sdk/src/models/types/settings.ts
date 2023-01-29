@@ -9,10 +9,11 @@ export type Settings = {
     /** Extension name */
     [name: string]: {
       /**
-       * Is extension enable.
-       * @default true
+       * Is extension enabled.
+       * @defaultValue `true`
        */
       enabled?: boolean;
+      
       /** Overriden extension priority */
       priority?: number;
     };

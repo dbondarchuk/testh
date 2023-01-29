@@ -16,7 +16,7 @@ export class AddPropertiesToObjectActionProperties
 {
   /**
    * Existing object
-   * @default {{}} Empty object
+   * @defaultValue {{}} Empty object
    */
   object: Record<string, any>;
 

@@ -54,7 +54,7 @@ export class OpenBrowserActionProperties implements IActionProperties {
 
   /**
    * Determines whether to run browser in headless mode
-   * @default true
+   * @defaultValue true
    */
   @ToBoolean()
   headless?: boolean;

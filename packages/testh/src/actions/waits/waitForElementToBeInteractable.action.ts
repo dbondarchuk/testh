@@ -27,7 +27,7 @@ export class WaitForElementToBeInteractableActionProperties
 
   /**
    * Wait timeout in seconds
-   * @default 5
+   * @defaultValue `5`
    */
   @ToNumber()
   timeout?: number;
