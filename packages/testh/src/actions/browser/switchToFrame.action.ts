@@ -8,8 +8,8 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link SwitchToFrameAction}
@@ -19,12 +19,16 @@ export class SwitchToFrameActionProperties implements IActionProperties {
    * IFrame selector
    */
   @BindingProperty()
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 }
 
 /** Action type aliases for {@link SwitchToFrameAction} */
-export const SwitchToFrameActionTypeAliases = ['switch-to-frame', 'switch-frame', 'frame'] as const;
+export const SwitchToFrameActionTypeAliases = [
+  'switch-to-frame',
+  'switch-frame',
+  'frame',
+] as const;
 
 /**
  * Switches to IFrame using a selector
@@ -54,6 +58,8 @@ export class SwitchToFrameAction extends IAction<SwitchToFrameActionProperties> 
     const element = await this.props.selector.getElement(state.currentDriver);
     await state.currentDriver.switchTo().frame(element);
 
-    this.logger.info(`Successfully changed focus to frame '${this.props.selector}'`);
+    this.logger.info(
+      `Successfully changed focus to frame '${this.props.selector}'`,
+    );
   }
 }

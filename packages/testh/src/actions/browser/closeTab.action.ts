@@ -10,8 +10,7 @@ import {
 /**
  * Properties for {@link CloseTabAction}
  */
-export class CloseTabActionProperties implements IActionProperties {
-}
+export class CloseTabActionProperties implements IActionProperties {}
 
 /** Action type aliases for {@link CloseTabAction} */
 export const CloseTabActionTypeAliases = ['close-tab'] as const;
@@ -21,17 +20,10 @@ export const CloseTabActionTypeAliases = ['close-tab'] as const;
  * @properties {@link CloseTabActionProperties}
  * @runnerType {@link CloseTabActionTypeAliases}
  */
-@Action(
-  CloseTabActionProperties,
-  'Close tab',
-  ...CloseTabActionTypeAliases,
-)
+@Action(CloseTabActionProperties, 'Close tab', ...CloseTabActionTypeAliases)
 export class CloseTabAction extends IAction<CloseTabActionProperties> {
   private readonly logger: ILogger;
-  constructor(
-    props: CloseTabActionProperties,
-    loggerFactory: ILoggerFactory,
-  ) {
+  constructor(props: CloseTabActionProperties, loggerFactory: ILoggerFactory) {
     super(props);
     this.logger = loggerFactory.get<CloseTabAction>(CloseTabAction);
   }

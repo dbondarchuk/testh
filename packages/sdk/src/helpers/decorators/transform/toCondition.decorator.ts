@@ -32,7 +32,7 @@ function toCondition(value: any): Condition | Condition[] {
         const results = await stepsRunner.runTestSteps(
           [value] as TestSteps,
           state,
-          (stepNumber) => `${baseStepNumber}-condition-${stepNumber}`,
+          (stepNumber) => `${baseStepNumber}.${stepNumber}`,
         );
 
         updateStepNumber(state.variables, baseStepNumber);

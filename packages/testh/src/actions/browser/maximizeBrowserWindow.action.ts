@@ -10,8 +10,8 @@ import {
 /**
  * Properties for {@link MaximizeBrowserWindowAction}
  */
-export class MaximizeBrowserWindowActionProperties implements IActionProperties {
-}
+export class MaximizeBrowserWindowActionProperties
+  implements IActionProperties {}
 
 /** Action type aliases for {@link MaximizeBrowserWindowAction} */
 export const MaximizeBrowserWindowActionTypeAliases = ['maximize'] as const;
@@ -33,7 +33,9 @@ export class MaximizeBrowserWindowAction extends IAction<MaximizeBrowserWindowAc
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<MaximizeBrowserWindowAction>(MaximizeBrowserWindowAction);
+    this.logger = loggerFactory.get<MaximizeBrowserWindowAction>(
+      MaximizeBrowserWindowAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {

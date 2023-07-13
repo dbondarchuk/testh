@@ -23,12 +23,14 @@ export interface IPostStepExecutionCallback {
    * @param stepNumber Current test step number
    * @param isSuccessful Was the step successful
    * @param errors List of errors if step has failed
+   * @param result Test step result
    */
   execute(
     step: TestStep,
     stepNumber: string | number,
     isSuccessful: boolean,
     errors?: Error[],
+    result?: any,
   ): Promise<void>;
 }
 

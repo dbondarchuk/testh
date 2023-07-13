@@ -101,7 +101,7 @@ export class State implements IState {
   public get drivers(): WebDriver[] {
     return this._drivers;
   }
-  
+
   /**
    * Gets web driver by index
    * @param index Index of the driver

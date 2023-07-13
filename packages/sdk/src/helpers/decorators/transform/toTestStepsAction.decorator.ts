@@ -42,7 +42,7 @@ export function ToTestStepsAction(): PropertyDecorator {
             const results = await stepsRunner.runTestSteps(
               value as TestSteps,
               state,
-              (stepNumber) => `${baseStepNumber}-run-${stepNumber}`,
+              (stepNumber) => `${baseStepNumber}.${stepNumber}`,
             );
 
             updateStepNumber(state.variables, baseStepNumber);

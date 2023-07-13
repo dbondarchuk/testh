@@ -7,8 +7,8 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link GetElementCssValueAction}
@@ -17,7 +17,7 @@ export class GetElementCssValueActionProperties implements IActionProperties {
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 
   /**
@@ -55,7 +55,9 @@ export class GetElementCssValueAction extends IAction<
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<GetElementCssValueAction>(GetElementCssValueAction);
+    this.logger = loggerFactory.get<GetElementCssValueAction>(
+      GetElementCssValueAction,
+    );
   }
 
   public async run(state: IState): Promise<string> {

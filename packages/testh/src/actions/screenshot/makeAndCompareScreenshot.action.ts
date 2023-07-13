@@ -11,9 +11,9 @@ import {
   ScreenshotSaverInjectionToken,
   SelectorOrElement,
   TestStep,
+  ToSelectorOrElement,
   UnknownOptionException,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 import * as looksSame from 'looks-same';
 import { MakeScreenshotAction, ScreenshotType } from './makeScreenshot.action';
 
@@ -45,7 +45,7 @@ export class MakeAndCompareScreenshotActionProperties
   /**
    * Element select if type is 'element'
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector?: SelectorOrElement;
 }
 

@@ -8,8 +8,8 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link GetElementSizeAction}
@@ -18,7 +18,7 @@ export class GetElementSizeActionProperties implements IActionProperties {
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   @BindingProperty()
   selector: SelectorOrElement;
 }
@@ -74,7 +74,7 @@ export class GetElementSizeAction extends IAction<
 
     const size: ElementSize = {
       width: rect.width,
-      height: rect.height
+      height: rect.height,
     };
 
     this.logger.info(

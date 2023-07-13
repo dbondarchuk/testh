@@ -30,7 +30,8 @@ export class GetPropertyFromObjectActionProperties
  */
 export const GetPropertyFromObjectActionTypeAliases = [
   'get-array-element',
-  'array-element'
+  'array-element',
+  'at',
 ] as const;
 
 /**
@@ -60,13 +61,14 @@ export class GetPropertyFromObjectAction extends IAction<
   }
 
   public async run(_: IState): Promise<any> {
-    const index = this.props.index >= 0 ? this.props.index : this.props.array.length + this.props.index;
+    const index =
+      this.props.index >= 0
+        ? this.props.index
+        : this.props.array.length + this.props.index;
 
     const value = this.props.array[index];
 
-    this.logger.info(
-      `Successfully got array element`,
-    );
+    this.logger.info(`Successfully got array element`);
 
     return value;
   }

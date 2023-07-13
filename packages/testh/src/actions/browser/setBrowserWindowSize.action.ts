@@ -46,20 +46,27 @@ export class SetBrowserWindowSizeAction extends IAction<SetBrowserWindowSizeActi
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<SetBrowserWindowSizeAction>(SetBrowserWindowSizeAction);
+    this.logger = loggerFactory.get<SetBrowserWindowSizeAction>(
+      SetBrowserWindowSizeAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {
     if (!this.props.width) {
       throw new PropertyIsRequiredException('width');
     }
-    
+
     if (!this.props.height) {
       throw new PropertyIsRequiredException('height');
     }
 
-    await state.currentDriver.manage().window().setSize(this.props.width, this.props.height);
+    await state.currentDriver
+      .manage()
+      .window()
+      .setSize(this.props.width, this.props.height);
 
-    this.logger.info(`Successfully resized browser window to ${this.props.width}x${this.props.height}`);
+    this.logger.info(
+      `Successfully resized browser window to ${this.props.width}x${this.props.height}`,
+    );
   }
 }

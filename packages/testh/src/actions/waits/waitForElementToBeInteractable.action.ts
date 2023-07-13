@@ -9,8 +9,8 @@ import {
   PropertyIsRequiredException,
   SelectorOrElement,
   ToNumber,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link WaitForElementToBeInteractableAction}
@@ -22,7 +22,7 @@ export class WaitForElementToBeInteractableActionProperties
    * Element selector
    */
   @BindingProperty()
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 
   /**

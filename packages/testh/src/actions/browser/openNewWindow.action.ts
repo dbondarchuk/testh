@@ -28,7 +28,10 @@ export const OpenNewWindowActionTypeWindow = 'open-window';
 export const OpenNewWindowActionTypeTab = 'open-tab';
 
 /** Action type aliases for {@link OpenNewWindowAction} */
-export const OpenNewWindowActionTypeAliases = [OpenNewWindowActionTypeWindow, OpenNewWindowActionTypeTab] as const;
+export const OpenNewWindowActionTypeAliases = [
+  OpenNewWindowActionTypeWindow,
+  OpenNewWindowActionTypeTab,
+] as const;
 
 /**
  * Opens a new window or tab and switches to it

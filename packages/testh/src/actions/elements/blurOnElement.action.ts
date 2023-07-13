@@ -8,8 +8,8 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 import { Key } from 'selenium-webdriver';
 
 /**
@@ -19,7 +19,7 @@ export class BlurOnElementActionProperties implements IActionProperties {
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   @BindingProperty()
   selector: SelectorOrElement;
 }
@@ -56,10 +56,9 @@ export class BlurOnElementAction extends IAction<BlurOnElementActionProperties> 
     this.logger.info(`Bluring on element ${selector}`);
 
     const element = await selector.getElement(state.currentDriver);
-    
+
     await element.sendKeys(Key.SHIFT);
     await state.currentDriver.executeScript('arguments[0].blur();', element);
-
 
     this.logger.info(`Successfully removed focus on element ${selector}`);
   }

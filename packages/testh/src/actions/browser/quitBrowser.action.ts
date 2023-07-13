@@ -10,8 +10,7 @@ import {
 /**
  * Properties for {@link QuitBrowserAction}
  */
-export class QuitBrowserActionProperties implements IActionProperties {
-}
+export class QuitBrowserActionProperties implements IActionProperties {}
 
 /** Action type aliases for {@link QuitBrowserAction} */
 export const QuitBrowserActionTypeAliases = ['quit'] as const;

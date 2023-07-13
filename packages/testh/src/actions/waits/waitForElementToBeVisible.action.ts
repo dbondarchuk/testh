@@ -1,5 +1,4 @@
 import { until } from 'selenium-webdriver';
-import { Type } from 'class-transformer';
 import {
   Action,
   BindingProperty,
@@ -11,6 +10,7 @@ import {
   PropertyIsRequiredException,
   SelectorOrElement,
   ToNumber,
+  ToSelectorOrElement,
 } from '@testh/sdk';
 
 /**
@@ -23,7 +23,7 @@ export class WaitForElementToBeVisibleActionProperties
    * Element selector
    */
   @BindingProperty()
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 
   /**

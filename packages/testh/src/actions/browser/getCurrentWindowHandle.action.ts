@@ -10,11 +10,14 @@ import {
 /**
  * Properties for {@link GetCurrentWindowHandleAction}
  */
-export class GetCurrentWindowHandleActionProperties implements IActionProperties {
-}
+export class GetCurrentWindowHandleActionProperties
+  implements IActionProperties {}
 
 /** Action type aliases for {@link GetCurrentWindowHandleAction} */
-export const GetCurrentWindowHandleActionTypeAliases = ['get-hanlde', 'handle'] as const;
+export const GetCurrentWindowHandleActionTypeAliases = [
+  'get-hanlde',
+  'handle',
+] as const;
 
 /**
  * Gets handle of the current window (tab) (i.e. title of the page showed in the tab)
@@ -27,14 +30,19 @@ export const GetCurrentWindowHandleActionTypeAliases = ['get-hanlde', 'handle'] 
   'Get window handle',
   ...GetCurrentWindowHandleActionTypeAliases,
 )
-export class GetCurrentWindowHandleAction extends IAction<GetCurrentWindowHandleActionProperties, string> {
+export class GetCurrentWindowHandleAction extends IAction<
+  GetCurrentWindowHandleActionProperties,
+  string
+> {
   private readonly logger: ILogger;
   constructor(
     props: GetCurrentWindowHandleActionProperties,
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<GetCurrentWindowHandleAction>(GetCurrentWindowHandleAction);
+    this.logger = loggerFactory.get<GetCurrentWindowHandleAction>(
+      GetCurrentWindowHandleAction,
+    );
   }
 
   public async run(state: IState): Promise<string> {

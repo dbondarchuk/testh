@@ -1,5 +1,4 @@
 import { until } from 'selenium-webdriver';
-import { Type } from 'class-transformer';
 import {
   Action,
   BindingProperty,
@@ -11,6 +10,7 @@ import {
   PropertyIsRequiredException,
   SelectorOrElement,
   ToNumber,
+  ToSelectorOrElement,
 } from '@testh/sdk';
 
 /**
@@ -23,12 +23,12 @@ export class WaitForElementToBePresentActionProperties
    * Element selector
    */
   @BindingProperty()
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 
   /**
    * Wait timeout in seconds
-   * @defaultValue 5
+   * @defaultValue `5`
    */
   @ToNumber()
   timeout: number;

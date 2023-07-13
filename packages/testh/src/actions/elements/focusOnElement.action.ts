@@ -8,8 +8,8 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 import { Key } from 'selenium-webdriver';
 
 /**
@@ -19,7 +19,7 @@ export class FocusOnElementActionProperties implements IActionProperties {
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   @BindingProperty()
   selector: SelectorOrElement;
 }
@@ -56,10 +56,9 @@ export class FocusOnElementAction extends IAction<FocusOnElementActionProperties
     this.logger.info(`Focusing on element ${selector}`);
 
     const element = await selector.getElement(state.currentDriver);
-    
+
     await element.sendKeys(Key.SHIFT);
     await state.currentDriver.executeScript('arguments[0].focus();', element);
-
 
     this.logger.info(`Successfully focused on element ${selector}`);
   }

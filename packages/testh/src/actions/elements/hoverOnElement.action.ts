@@ -8,8 +8,8 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link HoverOnElementAction}
@@ -18,7 +18,7 @@ export class HoverOnElementActionProperties implements IActionProperties {
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   @BindingProperty()
   selector: SelectorOrElement;
 }
@@ -55,10 +55,12 @@ export class HoverOnElementAction extends IAction<HoverOnElementActionProperties
     this.logger.info(`Hovering on element ${selector}`);
 
     const element = await selector.getElement(state.currentDriver);
-    await state.currentDriver.actions().move({
-      origin: element
-    }).perform();
-
+    await state.currentDriver
+      .actions()
+      .move({
+        origin: element,
+      })
+      .perform();
 
     this.logger.info(`Successfully hovered on element ${selector}`);
   }

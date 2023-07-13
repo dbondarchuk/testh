@@ -29,6 +29,7 @@ export const INDEX_VARIABLE = 'INDEX';
 
 /** Action type aliases for {@link ForEachArrayItemAction} */
 export const ForEachArrayItemActionTypeAliases = [
+  'for-each',
   'for-each-item',
   'for-each-array-item',
 ] as const;
@@ -39,13 +40,17 @@ export const ForEachArrayItemActionTypeAliases = [
  * @runnerType {@link ForEachArrayItemActionTypeAliases}
  * @variable {@link ITEM_VARIABLE} Item
  * @variable {@link INDEX_VARIABLE} Item zero-based index
+ * @returns {Array<any>} Array of last step results for each item
  */
 @Action(
   ForEachArrayItemActionProperties,
   'Do for each array item',
   ...ForEachArrayItemActionTypeAliases,
 )
-export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProperties> {
+export class ForEachArrayItemAction extends IAction<
+  ForEachArrayItemActionProperties,
+  any[]
+> {
   private readonly logger: ILogger;
   constructor(
     props: ForEachArrayItemActionProperties,
@@ -57,7 +62,7 @@ export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProper
     );
   }
 
-  public async run(state: IState): Promise<void> {
+  public async run(state: IState): Promise<any[]> {
     if (!this.props.steps) {
       throw new PropertyIsRequiredException('steps');
     }
@@ -69,17 +74,20 @@ export class ForEachArrayItemAction extends IAction<ForEachArrayItemActionProper
     const basicStepNumber = getCurrentStepNumber(state.variables);
 
     let index = 0;
+    const results = [];
     for (const item of this.props.array) {
       state.variables.put(ITEM_VARIABLE, item);
       state.variables.put(INDEX_VARIABLE, index);
 
       updateStepNumber(state.variables, `${basicStepNumber}.${index}`);
 
-      await this.props.steps.execute(state);
+      const result = await this.props.steps.execute(state);
+      results.push(result[result.length - 1]);
 
       index++;
     }
 
     this.logger.info(`Succesfully run all steps for all items`);
+    return results;
   }
 }

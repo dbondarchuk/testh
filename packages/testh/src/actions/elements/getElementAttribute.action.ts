@@ -7,8 +7,8 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link GetElementAttributeAction}
@@ -17,7 +17,7 @@ export class GetElementAttributeActionProperties implements IActionProperties {
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 
   /**
@@ -54,7 +54,9 @@ export class GetElementAttributeAction extends IAction<
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<GetElementAttributeAction>(GetElementAttributeAction);
+    this.logger = loggerFactory.get<GetElementAttributeAction>(
+      GetElementAttributeAction,
+    );
   }
 
   public async run(state: IState): Promise<string> {

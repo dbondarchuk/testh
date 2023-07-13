@@ -10,11 +10,13 @@ import {
 /**
  * Properties for {@link SwitchToParentFrameAction}
  */
-export class SwitchToParentFrameActionProperties implements IActionProperties {
-}
+export class SwitchToParentFrameActionProperties implements IActionProperties {}
 
 /** Action type aliases for {@link SwitchToParentFrameAction} */
-export const SwitchToParentFrameActionTypeAliases = ['switch-to-parent-frame', 'parent-frame'] as const;
+export const SwitchToParentFrameActionTypeAliases = [
+  'switch-to-parent-frame',
+  'parent-frame',
+] as const;
 
 /**
  * Switches to the parent frame of the currently selected frame
@@ -33,7 +35,9 @@ export class SwitchToParentFrameAction extends IAction<SwitchToParentFrameAction
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<SwitchToParentFrameAction>(SwitchToParentFrameAction);
+    this.logger = loggerFactory.get<SwitchToParentFrameAction>(
+      SwitchToParentFrameAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {

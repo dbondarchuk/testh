@@ -11,9 +11,7 @@ import {
 /**
  * Properties for {@link GetArrayLengthAction}
  */
-export class GetArrayLengthActionProperties
-  implements IActionProperties
-{
+export class GetArrayLengthActionProperties implements IActionProperties {
   /**
    * Array to get it's length
    * @defaultValue `[]` Empty array
@@ -27,7 +25,7 @@ export class GetArrayLengthActionProperties
  */
 export const GetArrayLengthActionTypeAliases = [
   'get-array-length',
-  'array-length'
+  'array-length',
 ] as const;
 
 /**
@@ -51,17 +49,13 @@ export class GetArrayLengthAction extends IAction<
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<GetArrayLengthAction>(
-      GetArrayLengthAction,
-    );
+    this.logger = loggerFactory.get<GetArrayLengthAction>(GetArrayLengthAction);
   }
 
   public async run(_: IState): Promise<number> {
     const value = this.props.array.length;
 
-    this.logger.info(
-      `Successfully got array length: ${value}`,
-    );
+    this.logger.info(`Successfully got array length: ${value}`);
 
     return value;
   }

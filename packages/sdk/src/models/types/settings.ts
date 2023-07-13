@@ -13,7 +13,7 @@ export type Settings = {
        * @defaultValue `true`
        */
       enabled?: boolean;
-      
+
       /** Overriden extension priority */
       priority?: number;
     };

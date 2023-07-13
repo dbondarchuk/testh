@@ -39,16 +39,17 @@ export class DollarSignPropertyEvaluator extends IPropertyEvaluator {
     recursive: boolean,
     type?: Constructor<any>,
   ): Promise<void> {
-    if (property.key.startsWith('$') && typeof property.value === 'string') {
-      property.key = property.key.substring(1);
-      property.value = await this.propertiesEvaluator.evaluate(
-        property.value,
-        state.variables.variables,
-      );
-
-      await super.first(property, state, recursive, type);
-    } else {
+    if (!property.key.startsWith('$') || typeof property.value !== 'string') {
       await super.next(property, state, recursive, type);
+      return;
     }
+
+    property.key = property.key.substring(1);
+    property.value = await this.propertiesEvaluator.evaluate(
+      property.value,
+      state.variables.variables,
+    );
+
+    await super.first(property, state, recursive, type);
   }
 }

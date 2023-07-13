@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import './helpers/selenium/webDriverProxy';
+import './helpers/class-transformer/plainToClass';
 
 import {
   ActionContainerInjectionToken,

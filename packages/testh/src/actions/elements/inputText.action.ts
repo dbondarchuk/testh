@@ -8,8 +8,8 @@ import {
   PropertyIsRequiredException,
   SelectorOrElement,
   ToBoolean,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link InputTextAction}
@@ -18,7 +18,7 @@ export class InputTextActionProperties implements IActionProperties {
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 
   /**

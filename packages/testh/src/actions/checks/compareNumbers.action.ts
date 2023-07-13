@@ -50,19 +50,20 @@ export class CompareNumbersAction extends IAction<
   }
 
   public async run(_: IState): Promise<boolean> {
-    const compare = this.props.compare;
-    if (!compare) {
+    if (!this.props.compare) {
       throw new PropertyIsRequiredException('compare');
     }
 
-    this.logger.info(`Comparing number ${compare} to '${this.props.to}'`);
+    this.logger.info(
+      `Comparing number ${this.props.compare} to '${this.props.to}'`,
+    );
 
     const result = this.props.compare.compare(this.props.to);
 
     this.logger.info(
-      `Value '${compare}' was${!result ? ' not' : ''} successfully matched ${
-        this.props.compare
-      }`,
+      `Value '${this.props.compare}' was${
+        !result ? ' not' : ''
+      } successfully matched ${this.props.to}`,
     );
 
     return result;

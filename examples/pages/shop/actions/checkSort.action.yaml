@@ -15,38 +15,19 @@
   values:
     variable: prices
     value: []
-- name: Get price for each item
-  type: for-each-element
-  values:
-    selector:
-      type: class
-      value: inventory_item_price
-    steps:
-      - name: Get price
-        type: set-variable
-        values:
-          variable: price
-          #$value: (await ELEMENT.getText()).trim().substr(1)
-          (value):
-            name: Get price text
-            type: get-text
-            values:
-              selector:
-                $element: ELEMENT            
-      - name: Create price array
-        type: set-variable
-        values:
-          variable: prices
-          (value):
-            name: Add price to array
-            type: add-to-array
-            values:
-              $values: "[parseFloat(price.trim().substr(1))]"
-              $array: prices
 - name: Check prices are sorted from low to high
   type: for-each-item
   values:
-    $array: prices
+    (array):
+      name: Get price for each item
+      type: for-each-element
+      values:
+        selector:
+          type: class
+          value: inventory_item_price
+        steps:
+          - get-text:
+              $element: ELEMENT
     steps:
       - if:
           $condition: INDEX > 0

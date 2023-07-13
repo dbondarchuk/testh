@@ -24,7 +24,7 @@
       "cwd": "${workspaceFolder}",
       "program": "${workspaceFolder}/packages/testh/build/src/main.js",
       "sourceMaps": true,
-      "args": ["-s", "${workspaceFolder}/examples/settings.yaml", "${workspaceFolder}/examples/example.yaml"],
+      "args": ["-s", "${workspaceFolder}/examples/settings.yaml", "${workspaceFolder}/examples/http.file.yaml"],
       "outFiles": ["${workspaceFolder}/packages/**/build/**/*.js"]
     }
   ]

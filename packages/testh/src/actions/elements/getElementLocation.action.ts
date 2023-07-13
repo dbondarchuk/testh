@@ -8,8 +8,8 @@ import {
   IState,
   PropertyIsRequiredException,
   SelectorOrElement,
+  ToSelectorOrElement,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link GetElementLocationAction}
@@ -18,7 +18,7 @@ export class GetElementLocationActionProperties implements IActionProperties {
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   @BindingProperty()
   selector: SelectorOrElement;
 }
@@ -35,7 +35,7 @@ export interface ElementLocation {
   /** Location of the top left corner on x-axis */
   x: number;
 
-    /** Location of the top left corner on y-axis */
+  /** Location of the top left corner on y-axis */
   y: number;
 }
 
@@ -60,7 +60,9 @@ export class GetElementLocationAction extends IAction<
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<GetElementLocationAction>(GetElementLocationAction);
+    this.logger = loggerFactory.get<GetElementLocationAction>(
+      GetElementLocationAction,
+    );
   }
 
   public async run(state: IState): Promise<ElementLocation> {
@@ -74,7 +76,7 @@ export class GetElementLocationAction extends IAction<
 
     const size: ElementLocation = {
       x: rect.x,
-      y: rect.y
+      y: rect.y,
     };
 
     this.logger.info(

@@ -9,10 +9,10 @@ import {
   PropertyIsRequiredException,
   SelectorOrElements,
   TestStepsAction,
+  ToSelectorOrElements,
   ToTestStepsAction,
   updateStepNumber,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link ForEachElementAction}
@@ -21,7 +21,7 @@ export class ForEachElementActionProperties implements IActionProperties {
   /**
    * Elements selector
    */
-  @Type(() => SelectorOrElements)
+  @ToSelectorOrElements()
   selector: SelectorOrElements;
 
   /** Steps to run */
@@ -44,13 +44,17 @@ export const ForEachElementActionTypeAliases = ['for-each-element'] as const;
  * @runnerType {@link ForEachElementActionTypeAliases}
  * @variable {@link ELEMENT_VARIABLE} Where current element is stored
  * @variable {@link ELEMENT_INDEX_VARIABLE} Where the index of current element is stored
+ * @returns {Array<any>} Array of last step results for each item
  */
 @Action(
   ForEachElementActionProperties,
   'Do for each element',
   ...ForEachElementActionTypeAliases,
 )
-export class ForEachElementAction extends IAction<ForEachElementActionProperties> {
+export class ForEachElementAction extends IAction<
+  ForEachElementActionProperties,
+  any[]
+> {
   private readonly logger: ILogger;
   constructor(
     props: ForEachElementActionProperties,
@@ -60,7 +64,7 @@ export class ForEachElementAction extends IAction<ForEachElementActionProperties
     this.logger = loggerFactory.get<ForEachElementAction>(ForEachElementAction);
   }
 
-  public async run(state: IState): Promise<void> {
+  public async run(state: IState): Promise<any[]> {
     const selector = this.props.selector;
     if (!selector) {
       throw new PropertyIsRequiredException('selector');
@@ -78,16 +82,19 @@ export class ForEachElementAction extends IAction<ForEachElementActionProperties
     );
 
     let elementNumber = 0;
+    const results = [];
     for (const element of elements) {
       state.variables.put(ELEMENT_VARIABLE, element);
       state.variables.put(ELEMENT_INDEX_VARIABLE, elementNumber);
 
       updateStepNumber(state.variables, `${basicStepNumber}.${elementNumber}`);
-      await this.props.steps.execute(state);
+      const result = await this.props.steps.execute(state);
+      results.push(result[result.length - 1]);
 
       elementNumber++;
     }
 
     this.logger.info(`Successfully run all steps for all elements`);
+    return results;
   }
 }

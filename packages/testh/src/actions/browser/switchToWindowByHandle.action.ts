@@ -12,7 +12,9 @@ import {
 /**
  * Properties for {@link SwitchToWindowByHandleAction}
  */
-export class SwitchToWindowByHandleActionProperties implements IActionProperties {
+export class SwitchToWindowByHandleActionProperties
+  implements IActionProperties
+{
   /**
    * Handle of the window to switch to
    */
@@ -40,7 +42,9 @@ export class SwitchToWindowByHandleAction extends IAction<SwitchToWindowByHandle
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<SwitchToWindowByHandleAction>(SwitchToWindowByHandleAction);
+    this.logger = loggerFactory.get<SwitchToWindowByHandleAction>(
+      SwitchToWindowByHandleAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {
@@ -50,6 +54,8 @@ export class SwitchToWindowByHandleAction extends IAction<SwitchToWindowByHandle
 
     await state.currentDriver.switchTo().window(this.props.handle);
 
-    this.logger.info(`Successfully changed window focus to '${this.props.handle}' window`);
+    this.logger.info(
+      `Successfully changed window focus to '${this.props.handle}' window`,
+    );
   }
 }

@@ -13,7 +13,9 @@ import {
 /**
  * Properties for {@link SwitchToBrowserByHandleAction}
  */
-export class SwitchToBrowserByHandleActionProperties implements IActionProperties {
+export class SwitchToBrowserByHandleActionProperties
+  implements IActionProperties
+{
   /**
    * Handle of the window to search for the browser to switch to
    */
@@ -22,7 +24,9 @@ export class SwitchToBrowserByHandleActionProperties implements IActionPropertie
 }
 
 /** Action type aliases for {@link SwitchToBrowserByHandleAction} */
-export const SwitchToBrowserByHandleActionTypeAliases = ['switch-browser-by-handle'] as const;
+export const SwitchToBrowserByHandleActionTypeAliases = [
+  'switch-browser-by-handle',
+] as const;
 
 /**
  * Switches to another opened browser session (i.e using Open Browser action) using the provided handle of the window/tab in that session
@@ -43,7 +47,9 @@ export class SwitchToBrowserByHandleAction extends IAction<SwitchToBrowserByHand
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<SwitchToBrowserByHandleAction>(SwitchToBrowserByHandleAction);
+    this.logger = loggerFactory.get<SwitchToBrowserByHandleAction>(
+      SwitchToBrowserByHandleAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {
@@ -64,14 +70,20 @@ export class SwitchToBrowserByHandleAction extends IAction<SwitchToBrowserByHand
     }
 
     if (indexToUse < 0) {
-      throw new InvalidOperationException(`Can't find a browser session with any window with handle ${this.props.handle}`);
+      throw new InvalidOperationException(
+        `Can't find a browser session with any window with handle ${this.props.handle}`,
+      );
     }
-    
+
     const driver = state.switchToDriver(indexToUse);
     const capabilities = await driver.getCapabilities();
 
-    await state.currentDriver.switchTo().window(this.props.handle)
+    await state.currentDriver.switchTo().window(this.props.handle);
 
-    this.logger.info(`Successfully changed current browser to '${capabilities.getBrowserName()} v${capabilities.getBrowserVersion()}' with handle '${this.props.handle}'`);
+    this.logger.info(
+      `Successfully changed current browser to '${capabilities.getBrowserName()} v${capabilities.getBrowserVersion()}' with handle '${
+        this.props.handle
+      }'`,
+    );
   }
 }

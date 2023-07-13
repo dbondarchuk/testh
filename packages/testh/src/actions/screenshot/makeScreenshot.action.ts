@@ -12,9 +12,9 @@ import {
   ScreenshotSaverInjectionToken,
   SelectorOrElement,
   TestStep,
+  ToSelectorOrElement,
   UnknownOptionException,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 import joinImages from 'join-images';
 import { WebDriver } from 'selenium-webdriver';
 
@@ -46,7 +46,7 @@ export class MakeScreenshotActionProperties implements IActionProperties {
   /**
    * Element select if type is 'element'
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector?: SelectorOrElement;
 }
 

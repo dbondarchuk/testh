@@ -30,7 +30,7 @@ export class GetPropertyFromObjectActionProperties
  */
 export const GetPropertyFromObjectActionTypeAliases = [
   'get-property',
-  'get'
+  'get',
 ] as const;
 
 /**
@@ -66,9 +66,7 @@ export class GetPropertyFromObjectAction extends IAction<
 
     const value = this.props.object[this.props.property];
 
-    this.logger.info(
-      `Successfully got property value`,
-    );
+    this.logger.info(`Successfully got property value`);
 
     return value;
   }

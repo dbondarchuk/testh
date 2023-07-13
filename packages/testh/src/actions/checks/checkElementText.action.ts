@@ -9,13 +9,14 @@ import {
   PropertyIsRequiredException,
   SelectorOrElement,
   StringComparison,
+  ToSelectorOrElement,
 } from '@testh/sdk';
 import { Type } from 'class-transformer';
 
 /** Properties for {@link CheckElementTextAction} */
 export class CheckElementTextActionProperties implements IActionProperties {
   /** Element selector */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 
   /** Comparison value */

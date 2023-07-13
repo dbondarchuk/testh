@@ -10,11 +10,14 @@ import {
 /**
  * Properties for {@link SwitchToDefaultContentAction}
  */
-export class SwitchToDefaultContentActionProperties implements IActionProperties {
-}
+export class SwitchToDefaultContentActionProperties
+  implements IActionProperties {}
 
 /** Action type aliases for {@link SwitchToDefaultContentAction} */
-export const SwitchToDefaultContentActionTypeAliases = ['switch-to-default', 'default-frame'] as const;
+export const SwitchToDefaultContentActionTypeAliases = [
+  'switch-to-default',
+  'default-frame',
+] as const;
 
 /**
  * Switches to the first frame on the page
@@ -33,7 +36,9 @@ export class SwitchToDefaultContentAction extends IAction<SwitchToDefaultContent
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<SwitchToDefaultContentAction>(SwitchToDefaultContentAction);
+    this.logger = loggerFactory.get<SwitchToDefaultContentAction>(
+      SwitchToDefaultContentAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {

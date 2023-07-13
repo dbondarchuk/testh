@@ -24,7 +24,7 @@ export class SetVariableActionProperties implements IActionProperties {
 }
 
 /** Action type aliases for {@link SetVariableAction} */
-export const SetVariableActionTypeAliases = ['set-variable'] as const;
+export const SetVariableActionTypeAliases = ['set-variable', 'set'] as const;
 
 /**
  * Sets a value into a variable

@@ -11,7 +11,9 @@ import {
 /**
  * Properties for {@link SwitchToBrowserByIndexAction}
  */
-export class SwitchToBrowserByIndexActionProperties implements IActionProperties {
+export class SwitchToBrowserByIndexActionProperties
+  implements IActionProperties
+{
   /**
    * Zero-based index of the all opened browser during the current test execution
    * If the value is negative, then indexing will start from the end. I.E. value of `-1` will switch to the last opened browser
@@ -21,7 +23,9 @@ export class SwitchToBrowserByIndexActionProperties implements IActionProperties
 }
 
 /** Action type aliases for {@link SwitchToBrowserByIndexAction} */
-export const SwitchToBrowserByIndexActionTypeAliases = ['switch-browser'] as const;
+export const SwitchToBrowserByIndexActionTypeAliases = [
+  'switch-browser',
+] as const;
 
 /**
  * Switches to another opened browser session (i.e using Open Browser action) using zero-based index
@@ -40,17 +44,22 @@ export class SwitchToBrowserByIndexAction extends IAction<SwitchToBrowserByIndex
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<SwitchToBrowserByIndexAction>(SwitchToBrowserByIndexAction);
+    this.logger = loggerFactory.get<SwitchToBrowserByIndexAction>(
+      SwitchToBrowserByIndexAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {
     const count = state.driversCount;
-    const index = this.props.index >= 0? this.props.index : count + this.props.index; // using + sign as index will already contain minus sign
+    const index =
+      this.props.index >= 0 ? this.props.index : count + this.props.index; // using + sign as index will already contain minus sign
 
     const driver = state.switchToDriver(index);
     const capabilities = await driver.getCapabilities();
     const handle = await driver.getWindowHandle();
 
-    this.logger.info(`Successfully changed current browser to '${capabilities.getBrowserName()} v${capabilities.getBrowserVersion()}' with handle '${handle}'`);
+    this.logger.info(
+      `Successfully changed current browser to '${capabilities.getBrowserName()} v${capabilities.getBrowserVersion()}' with handle '${handle}'`,
+    );
   }
 }

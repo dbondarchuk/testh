@@ -74,6 +74,8 @@ export class StepsRunner implements IStepsRunner {
       let isStepSuccessul = true;
       let stepErrors = [];
 
+      let result: any;
+
       try {
         if (!step.runOnFailure && isFailed) continue;
 
@@ -142,7 +144,7 @@ export class StepsRunner implements IStepsRunner {
         this.logger.debug(`Running action ${actionType.ctor.name}`);
 
         const runner = new actionType.ctor(props, this.loggerFactory);
-        const result = await runner.run(state, step);
+        result = await runner.run(state, step);
         results.push(result);
 
         this.logger.debug(`Step has completed successfully`);
@@ -167,6 +169,7 @@ export class StepsRunner implements IStepsRunner {
             currentStepNumber,
             isStepSuccessul,
             stepErrors,
+            result,
           );
         }
       }

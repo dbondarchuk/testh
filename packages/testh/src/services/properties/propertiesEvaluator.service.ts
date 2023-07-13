@@ -11,7 +11,8 @@ import {
   WrapperWithVariables,
 } from '@testh/sdk';
 
-const isPlainObject = (value: any): boolean => value?.constructor === Object;
+export const isPlainObject = (value: any): boolean =>
+  value?.constructor === Object;
 
 /** Default properties evaluator */
 @Service(PropertiesEvaluatorInjectionToken)
@@ -128,19 +129,20 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
                 type && hasSkipEvaluateMetadata(key, type);
               if (hasSkipMetadata) {
                 newValue[key] = obj[key];
-              } else {
-                const isRecursive =
-                  recursive && (!type || !hasNonRecursiveMetadata(key, type));
-                const evaluated = await this.evaluateProperty(
-                  obj[key],
-                  key,
-                  state,
-                  isRecursive,
-                  type,
-                );
-
-                newValue[evaluated.key] = evaluated.value;
+                continue;
               }
+
+              const isRecursive =
+                recursive && (!type || !hasNonRecursiveMetadata(key, type));
+              const evaluated = await this.evaluateProperty(
+                obj[key],
+                key,
+                state,
+                isRecursive,
+                type,
+              );
+
+              newValue[evaluated.key] = evaluated.value;
             }
           } else {
             newValue = obj;

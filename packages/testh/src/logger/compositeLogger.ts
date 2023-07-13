@@ -66,7 +66,8 @@ export class CompositeLogger implements ILogger {
   format(message: string): string {
     const formatters = resolveAll<ILogFormatter>(LogFormatterInjectionToken);
 
-    for (const formatter of formatters) {
+    // Highest priority should format first
+    for (const formatter of formatters.reverse()) {
       message = formatter.format(message, this.type);
     }
 

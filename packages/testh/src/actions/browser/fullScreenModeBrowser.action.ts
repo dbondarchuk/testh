@@ -10,8 +10,8 @@ import {
 /**
  * Properties for {@link FullScreenModeBrowserAction}
  */
-export class FullScreenModeBrowserActionProperties implements IActionProperties {
-}
+export class FullScreenModeBrowserActionProperties
+  implements IActionProperties {}
 
 /** Action type aliases for {@link FullScreenModeBrowserAction} */
 export const FullScreenModeBrowserActionTypeAliases = ['fullscreen'] as const;
@@ -33,7 +33,9 @@ export class FullScreenModeBrowserAction extends IAction<FullScreenModeBrowserAc
     loggerFactory: ILoggerFactory,
   ) {
     super(props);
-    this.logger = loggerFactory.get<FullScreenModeBrowserAction>(FullScreenModeBrowserAction);
+    this.logger = loggerFactory.get<FullScreenModeBrowserAction>(
+      FullScreenModeBrowserAction,
+    );
   }
 
   public async run(state: IState): Promise<void> {

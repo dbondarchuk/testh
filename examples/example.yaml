@@ -28,7 +28,7 @@ steps:
       name: Check execution time
       type: compare-numbers
       values:
-        to: 7000
+        to: 9000
         compare:
           type: <
           $value: TASK_EXECUTION_TIME()

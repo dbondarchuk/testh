@@ -8,9 +8,9 @@ import {
   PropertyIsRequiredException,
   SelectorOrElement,
   ToNumber,
+  ToSelectorOrElement,
   Waits,
 } from '@testh/sdk';
-import { Type } from 'class-transformer';
 
 /**
  * Properties for {@link WaitForElementToBeNotPresentAction}
@@ -21,7 +21,7 @@ export class WaitForElementToBeNotPresentActionProperties
   /**
    * Element selector
    */
-  @Type(() => SelectorOrElement)
+  @ToSelectorOrElement()
   selector: SelectorOrElement;
 
   /**
