@@ -1,0 +1,21 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "plugin": ["typedoc-plugin-markdown"],
+  "skipErrorChecking": true,
+  "cleanOutputDir": true,
+  "exclude": [
+    "**/src/runners/runners.ts",
+    "**/src/**/index.ts",
+    "**/src/test/*",
+    "**/*.test.ts",
+    "**/__tests__/*",
+    "**/__mocks__/*",
+    "**/node_modules/**"
+  ],
+  "out": "docs",
+  "includeVersion": true,
+  "theme": "markdown",
+  "name": "Testh",
+  "entryPoints": ["packages/*"],
+  "entryPointStrategy": "packages"
+}

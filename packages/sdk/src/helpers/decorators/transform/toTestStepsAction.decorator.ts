@@ -15,6 +15,37 @@ import {
 import { SkipEvaluate } from '../evaluate/skipEvaluate.decorator';
 
 /**
+ * Transforms Test Steps into {@link TestStepsAction}
+ * @param value TestSteps
+ * @returns `TestStepsAction` Test steps as action
+ */
+export const toTestStepsAction = (value: TestSteps): TestStepsAction => {
+  if (!Array.isArray(value)) {
+    throw new InvalidOperationException(
+      "Can't convert non-array value into test steps",
+    );
+  }
+
+  return {
+    length: value.length,
+    execute: async (state: IState): Promise<any[]> => {
+      const baseStepNumber = getCurrentStepNumber(state.variables);
+      const stepsRunner = resolve<IStepsRunner>(StepsRunnerInjectionToken);
+
+      const results = await stepsRunner.runTestSteps(
+        value as TestSteps,
+        state,
+        (stepNumber) => `${baseStepNumber}.${stepNumber}`,
+      );
+
+      updateStepNumber(state.variables, baseStepNumber);
+
+      return results;
+    },
+  } as TestStepsAction;
+};
+
+/**
  * Decorator to transform test steps into actionable items
  * @returns Transformed object
  */
@@ -24,32 +55,11 @@ export function ToTestStepsAction(): PropertyDecorator {
 
     Transform((params): TestStepsAction | any => {
       if (params.type === TransformationType.PLAIN_TO_CLASS) {
-        const value = params.obj[params.key] as TestSteps;
-        if (!Array.isArray(value)) {
-          throw new InvalidOperationException(
-            "Can't convert non-array value into test steps",
-          );
-        }
+        const obj = params.obj[params.key];
+        if (obj?.execute) return obj;
+        const value = obj as TestSteps;
 
-        return {
-          length: value.length,
-          execute: async (state: IState): Promise<any[]> => {
-            const baseStepNumber = getCurrentStepNumber(state.variables);
-            const stepsRunner = resolve<IStepsRunner>(
-              StepsRunnerInjectionToken,
-            );
-
-            const results = await stepsRunner.runTestSteps(
-              value as TestSteps,
-              state,
-              (stepNumber) => `${baseStepNumber}.${stepNumber}`,
-            );
-
-            updateStepNumber(state.variables, baseStepNumber);
-
-            return results;
-          },
-        } as TestStepsAction;
+        return toTestStepsAction(value);
       }
 
       if (params.type === TransformationType.CLASS_TO_PLAIN) {

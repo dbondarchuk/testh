@@ -32,7 +32,7 @@ export const GetArrayLengthActionTypeAliases = [
  * Gets array length
  * @properties {@link GetArrayLengthActionProperties}
  * @runnerType {@link GetArrayLengthActionTypeAliases}
- * @returns {number} Array length
+ * @result `number` Array length
  */
 @Action(
   GetArrayLengthActionProperties,

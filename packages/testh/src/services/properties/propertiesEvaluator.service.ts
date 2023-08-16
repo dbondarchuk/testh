@@ -4,10 +4,10 @@ import {
   hasNonRecursiveMetadata,
   hasSkipEvaluateMetadata,
   IPropertiesEvaluator,
-  IState,
   KeyValue,
   PropertiesEvaluatorInjectionToken,
   Service,
+  Variables,
   WrapperWithVariables,
 } from '@testh/sdk';
 
@@ -33,10 +33,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
   }
 
   /** @inheritdoc */
-  public evaluate(
-    code: string,
-    context: Record<string, any> = {},
-  ): Promise<any> {
+  public evaluate(code: string, context: Variables = {}): Promise<any> {
     return function evaluateEval(): any {
       const argsStr = Object.keys(context)
         .map((key) => `${key} = this.${key}`)
@@ -51,7 +48,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
   /** @inheritdoc */
   public async replaceVariables(
     value: string,
-    state: IState,
+    variables: Variables,
     recursive = true,
   ): Promise<string | any | undefined> {
     if (!value) return undefined;
@@ -67,11 +64,11 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
       async (match, group) => {
         let result = await this.evaluate(
           group.toString().replaceAll('\\$', '\\\\\\$'),
-          state.variables.variables,
+          variables,
         );
 
         if (recursive) {
-          result = await this.evaluateProperties(result, state);
+          result = await this.evaluateProperties(result, variables);
         }
 
         if (match === value) {
@@ -89,16 +86,16 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
   /** @inheritdoc */
   public async evaluateProperties(
     obj: any,
-    state: IState,
+    variables: Variables,
     type?: Constructor<any>,
     recursive = true,
   ): Promise<any> {
-    if (!state.variables) return obj;
+    if (!variables) return obj;
     let newValue: any;
 
     switch (typeof obj) {
       case 'string':
-        newValue = await this.replaceVariables(obj, state, recursive);
+        newValue = await this.replaceVariables(obj, variables, recursive);
         break;
 
       case 'object':
@@ -118,7 +115,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
 
           for (const item of obj as any[]) {
             newValue.push(
-              await this.evaluateProperties(item, state, type, recursive),
+              await this.evaluateProperties(item, variables, type, recursive),
             );
           }
         } else {
@@ -137,7 +134,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
               const evaluated = await this.evaluateProperty(
                 obj[key],
                 key,
-                state,
+                variables,
                 isRecursive,
                 type,
               );
@@ -153,6 +150,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
 
       case 'number':
       case 'boolean':
+      case 'function':
       default:
         newValue = obj;
         break;
@@ -164,7 +162,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
   private async evaluateProperty(
     value: any,
     key: string,
-    state: IState,
+    variables: Variables,
     recursive: boolean,
     type?: Constructor<any>,
   ): Promise<KeyValue> {
@@ -175,7 +173,7 @@ export class PropertiesEvaluator implements IPropertiesEvaluator {
 
     const evaluator = getPropertyEvaluators();
 
-    await evaluator.evaluate(result, state, recursive, type);
+    await evaluator.evaluate(result, variables, recursive, type);
 
     return result;
   }

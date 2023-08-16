@@ -12,14 +12,13 @@ import {
   PropertiesEvaluatorInjectionToken,
   Service,
   TestStep,
-  UnknownOptionException,
 } from '@testh/sdk';
 import { inject } from 'tsyringe';
 
 import 'reflect-metadata';
 
 @Service(PreStepExecutionCallbackInjectionToken)
-export class ShortcutResolvePreStepCallback
+export class ShorthandResolvePreStepCallback
   implements IPreStepExecutionCallback
 {
   private readonly logger: ILogger;
@@ -31,8 +30,8 @@ export class ShortcutResolvePreStepCallback
     protected readonly propertiesEvaluator: IPropertiesEvaluator,
     @inject(LoggerFactoryInjectionToken) loggerFactory: ILoggerFactory,
   ) {
-    this.logger = loggerFactory.get<ShortcutResolvePreStepCallback>(
-      ShortcutResolvePreStepCallback,
+    this.logger = loggerFactory.get<ShorthandResolvePreStepCallback>(
+      ShorthandResolvePreStepCallback,
     );
   }
 
@@ -43,33 +42,33 @@ export class ShortcutResolvePreStepCallback
 
     const originalStep = step;
     const originalName = Object.keys(originalStep)[0];
-    let shortcutName = originalName;
+    let shorthandName = originalName;
     let isMultiple = false;
-    if (shortcutName.startsWith('?')) {
+    if (shorthandName.startsWith('?')) {
       isMultiple = true;
-      shortcutName = shortcutName.substring(1);
+      shorthandName = shorthandName.substring(1);
     } else {
-      shortcutName = getPropertyEvaluators().parseKey(shortcutName);
+      shorthandName = getPropertyEvaluators().parseKey(shorthandName);
     }
 
     const actions = this.actionContainer.get();
 
-    const action = actions[shortcutName];
-    if (!action) {
-      throw new UnknownOptionException(
-        `Can't find a runner for shortcut '${shortcutName}'.`,
-      );
-    }
+    const action = actions[shorthandName];
+    // if (!action) {
+    //   throw new UnknownOptionException(
+    //     `Can't find a runner for shorthand '${shorthandName}'.`,
+    //   );
+    // }
 
-    this.logger.debug(`Found a shortcut for '${shortcutName}'`);
+    this.logger.debug(`Found a shorthand for '${shorthandName}'`);
 
     step = {
-      type: shortcutName,
-      name: action.defaultStepName,
+      type: shorthandName,
+      name: action?.defaultStepName,
       values: {},
     };
 
-    if (!isMultiple) {
+    if (action && !isMultiple) {
       const bindingProperty = Reflect.getMetadata(
         BindingPropertyMetadataKey,
         action.propertiesType,
@@ -80,7 +79,7 @@ export class ShortcutResolvePreStepCallback
         );
 
         const newPropertyKey = originalName.replaceAll(
-          shortcutName,
+          shorthandName,
           bindingProperty,
         );
 

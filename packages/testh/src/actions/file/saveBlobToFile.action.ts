@@ -5,8 +5,9 @@ import {
   ILogger,
   ILoggerFactory,
   PropertyIsRequiredException,
-  SkipEvaluate,
   InvalidOperationException,
+  Safe,
+  ToBoolean,
 } from '@testh/sdk';
 
 import * as fs from 'fs';
@@ -24,13 +25,13 @@ export class SaveBlobToFileProperties implements IActionProperties {
   /**
    * Blob to save
    */
-  @SkipEvaluate()
-  blob: Blob;
+  blob: Safe<Blob>;
 
   /**
    * Indicates whether to overwrite file if it alread exists
    * @default true
    */
+  @ToBoolean()
   overwrite?: boolean;
 }
 
@@ -46,7 +47,7 @@ export const SaveBlobToFileActionTypeAliases = [
  * Is useful for downloading files via HTTP
  * @properties {@link SaveBlobToFileProperties}
  * @runnerType {@link SaveBlobToFileActionTypeAliases}
- * @throws {InvalidOperationException} When file exists and not allowed to overwrite
+ * @error {@link InvalidOperationException} When file exists and not allowed to overwrite
  */
 @Action(
   SaveBlobToFileProperties,
@@ -77,7 +78,7 @@ export class SaveBlobToFileAction extends IAction<SaveBlobToFileProperties> {
       throw new InvalidOperationException(`Path '${path}' already exists`);
     }
 
-    await $fs.writeFile(path, this.props.blob.stream());
+    await $fs.writeFile(path, this.props.blob().stream());
 
     this.logger.info(`Successfully wrote blob to the file ${path}`);
   }

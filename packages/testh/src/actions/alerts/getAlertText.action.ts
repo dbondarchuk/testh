@@ -19,7 +19,7 @@ export const GetAlertTextAlertActionTypeAliases = ['alert-get-text'] as const;
  * Gets alert text
  * @properties {@link GetAlertTextAlertActionProperties}
  * @runnerType {@link GetAlertTextAlertActionTypeAliases}
- * @returns {string} Alert text
+ * @result `string` Alert text
  */
 @Action(
   GetAlertTextAlertActionProperties,

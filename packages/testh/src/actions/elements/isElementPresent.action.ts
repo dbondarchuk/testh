@@ -30,7 +30,7 @@ export const IsElementPresentActionTypeAliases = ['is-present'] as const;
  * Gets whether a web element is present
  * @properties {@link IsElementPresentActionProperties}
  * @runnerType {@link IsElementPresentActionTypeAliases}
- * @returns {boolean} Whether the element is present
+ * @result `boolean` Whether the element is present
  */
 @Action(
   IsElementPresentActionProperties,

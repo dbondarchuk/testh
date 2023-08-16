@@ -43,7 +43,7 @@ export interface ElementSize {
  * Gets an object with the element's size
  * @properties {@link GetElementSizeActionProperties}
  * @runnerType {@link GetElementSizeActionTypeAliases}
- * @returns {ElementSize} Element's size
+ * @result {@link ElementSize} Element's size
  */
 @Action(
   GetElementSizeActionProperties,

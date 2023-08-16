@@ -29,7 +29,7 @@ export const CompareNumbersActionTypeAliases = ['compare-numbers'] as const;
  * Compares two numbers
  * @properties {@link CompareNumbersActionProperties}
  * @runnerType {@link CompareNumbersActionTypeAliases}
- * @returns {boolean} Whether {@link CompareNumbersActionProperties.to} satisfies the comparison {@link CompareNumbersActionProperties.compare}
+ * @result `boolean` Whether {@link CompareNumbersActionProperties.to} satisfies the comparison {@link CompareNumbersActionProperties.compare}
  */
 @Action(
   CompareNumbersActionProperties,

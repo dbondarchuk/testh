@@ -35,7 +35,7 @@ export const GetElementTagActionTypeAliases = [
  * Gets a web element tag name
  * @properties {@link GetElementTagActionProperties}
  * @runnerType {@link GetElementTagActionTypeAliases}
- * @returns {string} Element's tag name
+ * @result `string` Element's tag name
  */
 @Action(
   GetElementTagActionProperties,

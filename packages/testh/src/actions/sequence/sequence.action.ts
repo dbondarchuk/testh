@@ -33,7 +33,7 @@ export interface ISequenceAction<Props extends ISequenceActionProperties> {
    * @param sequence Current actions builder
    * @param state Current test state
    * @param step Sequence step
-   * @returns Result builder
+   * @result {@link Actions} Result builder
    */
   execute(sequence: Actions, state: IState, props: Props): Promise<Actions>;
 }
@@ -104,7 +104,7 @@ export class SequenceAction extends IAction<SequenceActionProperties> {
 
       const propsPlain = await propertiesEvaluator.evaluateProperties(
         action.values,
-        state,
+        state.variables.variables,
         sequenceAction.propsType,
       );
 

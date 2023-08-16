@@ -8,6 +8,7 @@ import {
   ILoggerFactory,
   PropertyIsRequiredException,
   InvalidOperationException,
+  Safe,
 } from '@testh/sdk';
 
 import * as fs from 'fs';
@@ -35,19 +36,22 @@ export const GetFileBlobActionTypeAliases = [
  * Is useful for uploading files via HTTP
  * @properties {@link GetFileBlobProperties}
  * @runnerType {@link GetFileBlobActionTypeAliases}
- * @throws {NotFoundException} When path doesn't exist
- * @throws {InvalidOperationException} When path is not a file
- * @returns {Blob} File content as blob
+ * @error {@link NotFoundException} When path doesn't exist
+ * @error {@link InvalidOperationException} When path is not a file
+ * @result {@link Safe<Blob>} File content as blob
  */
 @Action(GetFileBlobProperties, 'Get file blob', ...GetFileBlobActionTypeAliases)
-export class GetFileBlobAction extends IAction<GetFileBlobProperties, Blob> {
+export class GetFileBlobAction extends IAction<
+  GetFileBlobProperties,
+  Safe<Blob>
+> {
   private readonly logger: ILogger;
   constructor(props: GetFileBlobProperties, loggerFactory: ILoggerFactory) {
     super(props);
     this.logger = loggerFactory.get<GetFileBlobAction>(GetFileBlobAction);
   }
 
-  public async run(): Promise<Blob> {
+  public async run(): Promise<Safe<Blob>> {
     const path = this.props.path;
     if (!path) {
       throw new PropertyIsRequiredException('path');
@@ -70,6 +74,6 @@ export class GetFileBlobAction extends IAction<GetFileBlobProperties, Blob> {
 
     this.logger.info(`Successfully got content of the file ${path} as blob`);
 
-    return blob;
+    return () => blob;
   }
 }

@@ -38,7 +38,7 @@ export const GetElementCssValueActionTypeAliases = [
  * Gets a web element CSS property value
  * @properties {@link GetElementCssValueActionProperties}
  * @runnerType {@link GetElementCssValueActionTypeAliases}
- * @returns {string} Element's style property value
+ * @result `string` Element's style property value
  */
 @Action(
   GetElementCssValueActionProperties,

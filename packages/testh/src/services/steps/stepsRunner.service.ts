@@ -68,7 +68,7 @@ export class StepsRunner implements IStepsRunner {
         this.logger.debug(
           `Running pre step execution callback ${preCallback.constructor.name}`,
         );
-        step = await preCallback.execute(step, currentStepNumber);
+        step = await preCallback.execute(step, state);
       }
 
       let isStepSuccessul = true;
@@ -133,7 +133,7 @@ export class StepsRunner implements IStepsRunner {
 
         const propsPlain = await this.propertiesEvaluator.evaluateProperties(
           step.values,
-          state,
+          state.variables.variables,
           actionType.propertiesType,
         );
 
@@ -166,7 +166,7 @@ export class StepsRunner implements IStepsRunner {
           );
           await postCallback.execute(
             step,
-            currentStepNumber,
+            state,
             isStepSuccessul,
             stepErrors,
             result,

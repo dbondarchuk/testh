@@ -1,5 +1,6 @@
 import { RecordType } from '../../helpers/decorators/transform/recordType.decorator';
 import { Page } from './page';
+import { Shortcut } from './shortcut';
 import { TestSteps } from './testSteps';
 
 /**
@@ -21,6 +22,11 @@ export class Test {
    */
   @RecordType(Page)
   pages?: Record<string, Page>;
+
+  /**
+   * Shortcuts
+   */
+  shortcuts?: Shortcut[];
 
   /**
    * Steps to run

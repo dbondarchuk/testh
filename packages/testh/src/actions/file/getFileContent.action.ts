@@ -40,9 +40,9 @@ export const GetFileContentActionTypeAliases = [
  * Gets file content as text
  * @properties {@link GetFileContentProperties}
  * @runnerType {@link GetFileContentActionTypeAliases}
- * @throws {NotFoundException} When path doesn't exist
- * @throws {InvalidOperationException} When path is not a file
- * @returns {string} File content as text
+ * @error {@link NotFoundException} When path doesn't exist
+ * @error {@link InvalidOperationException} When path is not a file
+ * @result `string` File content as text
  */
 @Action(
   GetFileContentProperties,

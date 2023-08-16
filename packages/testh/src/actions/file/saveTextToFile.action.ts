@@ -6,6 +6,7 @@ import {
   ILoggerFactory,
   InvalidOperationException,
   PropertyIsRequiredException,
+  ToBoolean,
 } from '@testh/sdk';
 
 import * as fs from 'fs';
@@ -29,6 +30,7 @@ export class SaveTextToFileProperties implements IActionProperties {
    * Indicates whether to overwrite file if it alread exists
    * @default true
    */
+  @ToBoolean()
   overwrite?: boolean;
 }
 
@@ -45,7 +47,7 @@ export const SaveTextToFileActionTypeAliases = [
  * Saves text to the file
  * @properties {@link SaveTextToFileProperties}
  * @runnerType {@link SaveTextToFileActionTypeAliases}
- * @throws {InvalidOperationException} When file exists and not allowed to overwrite
+ * @error {@link InvalidOperationException} When file exists and not allowed to overwrite
  */
 @Action(
   SaveTextToFileProperties,

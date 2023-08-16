@@ -10,9 +10,11 @@ import {
   PropertiesEvaluatorInjectionToken,
   PropertyEvaluatorInjectionToken,
   Service,
+  StateInstanceInjectionToken,
   StepsRunnerInjectionToken,
   TestSteps,
   updateStepNumber,
+  Variables,
 } from '@testh/sdk';
 
 /**
@@ -28,6 +30,8 @@ export class RunActionsPropertyEvaluator extends IPropertyEvaluator {
     protected readonly propertiesEvaluator: IPropertiesEvaluator,
     @inject(StepsRunnerInjectionToken)
     protected readonly stepsRunner: IStepsRunner,
+    @inject(StateInstanceInjectionToken)
+    protected readonly state: IState,
   ) {
     super();
   }
@@ -45,12 +49,12 @@ export class RunActionsPropertyEvaluator extends IPropertyEvaluator {
 
   public async evaluate(
     property: KeyValue,
-    state: IState,
+    variables: Variables,
     recursive: boolean,
     type?: Constructor<any>,
   ): Promise<void> {
     if (!property.key.startsWith('(') || !property.key.endsWith(')')) {
-      await super.next(property, state, recursive, type);
+      await super.next(property, variables, recursive, type);
       return;
     }
 
@@ -60,25 +64,25 @@ export class RunActionsPropertyEvaluator extends IPropertyEvaluator {
       typeof property.value === 'string'
         ? await this.propertiesEvaluator.evaluateProperties(
             property.value,
-            state,
+            variables,
             undefined,
             false,
           )
         : property.value;
 
-    const baseStepNumber = getCurrentStepNumber(state.variables);
+    const baseStepNumber = getCurrentStepNumber(this.state.variables);
     const results = await this.stepsRunner.runTestSteps(
       (Array.isArray(steps) ? steps : [steps]) as TestSteps,
-      state,
+      this.state,
       (stepNumber) => `${baseStepNumber}.${stepNumber}`,
     );
 
-    updateStepNumber(state.variables, baseStepNumber);
+    updateStepNumber(this.state.variables, baseStepNumber);
 
     property.value = Array.isArray(steps)
       ? results
       : results[results.length - 1];
 
-    await super.first(property, state, recursive, type);
+    await super.first(property, variables, recursive, type);
   }
 }

@@ -44,7 +44,7 @@ export const ForEachElementActionTypeAliases = ['for-each-element'] as const;
  * @runnerType {@link ForEachElementActionTypeAliases}
  * @variable {@link ELEMENT_VARIABLE} Where current element is stored
  * @variable {@link ELEMENT_INDEX_VARIABLE} Where the index of current element is stored
- * @returns {Array<any>} Array of last step results for each item
+ * @result `Array<any>` Array of last step results for each item
  */
 @Action(
   ForEachElementActionProperties,

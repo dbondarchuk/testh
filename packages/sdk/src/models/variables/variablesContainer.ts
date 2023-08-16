@@ -57,6 +57,12 @@ export interface IVariablesContainer {
    * @returns Merged variables
    */
   merge(baseVariables: Variables): IVariablesContainer;
+
+  /**
+   * Evaluates variable values, using current variables
+   * This allows usage of references to variables inside the variable
+   */
+  evalVariables(): Promise<void>;
 }
 
 /**
@@ -88,7 +94,7 @@ export interface IVariablesContainerFactory {
    * @param variables Additional variables
    * @returns Variables container
    */
-  createVariabesContainer(
+  createVariablesContainer(
     state: IState,
     variables?: Variables,
   ): IVariablesContainer;

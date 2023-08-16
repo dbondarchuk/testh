@@ -1,5 +1,5 @@
-import { IState } from '../../../tests/iState';
 import { Constructor } from '../../../types';
+import { Variables } from '../../../variables';
 
 /** Describes the properties evaluator */
 export interface IPropertiesEvaluator {
@@ -9,32 +9,31 @@ export interface IPropertiesEvaluator {
    * @param context Context
    * @returns Result of JS code evaluation
    */
-  evaluate(code: string, context?: Record<string, any>): Promise<any>;
+  evaluate(code: string, context?: Variables): Promise<any>;
 
   /**
    * Replaces variables in the expression
    * @param value Value string
-   * @param state Current state
+   * @param variables Variables to use
    * @returns Evaluated string
    */
   replaceVariables(
     value: string,
-    state: IState,
+    variables: Variables,
     recursive?: boolean,
   ): Promise<string | any | undefined>;
 
   /**
    * Recursively goes through an object properties and evaluates them
    * @param obj Object to evaluate
-   * @param state Current state
+   * @param variables Variables to uuse
    * @param type Optional type of the object
    * @param recursive Should it go through the properties recursively. @defaultValue `true`
-   * @param type Object's type
    * @returns Evaluated object
    */
   evaluateProperties(
     obj: any,
-    state: IState,
+    variables: Variables,
     type?: Constructor<any>,
     recursive?: boolean,
   ): Promise<any>;

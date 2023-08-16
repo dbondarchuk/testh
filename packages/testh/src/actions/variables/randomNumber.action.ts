@@ -9,7 +9,7 @@ import {
 } from '@testh/sdk';
 
 /**
- *  Generates random number
+ * Generates random number
  * @param min Min value (inclusive)
  * @param max Max value (inclusive)
  * */
@@ -39,8 +39,8 @@ export const RandomNumberActionTypeAliases = ['random-number'] as const;
 /**
  * Generates a random integer number between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
  * @properties {@link RandomNumberActionProperties}
- * @runnerType {@link SetVariableActionTypeAliases}
- * @returns {number} Random integer number between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
+ * @runnerType {@link RandomNumberActionTypeAliases}
+ * @result `number` Random integer number between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
  */
 @Action(
   RandomNumberActionProperties,

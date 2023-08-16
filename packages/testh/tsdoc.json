@@ -5,6 +5,14 @@
     {
       "tagName": "@runnerType",
       "syntaxKind": "block"
+    },
+    {
+      "tagName": "@result",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@error",
+      "syntaxKind": "block"
     }
   ]
 }

@@ -22,7 +22,7 @@ steps:
     runOnFailure: true
     values:
       type: page
-      reference: screenshots/Example-7-Make screenshot.png
+      reference: screenshots/Example-7-Make And Compare screenshot.png
       tolerance: 1
   - check:
       name: Check execution time

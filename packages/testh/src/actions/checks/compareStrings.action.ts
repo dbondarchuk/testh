@@ -27,7 +27,7 @@ export const CompareStringsActionTypeAliases = ['compare-strings'] as const;
  * Compares two strings
  * @properties {@link CompareStringsActionProperties}
  * @runnerType {@link CompareStringsActionTypeAliases}
- * @returns {boolean} Whether {@link CompareStringsActionProperties.to} satisfies the comparison {@link CompareStringsActionProperties.compare}
+ * @result `boolean` Whether {@link CompareStringsActionProperties.to} satisfies the comparison {@link CompareStringsActionProperties.compare}
  */
 @Action(
   CompareStringsActionProperties,

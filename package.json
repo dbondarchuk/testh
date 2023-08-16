@@ -7,9 +7,12 @@
   "scripts": {
     "build": "yarn workspace @testh/sdk build && yarn workspace @testh/testh build",
     "start:no-build": "yarn workspace @testh/testh start",
-    "start": "yarn build && yarn start:no-build"
+    "start": "yarn build && yarn start:no-build",
+    "docs": "typedoc"
   },
   "devDependencies": {
+    "typedoc": "^0.24.8",
+    "typedoc-plugin-markdown": "^3.15.3",
     "typescript": "^5.0.0"
   }
 }

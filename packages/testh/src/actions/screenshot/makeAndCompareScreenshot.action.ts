@@ -58,7 +58,7 @@ export const MakeAndCompareScreenshotActionTypeAliases = [
  * Makes a screenshot and compares it to existing image
  * @properties {@link MakeAndCompareScreenshotActionProperties}
  * @runnerType {@link MakeAndCompareScreenshotActionTypeAliases}
- * @returns {boolean} Whether the comparison was successful or no reference image were provided
+ * @result `boolean` Whether the comparison was successful or no reference image were provided
  */
 @Action(
   MakeAndCompareScreenshotActionProperties,

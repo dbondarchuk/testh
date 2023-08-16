@@ -5,7 +5,7 @@ import {
   ILogger,
   ILoggerFactory,
   IState,
-  SkipEvaluate,
+  Safe,
 } from '@testh/sdk';
 
 export enum HttpMethod {
@@ -18,8 +18,7 @@ export enum HttpMethod {
 /** Describes file for for FormData */
 export class FormDataFile {
   /** File content */
-  @SkipEvaluate()
-  blob: Blob;
+  blob: Safe<Blob>;
 
   /** Optional filename to give */
   filename?: string;
@@ -86,7 +85,7 @@ export class HttpActionResult {
   headers: Record<string, string>;
 
   /** Redponse body */
-  body: Blob | string | any | undefined;
+  body: Safe<Blob> | string | any | undefined;
 
   /**
    * High resolution number of milliseconds that was spent to get the response.
@@ -104,7 +103,7 @@ export const HttpActionTypeAliases = ['rest', 'http'] as const;
  * Makes an HTTP REST call and returns the response object
  * @properties {@link HttpActionProperties}
  * @runnerType {@link HttpActionTypeAliases}
- * @returns {@link HttpActionResult} HTTP result
+ * @result {@link HttpActionResult} HTTP result
  */
 @Action(HttpActionProperties, 'HTTP call', ...HttpActionTypeAliases)
 export class HttpAction extends IAction<
@@ -140,7 +139,7 @@ export class HttpAction extends IAction<
       if (this.props.body.form.files) {
         for (const key in this.props.body.form.files) {
           const file = this.props.body.form.files[key];
-          formData.set(key, file.blob, file.filename);
+          formData.set(key, file.blob(), file.filename);
         }
       }
 
@@ -179,9 +178,11 @@ export class HttpAction extends IAction<
         responseBody = await response.text();
         break;
 
-      case 'blob':
-        responseBody = await response.blob();
+      case 'blob': {
+        const blob = await response.blob();
+        responseBody = (() => blob) as Safe<Blob>;
         break;
+      }
 
       case 'none':
       default:

@@ -20,7 +20,7 @@ export const IsAlertPresentedActionTypeAliases = ['is-alert-present'] as const;
  * Checks if the alert is presented
  * @properties {@link IsAlertPresentedActionProperties}
  * @runnerType {@link IsAlertPresentedActionTypeAliases}
- * @returns {boolean} Whether the alert is present
+ * @result `boolean` Whether the alert is present
  */
 @Action(
   IsAlertPresentedActionProperties,

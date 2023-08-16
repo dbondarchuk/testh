@@ -9,10 +9,15 @@
     "**/__tests__/*",
     "**/__mocks__/*"
   ],
-  "out": "docs",
+  "out": "./docs",
   "includeVersion": true,
   "name": "Testh Runner",
-  "theme": "hierarchy",
-  "entryPoints": ["src/runners", "src/models", "src/helpers"],
+  "theme": "markdown",
+  "entryPoints": [
+    "src/actions",
+    "src/extensions",
+    "src/helpers",
+    "src/services"
+  ],
   "entryPointStrategy": "expand"
 }

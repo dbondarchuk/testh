@@ -43,7 +43,7 @@ export interface ElementLocation {
  * Gets an object with the element's location
  * @properties {@link GetElementLocationActionProperties}
  * @runnerType {@link GetElementLocationActionTypeAliases}
- * @returns {ElementLocation} Location of the element's top left corner in pixels relative to the document element
+ * @result {@link ElementLocation} Location of the element's top left corner in pixels relative to the document element
  */
 @Action(
   GetElementLocationActionProperties,

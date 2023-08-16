@@ -25,14 +25,14 @@ export class AllConditionActionProperties implements IActionProperties {
   conditions: Condition[];
 }
 
-/** Action type aliases for {@link AllConditionActionType} */
+/** Action type aliases for {@link AllConditionAction} */
 export const AllConditionActionTypeAliases = ['all'] as const;
 
 /**
  * Checks if all conditions are true
  * @parameters {@link AllConditionActionProperties}
  * @runnerType {@link AllConditionActionTypeAliases}
- * @returns {boolean} Whether all conditions are true
+ * @result `boolean` Whether all conditions are true
  */
 @Action(AllConditionActionProperties, 'All', ...AllConditionActionTypeAliases)
 export class AllConditionAction extends IAction<

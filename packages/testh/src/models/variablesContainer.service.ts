@@ -44,6 +44,7 @@ export class VariablesContainer implements IVariablesContainer {
   public constructor(
     private readonly state: IState,
     private readonly stepRunner: IStepsRunner,
+    private readonly propertiesEvaluator: IPropertiesEvaluator,
     variables?: Variables,
   ) {
     this.initVariables(variables);
@@ -102,7 +103,11 @@ export class VariablesContainer implements IVariablesContainer {
    * @returns Merged variables
    */
   public _merge(baseVariables: Variables): VariablesContainer {
-    const merged = new VariablesContainer(this.state, this.stepRunner);
+    const merged = new VariablesContainer(
+      this.state,
+      this.stepRunner,
+      this.propertiesEvaluator,
+    );
     merged._variables = { ...baseVariables, ...this.variables };
 
     return merged;
@@ -117,6 +122,21 @@ export class VariablesContainer implements IVariablesContainer {
     this._variables = { ...baseVariables, ...this.variables };
 
     return this;
+  }
+
+  /**
+   * Evaluates variable values, using current variables
+   * This allows usage of references to variables inside the variable
+   */
+  public async evalVariables(): Promise<void> {
+    for (const key in this._variables) {
+      if (!this._variables[key]) continue;
+
+      this._variables[key] = await this.propertiesEvaluator.evaluateProperties(
+        this._variables[key],
+        this._variables,
+      );
+    }
   }
 
   private initVariables(variables?: Variables): void {
@@ -189,13 +209,22 @@ export class VariablesContainerFactory implements IVariablesContainerFactory {
   constructor(
     @inject(StepsRunnerInjectionToken)
     private readonly stepsRunner: IStepsRunner,
+    @inject(PropertiesEvaluatorInjectionToken)
+    private readonly propertiesEvaluator: IPropertiesEvaluator,
   ) {}
 
   /** @inheritdoc */
-  createVariabesContainer(
+  createVariablesContainer(
     state: IState,
     variables?: Variables,
   ): IVariablesContainer {
-    return new VariablesContainer(state, this.stepsRunner, variables);
+    const container = new VariablesContainer(
+      state,
+      this.stepsRunner,
+      this.propertiesEvaluator,
+      variables,
+    );
+
+    return container;
   }
 }

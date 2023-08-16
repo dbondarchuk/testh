@@ -30,7 +30,7 @@ export const IsElementVisibleActionTypeAliases = ['is-visible'] as const;
  * Gets whether a web element is visible
  * @properties {@link IsElementVisibleActionProperties}
  * @runnerType {@link IsElementVisibleActionTypeAliases}
- * @returns {boolean} Whether the element is visible
+ * @result `boolean` Whether the element is visible
  */
 @Action(
   IsElementVisibleActionProperties,

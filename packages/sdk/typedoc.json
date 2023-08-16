@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "cleanOutputDir": true,
-  "out": "docs",
+  "out": "./docs",
   "includeVersion": true,
   "name": "Testh SDK",
   "theme": "hierarchy",

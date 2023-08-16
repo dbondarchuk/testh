@@ -1,0 +1,16 @@
+type: download-file
+name: Download file
+values:
+  - url
+  - path
+steps:
+  - pipe:
+      variable: response
+      (value):
+        rest:
+          $url: VALUES.url
+          responseType: blob
+      steps:
+        - save:
+            $blob: response.body
+            $path: VALUES.path

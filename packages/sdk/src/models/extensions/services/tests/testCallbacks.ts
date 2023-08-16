@@ -5,10 +5,10 @@ export interface IPreStepExecutionCallback {
   /**
    * Executes a callback
    * @param step Test step
-   * @param stepNumber Current test step number
+   * @param state Current test state
    * @returns Modified test step
    */
-  execute(step: TestStep, stepNumber: string | number): Promise<TestStep>;
+  execute(step: TestStep, state: IState): Promise<TestStep>;
 }
 
 /** Injection token for callback before test step run */
@@ -20,14 +20,14 @@ export interface IPostStepExecutionCallback {
   /**
    * Executes a callback
    * @param step Test step
-   * @param stepNumber Current test step number
+   * @param state Current test state
    * @param isSuccessful Was the step successful
    * @param errors List of errors if step has failed
    * @param result Test step result
    */
   execute(
     step: TestStep,
-    stepNumber: string | number,
+    state: IState,
     isSuccessful: boolean,
     errors?: Error[],
     result?: any,

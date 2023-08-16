@@ -5,7 +5,7 @@ import { Selector } from './selector';
 
 /**
  * Type for the relative selector
- * @see https://www.selenium.dev/documentation/webdriver/elements/locators/#relative-locators
+ * @link https://www.selenium.dev/documentation/webdriver/elements/locators/#relative-locators
  */
 export type RelativeType = 'above' | 'below' | 'left' | 'right' | 'near';
 

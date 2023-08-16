@@ -25,7 +25,7 @@ export const GetCookieActionTypeAliases = ['cookie', 'get-cookie'] as const;
  * Gets a cookies visible to the current page by its name
  * @properties {@link GetCookieActionProperties}
  * @runnerType {@link GetCookieActionTypeAliases}
- * @returns {string} Cookie's value
+ * @result `string` Cookie's value
  */
 @Action(
   GetCookieActionProperties,

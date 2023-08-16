@@ -30,7 +30,7 @@ export const IsElementSelectedActionTypeAliases = ['is-selected'] as const;
  * Gets whether a web element is selected
  * @properties {@link IsElementSelectedActionProperties}
  * @runnerType {@link IsElementSelectedActionTypeAliases}
- * @returns {boolean} Whether the element is selected
+ * @result `boolean` Whether the element is selected
  */
 @Action(
   IsElementSelectedActionProperties,

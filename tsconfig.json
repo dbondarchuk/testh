@@ -3,6 +3,7 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "target": "ES2022",
+        "skipLibCheck": true
     },
     "exclude": [
         "packages/**/tests/**",

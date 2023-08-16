@@ -23,14 +23,14 @@ export class NotConditionActionProperties implements IActionProperties {
   condition: Condition;
 }
 
-/** Action type aliases for {@link NotConditionActionType} */
+/** Action type aliases for {@link NotConditionAction} */
 export const NotConditionActionTypeAliases = ['not'] as const;
 
 /**
  * Inverts the result of a condition
  * @parameters {@link NotConditionActionProperties}
  * @runnerType {@link NotConditionActionTypeAliases}
- * @returns {boolean} Whether the condition is false
+ * @result `boolean` Whether the condition is false
  */
 @Action(NotConditionActionProperties, 'Not', ...NotConditionActionTypeAliases)
 export class NotConditionAction extends IAction<

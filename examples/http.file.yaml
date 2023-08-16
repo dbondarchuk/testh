@@ -1,0 +1,55 @@
+name: Example HTTP
+shortcuts: !!inc/seq ['shortcuts', { extensions: ['.shortcut.yaml'] }]
+variables:
+  parentDir: screenshots/results
+  dir: $(parentDir)/http.file
+  path: $(dir)/image.jpg
+  pathResult: $(dir)/result.txt
+steps:
+  - type: mkdir
+    ignoreError: true
+    values:
+      $path: dir
+  - set:
+      variable: response
+      (value):
+        http:
+          url: https://source.unsplash.com/1920x1080/?picture%20of%20the%20day
+          responseType: blob
+  - save:
+      $blob: response.body
+      $path: path
+  - download-file:
+      url: https://source.unsplash.com/1920x1080/?picture%20of%20the%20day
+      path: $(dir)/original.jpg
+  - pipe:
+      variable: response
+      (value):
+        http:
+          url: https://litterbox.catbox.moe/resources/internals/api.php
+          responseType: text
+          method: POST
+          body:
+            form:
+              values:
+                reqtype: fileupload
+                time: 1h
+              files:
+                fileToUpload:
+                  (blob):
+                    $file-blob: path
+                  filename: image.jpg
+      steps:
+        - write:
+            $path: pathResult
+            $text: response.body
+  - save:
+      path: $(parentDir)/results.zip
+      (blob):
+        zip:
+          - $(path)
+          - $(pathResult)
+  - type: rm
+    runOnFailure: true
+    values:
+      $path: dir

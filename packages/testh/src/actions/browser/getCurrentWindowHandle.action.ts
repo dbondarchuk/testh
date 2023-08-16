@@ -23,7 +23,7 @@ export const GetCurrentWindowHandleActionTypeAliases = [
  * Gets handle of the current window (tab) (i.e. title of the page showed in the tab)
  * @properties {@link GetCurrentWindowHandleActionProperties}
  * @runnerType {@link GetCurrentWindowHandleActionTypeAliases}
- * @returns {string} Window handle of the current window (tab)
+ * @result `string` Window handle of the current window (tab)
  */
 @Action(
   GetCurrentWindowHandleActionProperties,

@@ -4,11 +4,11 @@ import {
   hasSkipEvaluateMetadata,
   IPropertiesEvaluator,
   IPropertyEvaluator,
-  IState,
   KeyValue,
   PropertiesEvaluatorInjectionToken,
   PropertyEvaluatorInjectionToken,
   Service,
+  Variables,
 } from '@testh/sdk';
 import { inject } from 'tsyringe';
 
@@ -35,7 +35,7 @@ export class DefaultPropertyEvaluator extends IPropertyEvaluator {
 
   public async evaluate(
     property: KeyValue,
-    state: IState,
+    variables: Variables,
     recursive: boolean,
     type?: Constructor<any>,
   ): Promise<void> {
@@ -46,12 +46,12 @@ export class DefaultPropertyEvaluator extends IPropertyEvaluator {
 
       property.value = await this.propertiesEvaluator.evaluateProperties(
         property.value,
-        state,
+        variables,
         property.value?.constructor,
         isRecursive,
       );
     }
 
-    await super.next(property, state, recursive, type);
+    await super.next(property, variables, recursive, type);
   }
 }

@@ -29,7 +29,7 @@ export class State implements IState {
     private readonly _test: Test,
     variablesContainerFactory: IVariablesContainerFactory,
   ) {
-    this._variables = variablesContainerFactory.createVariabesContainer(
+    this._variables = variablesContainerFactory.createVariablesContainer(
       this,
       this._test?.variables,
     );

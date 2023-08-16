@@ -36,7 +36,7 @@ export const PipeActionTypeAliases = ['pipe'] as const;
  * Sets a value into a variable and pipes it down to the steps
  * @properties {@link PipeActionProperties}
  * @runnerType {@link PipeActionTypeAliases}
- * @returns {Array<any>} Array of last step results for each item
+ * @result `Array<any>` Array of last step results for each item
  */
 @Action(PipeActionProperties, 'Pipe', ...PipeActionTypeAliases)
 export class PipeAction extends IAction<PipeActionProperties, any[]> {

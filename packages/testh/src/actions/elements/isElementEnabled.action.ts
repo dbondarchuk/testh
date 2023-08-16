@@ -30,7 +30,7 @@ export const IsElementEnabledActionTypeAliases = ['is-enabled'] as const;
  * Gets whether a web element is enabled
  * @properties {@link IsElementEnabledActionProperties}
  * @runnerType {@link IsElementEnabledActionTypeAliases}
- * @returns {boolean} Whether the element is enabled
+ * @result `boolean` Whether the element is enabled
  */
 @Action(
   IsElementEnabledActionProperties,

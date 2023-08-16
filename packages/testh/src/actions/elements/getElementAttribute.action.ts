@@ -37,7 +37,7 @@ export const GetElementAttributeActionTypeAliases = [
  * Gets a web element attribute
  * @properties {@link GetElementAttributeActionProperties}
  * @runnerType {@link GetElementAttributeActionTypeAliases}
- * @returns {string} Element's attribute value
+ * @result `string` Element's attribute value
  */
 @Action(
   GetElementAttributeActionProperties,

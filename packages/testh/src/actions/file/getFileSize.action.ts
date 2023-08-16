@@ -34,9 +34,9 @@ export const GetFileSizeActionTypeAliases = [
  * Gets file size in bytes
  * @properties {@link GetFileSizeProperties}
  * @runnerType {@link GetFileSizeActionTypeAliases}
- * @throws {NotFoundException} When path doesn't exist
- * @throws {InvalidOperationException} When path is not a file
- * @returns {number} File size in bytes
+ * @error {@link NotFoundException} When path doesn't exist
+ * @error {@link InvalidOperationException} When path is not a file
+ * @result `number` File size in bytes
  */
 @Action(GetFileSizeProperties, 'Get file size', ...GetFileSizeActionTypeAliases)
 export class GetFileSizeAction extends IAction<GetFileSizeProperties, number> {

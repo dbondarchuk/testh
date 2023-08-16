@@ -3,11 +3,11 @@ import {
   Constructor,
   IPropertiesEvaluator,
   IPropertyEvaluator,
-  IState,
   KeyValue,
   PropertiesEvaluatorInjectionToken,
   PropertyEvaluatorInjectionToken,
   Service,
+  Variables,
 } from '@testh/sdk';
 
 /**
@@ -33,12 +33,12 @@ export class DoNotEvaluatePropertyEvaluator extends IPropertyEvaluator {
 
   public async evaluate(
     property: KeyValue,
-    state: IState,
+    variables: Variables,
     recursive: boolean,
     type?: Constructor<any>,
   ): Promise<void> {
     if (!property.key.startsWith('~')) {
-      await super.next(property, state, recursive, type);
+      await super.next(property, variables, recursive, type);
     }
   }
 }

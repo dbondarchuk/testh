@@ -23,7 +23,7 @@ export const GetAllCookiesActionTypeAliases = [
  * Gets all cookies visible to the current page as map of names and values
  * @properties {@link GetAllCookiesActionProperties}
  * @runnerType {@link GetAllCookiesActionTypeAliases}
- * @returns {Record<string, string>} All cookies visible to the current page as map of names and values
+ * @result `Record<string, string>` All cookies visible to the current page as map of names and values
  */
 @Action(
   GetAllCookiesActionProperties,

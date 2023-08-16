@@ -28,7 +28,7 @@ export const IsPathExistActionTypeAliases = ['path-exist'] as const;
  * Gets whether a path (either file or folder) exists
  * @properties {@link IsPathExistProperties}
  * @runnerType {@link IsPathExistActionTypeAliases}
- * @returns {boolean} Whether the path exist
+ * @result `boolean` Whether the path exist
  */
 @Action(
   IsPathExistProperties,

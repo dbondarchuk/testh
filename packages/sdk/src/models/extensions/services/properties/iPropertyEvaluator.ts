@@ -1,6 +1,6 @@
 import { resolveAll } from '../../../../containers/container';
-import { IState } from '../../../tests/iState';
 import { Constructor } from '../../../types/constructor';
+import { Variables } from '../../../variables';
 
 /**
  * Describes generic key-value item
@@ -47,13 +47,13 @@ export abstract class IPropertyEvaluator {
   /**
    * Runs the evaluation
    * @param property Property to evaluate
-   * @param state Current state
+   * @param variables Variables to use
    * @param recursive Determines whether the evaluation should be recursive
    * @param type Object's type
    */
   public abstract evaluate(
     property: KeyValue,
-    state: IState,
+    variables: Variables,
     recursive: boolean,
     type?: Constructor<any>,
   ): Promise<void>;
@@ -61,18 +61,18 @@ export abstract class IPropertyEvaluator {
   /**
    * Runs the next evaluator
    * @param property Property to evaluate
-   * @param state Current state
+   * @param variables Variables to use
    * @param recursive Determines whether the evaluation should be recursive
    * @param type Object's type
    */
   protected async next(
     property: KeyValue,
-    state: IState,
+    variables: Variables,
     recursive: boolean,
     type: Constructor<any> | undefined,
   ): Promise<void> {
     if (this._next) {
-      await this._next.evaluate(property, state, recursive, type);
+      await this._next.evaluate(property, variables, recursive, type);
     }
   }
 
@@ -87,17 +87,17 @@ export abstract class IPropertyEvaluator {
   /**
    * Runs the first evaluator
    * @param property Property to evaluate
-   * @param state Current state
+   * @param variables Variables to use
    * @param recursive Determines whether the evaluation should be recursive
    * @param type Object's type
    */
   protected async first(
     property: KeyValue,
-    state: IState,
+    variables: Variables,
     recursive: boolean,
     type?: Constructor<any>,
   ): Promise<void> {
-    await this._first.evaluate(property, state, recursive, type);
+    await this._first.evaluate(property, variables, recursive, type);
   }
 
   protected firstParseKey(key: string): string {

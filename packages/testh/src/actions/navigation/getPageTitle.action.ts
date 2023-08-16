@@ -22,7 +22,7 @@ export const GetPageTitleActionTypeAliases = [
  * Gets a title of the current page
  * @properties {@link GetPageTitleActionProperties}
  * @runnerType {@link GetPageTitleActionTypeAliases}
- * @returns {string} Title of the current page
+ * @result `string` Title of the current page
  */
 @Action(
   GetPageTitleActionProperties,

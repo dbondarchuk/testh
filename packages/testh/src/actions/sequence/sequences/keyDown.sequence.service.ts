@@ -1,7 +1,14 @@
 import { Constructor, IState, UnknownOptionException } from '@testh/sdk';
 import { Actions, Key } from 'selenium-webdriver';
 import { ISequenceAction, ISequenceActionProperties } from '../sequence.action';
+
 import { Keys } from './models';
+
+// Load for the docs generation:
+// eslint-disable-next-line  @typescript-eslint/no-unused-vars
+import { KeyUpSequenceAction } from './keyUp.sequence.service';
+// eslint-disable-next-line  @typescript-eslint/no-unused-vars
+import { SendKeysSequenceAction } from './sendKeys.sequence.service';
 
 /** Properties for modifier key down sequence */
 export class KeyDownSequenceActionProperties

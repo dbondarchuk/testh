@@ -22,7 +22,7 @@ export const GetPageUrlActionTypeAliases = [
  * Gets the URL of the current page
  * @properties {@link GetPageUrlActionProperties}
  * @runnerType {@link GetPageUrlActionTypeAliases}
- * @returns {string} URL of the current page
+ * @result `string` URL of the current page
  */
 @Action(
   GetPageUrlActionProperties,

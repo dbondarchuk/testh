@@ -1,0 +1,13 @@
+type: _http
+name: Make HTTP request with Auth token
+steps:
+  - http:
+      $url: VALUES.url
+      $method: VALUES.method
+      $body: VALUES.body
+      $responseType: VALUES.responseType
+      (headers):
+        ?union:
+          first:
+            - Authorization: Bearer $(AUTH_TOKEN)
+          $second: VALUES.headers

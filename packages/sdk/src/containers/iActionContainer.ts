@@ -20,7 +20,7 @@ export type ActionImplementationType<T> = {
 /** Describes an Action Registry */
 export interface IActionContainer {
   /**
-   * Gets all implementation of {@link IAction} in pair `type->{@link ActionImplementationType}`
+   * Gets all implementation of {@link IAction} in pair type -> {@link ActionImplementationType}
    * @returns All implementations of {@link IAction}
    */
   get(): Record<string, ActionImplementationType<any>>;

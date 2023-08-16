@@ -38,7 +38,7 @@ export class RandomStringActionProperties implements IActionProperties {
 
   /**
    * Indicates whether to use special characters
-   * @see specialCharacters
+   * @link specialCharacters
    */
   @ToBoolean()
   useSpecialCharacters: boolean;
@@ -51,10 +51,10 @@ export class RandomStringActionProperties implements IActionProperties {
 export const RandomStringActionTypeAliases = ['random-string'] as const;
 
 /**
- * Generates a random string of length between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
+ * Generates a random string of length between {@link RandomStringActionProperties.minLength} and {@link RandomStringActionProperties.maxLength}
  * @properties {@link RandomStringActionProperties}
- * @runnerType {@link SetVariableActionTypeAliases}
- * @returns {string} Random string of length between {@link RandomNumberActionProperties.min} and {@link RandomNumberActionProperties.max}
+ * @runnerType {@link RandomStringActionTypeAliases}
+ * @result `string` Random string of length between {@link RandomStringActionProperties.minLength} and {@link RandomStringActionProperties.maxLength}
  */
 @Action(
   RandomStringActionProperties,

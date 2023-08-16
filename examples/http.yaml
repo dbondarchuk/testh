@@ -1,0 +1,133 @@
+name: Example
+variables:
+  url: https://jsonplaceholder.typicode.com/posts
+  newTitle: my new title
+  userId: 7
+steps:
+  - pipe:
+      variable: response
+      (value):  
+        rest:
+          $url: url
+          responseType: json
+      steps:
+        - check:
+            compare-numbers:
+              compare:
+                type: ==
+                $value: response.status
+              to: 200
+        - check:
+            compare-numbers:
+              compare:
+                type: <
+                $value: response.responseTime
+              to: 300
+        - pipe:
+            variable: responseBody
+            (value):
+              get:
+                $object: response
+                property: body
+            steps:
+              - check:
+                  compare-numbers:
+                    compare:
+                      type: ==
+                      (value):
+                        $array-length: responseBody
+                    to: 100
+              - check:
+                  compare-strings:
+                    compare:
+                      type: equals
+                      (value):
+                        get:
+                          (object):
+                            at:
+                              $array: responseBody
+                              index: 1
+                          property: title
+                    to: qui est esse
+  - pipe:
+      variable: response
+      (value):  
+        rest:
+          $url: url
+          method: POST
+          headers:
+            Content-type: application/json; charset=UTF-8
+          body:
+            json:
+              $title: newTitle
+              body: bar
+              $userId: userId
+          responseType: json
+      steps:
+        - check:
+            compare-numbers:
+              compare:
+                type: ==
+                $value: response.status
+              to: 201
+        - check:
+            compare-numbers:
+              compare:
+                type: <
+                $value: response.responseTime
+              to: 300
+        - pipe:
+            variable: responseBody
+            (value):
+              get:
+                $object: response
+                property: body
+            steps:
+              - check:
+                  compare-numbers:
+                    compare:
+                      type: ==
+                      $value: responseBody.id
+                    to: 101
+              - check:
+                  compare-strings:
+                    compare:
+                      type: equals
+                      $value: responseBody.title
+                    $to: newTitle
+  - pipe:
+      variable: response
+      (value):  
+        rest:
+          url: $(url)?userId=$(userId)
+          responseType: json
+      steps:
+        - check:
+            compare-numbers:
+              compare:
+                type: ==
+                $value: response.status
+              to: 200
+        - check:
+            compare-numbers:
+              compare:
+                type: <
+                $value: response.responseTime
+              to: 300
+        - pipe:
+            variable: responseBody
+            (value):
+              get:
+                $object: response
+                property: body
+            steps:
+              - for-each:
+                  $array: responseBody
+                  steps:
+                    - check:
+                        compare-numbers:
+                          compare:
+                            type: ==
+                            $value: ITEM.userId
+                          $to: userId
+

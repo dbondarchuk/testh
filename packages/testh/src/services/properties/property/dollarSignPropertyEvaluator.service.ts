@@ -3,11 +3,11 @@ import {
   Constructor,
   IPropertiesEvaluator,
   IPropertyEvaluator,
-  IState,
   KeyValue,
   PropertiesEvaluatorInjectionToken,
   PropertyEvaluatorInjectionToken,
   Service,
+  Variables,
 } from '@testh/sdk';
 
 /**
@@ -35,21 +35,21 @@ export class DollarSignPropertyEvaluator extends IPropertyEvaluator {
 
   public async evaluate(
     property: KeyValue,
-    state: IState,
+    variables: Variables,
     recursive: boolean,
     type?: Constructor<any>,
   ): Promise<void> {
     if (!property.key.startsWith('$') || typeof property.value !== 'string') {
-      await super.next(property, state, recursive, type);
+      await super.next(property, variables, recursive, type);
       return;
     }
 
     property.key = property.key.substring(1);
     property.value = await this.propertiesEvaluator.evaluate(
       property.value,
-      state.variables.variables,
+      variables,
     );
 
-    await super.first(property, state, recursive, type);
+    await super.first(property, variables, recursive, type);
   }
 }

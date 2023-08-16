@@ -25,14 +25,14 @@ export class OrConditionActionProperties implements IActionProperties {
   conditions: Condition[];
 }
 
-/** Action type aliases for {@link OrConditionActionType} */
+/** Action type aliases for {@link OrConditionAction} */
 export const OrConditionActionTypeAliases = ['or'] as const;
 
 /**
  * Checks if at least one conditions is true
  * @parameters {@link OrConditionActionProperties}
  * @runnerType {@link OrConditionActionTypeAliases}
- * @returns {boolean} Whether at least one condition is true
+ * @result `boolean` Whether at least one condition is true
  */
 @Action(OrConditionActionProperties, 'Or', ...OrConditionActionTypeAliases)
 export class OrConditionAction extends IAction<

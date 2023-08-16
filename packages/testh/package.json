@@ -5,6 +5,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@microsoft/tsdoc-config": "^0.16.1",
+    "@types/adm-zip": "^0.5.0",
     "@types/command-line-args": "^5.2.0",
     "@types/deasync": "^0.1.2",
     "@types/glob": "^7.2.0",
@@ -21,8 +22,6 @@
     "prettier": "~2.6",
     "rimraf": "~3.0",
     "ts-jest": "~28.0",
-    "typedoc": "^0.23.13",
-    "typedoc-theme-hierarchy": "^3.0.0",
     "typescript": "^5.0.0",
     "undici": "^5.22.1"
   },
@@ -36,12 +35,12 @@
     "lint": "eslint . --ext .ts --ext .mts",
     "test": "jest --coverage",
     "prettier": "prettier --config .prettierrc --write .",
-    "test:watch": "jest --watch",
-    "docs": "typedoc --entryPointStrategy expand ./src"
+    "test:watch": "jest --watch"
   },
   "author": "Dmytro Bondarchuk <dbondarchuk@users.noreply.github.com>",
   "dependencies": {
     "@testh/sdk": "0.0.1",
+    "adm-zip": "^0.5.10",
     "chromedriver": "^114.0.0",
     "class-transformer": "^0.5.1",
     "command-line-args": "^5.2.1",
@@ -53,6 +52,6 @@
     "sharp": "^0.31.3",
     "tslib": "~2.4",
     "tsyringe": "^4.7.0",
-    "yaml-js-include": "^0.0.5"
+    "yaml-js-include": "^1.0.0"
   }
 }

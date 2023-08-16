@@ -37,7 +37,7 @@ export const GetPropertyFromObjectActionTypeAliases = [
  * Gets property from object by name
  * @properties {@link GetPropertyFromObjectActionProperties}
  * @runnerType {@link GetPropertyFromObjectActionTypeAliases}
- * @returns {any} Property value
+ * @result `any` Property value
  */
 @Action(
   GetPropertyFromObjectActionProperties,

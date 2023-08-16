@@ -31,9 +31,9 @@ export const IsFileActionTypeAliases = ['is-file'] as const;
  * Gets whether a path is file or folder
  * @properties {@link IsFileProperties}
  * @runnerType {@link IsFileActionTypeAliases}
- * @throws {NotFoundException} When path doesn't exist
- * @throws {InvalidOperationException} When path is neither file nor directory
- * @returns {boolean} Returns true when path is file, false when it's folder
+ * @error {@link NotFoundException} When path doesn't exist
+ * @error {@link InvalidOperationException} When path is neither file nor directory
+ * @result `boolean` Returns true when path is file, false when it's folder
  */
 @Action(
   IsFileProperties,

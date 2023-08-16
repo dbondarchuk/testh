@@ -34,7 +34,7 @@ export const GetElementTextActionTypeAliases = [
  * Gets a web element text and returns it
  * @properties {@link GetElementTextActionProperties}
  * @runnerType {@link GetElementTextActionTypeAliases}
- * @returns {string} Element's text
+ * @result `string` Element's text
  */
 @Action(
   GetElementTextActionProperties,

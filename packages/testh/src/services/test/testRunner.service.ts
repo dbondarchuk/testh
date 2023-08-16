@@ -45,6 +45,7 @@ export class TestRunner implements ITestRunner {
     container.registerInstance(TestInstanceInjectionToken, test);
 
     const state = this.stateFactory.createState(test);
+    await state.variables.evalVariables();
 
     container.registerInstance(StateInstanceInjectionToken, state);
 

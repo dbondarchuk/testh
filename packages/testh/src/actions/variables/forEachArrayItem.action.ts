@@ -40,7 +40,7 @@ export const ForEachArrayItemActionTypeAliases = [
  * @runnerType {@link ForEachArrayItemActionTypeAliases}
  * @variable {@link ITEM_VARIABLE} Item
  * @variable {@link INDEX_VARIABLE} Item zero-based index
- * @returns {Array<any>} Array of last step results for each item
+ * @result `Array<any>` Array of last step results for each item
  */
 @Action(
   ForEachArrayItemActionProperties,
