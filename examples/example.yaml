@@ -4,6 +4,12 @@ variables:
   productId: sauce-labs-backpack
   password: secret_sauce
   elementWaitTimeout: 3
+  imagesFolder: $(__dir__)/images
+  screenshots:
+    tolerance: 3
+    reference: $(imagesFolder)/reference.png
+    original: $(imagesFolder)/original.png
+    diff: $(imagesFolder)/diff.png
 pages: !!inc/dir ['pages', { extensions: ['.page.yaml'] }]
 steps:
   - open: chrome
@@ -17,13 +23,30 @@ steps:
       $steps: pages.shop.actions.checkSort
   - $run: pages.shop.actions.logout
   - open-url: https://stackoverflow.com/
-  - name: Make And Compare screenshot
-    type: compare-screenshot
+  - type: pipe
     runOnFailure: true
     values:
-      type: page
-      reference: screenshots/Example-7-Make And Compare screenshot.png
-      tolerance: 1
+      variable: screenshot
+      (value):
+        screenshot: page
+      steps:
+        - save:
+            $path: screenshots.original
+            $blob: screenshot
+        - save:
+            $path: screenshots.diff
+            (blob):
+              get-images-diff:
+                $image: screenshot
+                (reference):
+                  $file-blob: screenshots.reference
+                $tolerance: screenshots.tolerance
+        - (check):
+            compare-images:
+              $image: screenshot
+              (reference):
+                $file-blob: screenshots.reference
+              $tolerance: screenshots.tolerance
   - check:
       name: Check execution time
       type: compare-numbers

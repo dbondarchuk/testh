@@ -25,6 +25,22 @@ export const BROWSER_LOAD_TIMES = BROWSER_PREFIX + 'LOAD_TIMES';
 
 export const API_LOAD_TIMES = API_PREFIX + 'LOAD_TIMES';
 
+/** Contains working directory of the application */
+export const CWD = '__cwd__';
+
+/**
+ * Contains a function to run a test step and returns it's result.
+ *
+ * The type of the function is
+ * ```
+ * (stepType: string, values: any) => any
+ * ```
+ * @example
+ * ```
+ * // This will return a text for the element `.myClass`
+ * run('get-text', { selector: { type: 'css', value: '.myClass' } })
+ * ```
+ */
 export const RUN = 'run';
 
 /**

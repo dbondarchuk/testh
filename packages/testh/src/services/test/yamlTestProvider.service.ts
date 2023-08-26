@@ -8,9 +8,16 @@ import {
   TestProviderInjectionToken,
 } from '@testh/sdk';
 import { inject } from 'tsyringe';
+import * as path from 'path';
 import { YamlInclude } from 'yaml-js-include';
 
-/** Generates a test from the yaml file */
+/** The name of the variable which will contain path to the test directory */
+export const TEST_DIRECTORY_VARIABLE = '__dir__';
+
+/**
+ * Generates a test from the yaml file
+ * @variable {@link TEST_DIRECTORY_VARIABLE} Contains path to the test directory
+ */
 @Service(TestProviderInjectionToken)
 export class YamlTestProvider implements ITestProvider {
   private readonly logger: ILogger;
@@ -33,6 +40,12 @@ export class YamlTestProvider implements ITestProvider {
 
       const yaml = new YamlInclude();
       const test = await yaml.loadAsync<Test>(pathToTest);
+
+      test.variables = test.variables || {};
+
+      test.variables[TEST_DIRECTORY_VARIABLE] = path.dirname(
+        path.resolve(pathToTest),
+      );
 
       this.logger.debug('Successfully parsed a yaml file.');
       return test;

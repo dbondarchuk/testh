@@ -11,6 +11,7 @@ import {
   AGENT_OS_NAME,
   AGENT_OS_VERSION,
   AGENT_VERSION,
+  CWD,
   getCurrentStepNumber,
   IPropertiesEvaluator,
   IState,
@@ -143,6 +144,8 @@ export class VariablesContainer implements IVariablesContainer {
     // add environment vars
     Object.keys(env).forEach((key) => this.put(key, env[key]));
 
+    this.put(CWD, process.cwd());
+
     this.initAgentVariables();
     this.initRunCommand();
 
@@ -178,10 +181,10 @@ export class VariablesContainer implements IVariablesContainer {
         const results = await this.stepRunner.runTestSteps(
           stepsWrapper([step]),
           this.state,
-          (stepNumber) => `${currentStep}-execute-${stepNumber}`,
+          (stepNumber) => `${currentStep}.${stepNumber}`,
         );
 
-        return results;
+        return results[results.length - 1];
       })();
     };
 

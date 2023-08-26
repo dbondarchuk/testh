@@ -57,7 +57,7 @@ export class GetFileBlobAction extends IAction<
       throw new PropertyIsRequiredException('path');
     }
 
-    this.logger.info(`Getting content of file '${path}' as text`);
+    this.logger.info(`Getting content of file '${path}' as blob`);
 
     const exists = fs.existsSync(path);
     if (!exists) {
