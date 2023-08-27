@@ -20,7 +20,7 @@ values:
 
 ## How to write tests?
 
-Currently the only format supported is YAML.
+Currently the only supported format is YAML.
 
 Writing tests are really easy and quick. Testh provides a lot of built-in components.
 
@@ -104,7 +104,9 @@ or
 - $open-url: url
 ```
 
-Noice! ![Noice](https://media0.giphy.com/media/yJFeycRK2DB4c/giphy.gif?cid=ecf05e4795bae8xc0m4k7f2w0et7n1rzsdwpamq53534zzzj&ep=v1_gifs_search&rid=giphy.gif&ct=g)
+Noice! 
+
+![Noice](https://media0.giphy.com/media/yJFeycRK2DB4c/giphy.gif?cid=ecf05e4795bae8xc0m4k7f2w0et7n1rzsdwpamq53534zzzj&ep=v1_gifs_search&rid=giphy.gif&ct=g)
 
 You can see more examples: 
 
