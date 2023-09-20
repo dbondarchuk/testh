@@ -11,7 +11,6 @@ import {
   TestSteps,
   updateStepNumber,
 } from '../../../models';
-import { SkipEvaluate } from '../evaluate/skipEvaluate.decorator';
 
 function toCondition(value: any): Condition | Condition[] {
   switch (typeof value) {
@@ -51,7 +50,7 @@ function toCondition(value: any): Condition | Condition[] {
  */
 export function ToCondition(): PropertyDecorator {
   return (target: object, propertyKey: string): void => {
-    SkipEvaluate()(target, propertyKey);
+    //SkipEvaluate()(target, propertyKey);
 
     Transform((params): Condition | any => {
       if (params.type === TransformationType.PLAIN_TO_CLASS) {

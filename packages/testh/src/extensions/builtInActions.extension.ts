@@ -1,28 +1,12 @@
-import {
-  Extension,
-  ExtensionTypes,
-  IExtension,
-  loadAsync,
-  Priorities,
-} from '@testh/sdk';
-import { join } from 'path';
-
-/** Registers all default services */
-@Extension()
-export class BuiltInActionsExtension extends IExtension {
-  async init(): Promise<void> {
-    await loadAsync('.action.js', join(__dirname, '..', 'actions'));
-  }
-
-  get type(): string {
-    return ExtensionTypes.ServiceProvider;
-  }
-
-  get name(): string {
-    return 'Built in actions';
-  }
-
-  get priority(): number {
-    return Priorities.builtIn;
-  }
-}
+import '@testh/actions-alerts';
+import '@testh/actions-browser';
+import '@testh/actions-checks';
+import '@testh/actions-elements';
+import '@testh/actions-file';
+import '@testh/actions-http';
+import '@testh/actions-image';
+import '@testh/actions-navigation';
+import '@testh/actions-sequence';
+import '@testh/actions-steps';
+import '@testh/actions-variables';
+import '@testh/actions-waits';

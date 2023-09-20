@@ -10,7 +10,7 @@ variables:
     reference: $(imagesFolder)/reference.png
     original: $(imagesFolder)/original.png
     diff: $(imagesFolder)/diff.png
-pages: !!inc/dir ['pages', { extensions: ['.page.yaml'] }]
+pages: !!inc/dir ["pages", { extensions: [".page.yaml"] }]
 steps:
   - open: chrome
   - $run: pages.signin.actions.signin

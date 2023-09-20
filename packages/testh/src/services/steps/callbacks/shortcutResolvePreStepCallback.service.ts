@@ -16,7 +16,8 @@ import {
 import { inject } from 'tsyringe';
 
 import 'reflect-metadata';
-import { RunStepsSingleResultActionTypeAlias } from '../../../actions/steps/runSteps.action';
+
+const RunStepsSingleResultActionTypeAlias = 'run-steps-single-result';
 
 @Service(PreStepExecutionCallbackInjectionToken)
 export class ShortcutResolvePreStepCallback

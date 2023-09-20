@@ -14,11 +14,7 @@
   type: set-variable
   values:
     variable: prices
-    value: []
-- name: Check prices are sorted from low to high
-  type: for-each-item
-  values:
-    (array):
+    (value):
       name: Get price for each item
       type: for-each-element
       values:
@@ -28,6 +24,10 @@
         steps:
           - get-text:
               $element: ELEMENT
+- name: Check prices are sorted from low to high
+  type: for-each-item
+  values:
+    $array: prices
     steps:
       - if:
           $condition: INDEX > 0
@@ -37,6 +37,6 @@
                 type: compare-numbers
                 values:
                   compare:
-                    type: '<='
-                    $value: prices[INDEX-1]
-                  $to: ITEM
+                    type: "<="
+                    $value: prices[INDEX-1].substr(1)
+                  $to: ITEM.substr(1)
