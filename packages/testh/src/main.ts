@@ -5,6 +5,7 @@ import './helpers/class-transformer/plainToClass';
 import {
   ActionContainerInjectionToken,
   ExtensionContainerInjectionToken,
+  IExtension,
   IExtensionContainer,
   ITestProvider,
   ITestRunner,
@@ -25,6 +26,7 @@ import { join, resolve } from 'path';
 import { container } from 'tsyringe';
 import * as commandLineArgs from 'command-line-args';
 import { YamlInclude } from 'yaml-js-include';
+import { compare, satisfies } from 'semver';
 
 const consoleArgsDefinitions: commandLineArgs.OptionDefinition[] = [
   {
@@ -59,26 +61,47 @@ async function loadExtensions(): Promise<void> {
   if (!existsSync(extensionsFolder)) return;
 
   const folders = await readdir(extensionsFolder);
-  const files = folders
+  const packages = folders
     .map((folder) => join(extensionsFolder, folder))
     .filter((folder) => lstatSync(folder).isDirectory())
-    .map((folder) => join(folder, 'index.js'))
-    .filter((file) => existsSync(file))
-    .map((file) => resolve(file));
+    .filter((folder) => existsSync(join(folder, 'package.json')))
+    .map((folder) => resolve(folder));
 
-  const promises = files.map((file) => import(file));
+  const promises = packages.map((pkg) => import(pkg));
   await Promise.all(promises);
 }
 
 async function initExtensions(): Promise<void> {
   const settings = container.resolve<Settings>(SettingsInjectionToken);
 
-  const extensions = container
-    .resolve<IExtensionContainer>(ExtensionContainerInjectionToken)
-    .getAll()
-    .filter(
-      (extension) => settings?.extensions?.[extension.name]?.enabled !== false,
-    )
+  const extensions = Object.entries(
+    container
+      .resolve<IExtensionContainer>(ExtensionContainerInjectionToken)
+      .getAll()
+      .filter((extension) => {
+        if (settings?.extensions?.[extension.name]?.enabled === false)
+          return false;
+        const version = settings?.extensions?.[extension.name]?.version;
+
+        if (version && !satisfies(extension.version, version)) return false;
+
+        return true;
+      })
+      .reduce((group, extension) => {
+        if (!group[extension.name]) group[extension.name] = [];
+        group[extension.name].push(extension);
+
+        return group;
+      }, {} as { [name: string]: IExtension[] }),
+  )
+    .map(([name, list]) => {
+      const selected = list.sort((a, b) => -compare(a.version, b.version))[0];
+      console.debug(
+        `Selected version ${selected.version} for the extension '${name}'`,
+      );
+
+      return selected;
+    })
     .sort((a, b) => {
       let aPriority = a.priority;
       let bPriority = b.priority;

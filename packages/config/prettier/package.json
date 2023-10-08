@@ -1,0 +1,11 @@
+{
+  "name": "@testh/prettier-config",
+  "version": "0.0.1",
+  "description": "Testh shared prettier configurations",
+  "type": "commonjs",
+  "scripts": {
+    "build": "echo 'Nothing to build'"
+  },
+  "main": ".prettier.json",
+  "author": "Dmytro Bondarchuk <dbondarchuk@users.noreply.github.com>"
+}

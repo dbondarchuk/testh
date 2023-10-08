@@ -12,7 +12,16 @@ variables:
     diff: $(imagesFolder)/diff.png
 pages: !!inc/dir ["pages", { extensions: [".page.yaml"] }]
 steps:
-  - open: chrome
+  - ?open:
+      browser: chrome
+      # headless: false
+      # mobileEmulation:
+      #   #deviceName: iPhone 12 Pro
+      #   deviceMetrics:
+      #     width: 375
+      #     height: 812
+      #     pixelRatio: 3
+      #   userAgent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1
   - $run: pages.signin.actions.signin
   - $run: pages.shop.actions.waitForItemsToLoad
   - $run: pages.shop.actions.checkAddRemoveCart

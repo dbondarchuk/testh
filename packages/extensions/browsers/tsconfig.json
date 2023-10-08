@@ -1,0 +1,15 @@
+{
+  "extends": "@testh/typescript-config",
+  "compilerOptions": {
+    "outDir": "build"
+  },
+  "include": ["src/**/*", "__tests__/**/*", "package.json"],
+  "references": [
+    {
+      "path": "../../sdk/tsconfig.json"
+    },
+    {
+      "path": "../../actions/browser/tsconfig.json"
+    }
+  ]
+}

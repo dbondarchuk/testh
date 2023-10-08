@@ -1,0 +1,11 @@
+{
+  "name": "@testh/eslint-config",
+  "version": "0.0.1",
+  "description": "Testh shared configurations for eslint",
+  "type": "commonjs",
+  "scripts": {
+    "build": "echo 'Nothing to build'"
+  },
+  "main": "index.js",
+  "author": "Dmytro Bondarchuk <dbondarchuk@users.noreply.github.com>"
+}

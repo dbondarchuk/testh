@@ -152,7 +152,6 @@ export class VariablesContainer implements IVariablesContainer {
     this.put(TASK_TEST_NAME, this.state.test.name);
     this.put(TASK_START_TIME, Date.now());
     this.put(TASK_EXECUTION_TIME, () => {
-      console.log('______________EXECUTION_TIME__________');
       return Date.now() - this.get(TASK_START_TIME);
     });
 

@@ -6,6 +6,8 @@
   "main": "build/src/index.js",
   "prettier": "@testh/prettier-config",
   "devDependencies": {
+    "@testh/eslint-config": "^0.0.1",
+    "@testh/typescript-config": "^0.0.1",
     "@testh/prettier-config": "^0.0.1",
     "@microsoft/tsdoc-config": "^0.16.1",
     "@types/deasync": "^0.1.2",

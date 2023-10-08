@@ -8,6 +8,7 @@ extensions:
   Owofify Logger:
     enabled: false
     priority: 15
+    version: ^1.0.0
   Indent Logger:
     enabled: true
   Go Back action:

@@ -2,9 +2,10 @@
   "name": "testh",
   "private": true,
   "workspaces": [
-    "shared/prettier-config",
-    "packages/sdk*",
+    "packages/config/*",
+    "packages/sdk",
     "packages/actions/*",
+    "packages/extensions/*",
     "packages/testh"
   ],
   "scripts": {
@@ -15,7 +16,6 @@
   },
   "devDependencies": {
     "@microsoft/tsdoc-config": "^0.16.1",
-    "@testh/prettier-config": "^0.0.1",
     "@typescript-eslint/eslint-plugin": "~5.46",
     "@typescript-eslint/parser": "~5.46",
     "eslint": "~8.16",

@@ -12,6 +12,9 @@ export abstract class IExtension {
   /** Gets the priority of the extension. Extensions with higher priority will be executed first */
   public abstract get priority(): Priority;
 
+  /** Gets the sem version of the extensionn */
+  public abstract get version(): string;
+
   /** Initializes the extension */
   public abstract init(): Promise<void>;
 }

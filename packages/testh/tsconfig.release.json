@@ -1,4 +1,4 @@
 {
-  "extends": "../../shared/tsconfig.release.json",
+  "extends": "@testh/typescript-config/tsconfig.release.json",
   "include": ["src/**/*"]
 }

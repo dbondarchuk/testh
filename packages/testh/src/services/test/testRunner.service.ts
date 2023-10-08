@@ -76,7 +76,10 @@ export class TestRunner implements ITestRunner {
 
       return true;
     } catch (e: Error[] | Error | any) {
-      const error = Array.isArray(e) ? e.join(';\n') : e;
+      const error = Array.isArray(e)
+        ? e.map((err) => `\n  - ${err};`).join()
+        : e;
+
       this.logger.error(`Test execution has failed: ${error}`);
 
       await this.postCallback(test, state, false, e);

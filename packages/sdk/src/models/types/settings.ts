@@ -16,6 +16,12 @@ export type Settings = {
 
       /** Overriden extension priority */
       priority?: number;
+
+      /**
+       * Version requirment for the extension to be used.
+       * See {@link https://github.com/npm/node-semver} for the description of version constraints
+       */
+      version?: string;
     };
   };
   [key: string]: any;

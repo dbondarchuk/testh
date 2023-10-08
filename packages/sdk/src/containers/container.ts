@@ -1,4 +1,4 @@
-import { container, injectable, InjectionToken } from 'tsyringe';
+import { container, inject, injectable, InjectionToken } from 'tsyringe';
 import { Constructor } from '../models';
 
 /**
@@ -11,6 +11,23 @@ export function Service<T extends Constructor<any>>(
   return (ctor: T) => {
     injectable()(ctor);
     container.register(token, ctor);
+  };
+}
+
+/**
+ * Parameter decorator factory that allows for interface information to be stored in the constructor's metadata
+ * @param token Type's token
+ * @returns The parameter decorator
+ */
+export function dependency(
+  token: InjectionToken<any>,
+): (target: any, propertyKey: string | symbol, parameterIndex: number) => any {
+  return (
+    target: any,
+    propertyKey: string | symbol,
+    parameterIndex: number,
+  ): any => {
+    return inject(token)(target, propertyKey, parameterIndex);
   };
 }
 

@@ -1,0 +1,28 @@
+{
+  "name": "@testh/actions-navigation",
+  "version": "0.0.1",
+  "description": "Testh actions related to the browser navigation",
+  "type": "commonjs",
+  "main": "build/src/index.js",
+  "prettier": "@testh/prettier-config",
+  "devDependencies": {
+    "@testh/eslint-config": "^0.0.1",
+    "@testh/typescript-config": "^0.0.1",
+    "@testh/prettier-config": "^0.0.1"
+  },
+  "scripts": {
+    "clean": "rimraf coverage build tmp",
+    "prebuild": "yarn run clean && yarn run lint && yarn run prettier",
+    "build": "tsc -p tsconfig.json",
+    "build:watch": "tsc -w -p tsconfig.json",
+    "build:release": "tsc -p tsconfig.release.json",
+    "lint": "eslint . --ext .ts --ext .mts",
+    "test": "jest --coverage",
+    "prettier": "prettier --write .",
+    "test:watch": "jest --watch"
+  },
+  "author": "Dmytro Bondarchuk <dbondarchuk@users.noreply.github.com>",
+  "dependencies": {
+    "@testh/sdk": "0.0.1"
+  }
+}

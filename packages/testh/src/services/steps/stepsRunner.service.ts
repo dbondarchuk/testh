@@ -24,6 +24,7 @@ import {
   UnknownOptionException,
   updateStepNumber,
 } from '@testh/sdk';
+import { StepError } from './stepError';
 
 /** Default test step runner */
 @Service(StepsRunnerInjectionToken)
@@ -149,10 +150,15 @@ export class StepsRunner implements IStepsRunner {
 
         this.logger.debug(`Step has completed successfully`);
       } catch (e) {
-        isFailed = !isFailed && !step.ignoreError;
-        errors.push(e);
+        isFailed = isFailed || !step.ignoreError;
+        const error = new StepError(
+          getCurrentStepNumber(state.variables),
+          step.name,
+          e,
+        );
 
-        this.logger.error(`Step ${step.name} has failed: ${e}`);
+        errors.push(error);
+        this.logger.error(error.message);
 
         isStepSuccessul = false;
         stepErrors = Array.isArray(e) ? e : [e];
@@ -176,7 +182,9 @@ export class StepsRunner implements IStepsRunner {
     }
 
     if (isFailed) {
-      this.logger.error(`Steps execution failed: ${errors.join(';\n')}`);
+      this.logger.error(
+        `Steps execution failed:${errors.map((err) => `\n  - ${err};`).join()}`,
+      );
       throw errors;
     }
 
