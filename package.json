@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "build": "workspaces-foreach -pt yarn build",
+    "build:ci": "workspaces-foreach -pt -j 2 yarn build",
     "start:no-build": "yarn workspace @testh/testh start",
     "start": "yarn build && yarn start:no-build",
     "docs": "typedoc"
